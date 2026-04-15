@@ -183,6 +183,19 @@ export class EspnService {
         });
       }
 
+      // Add a descending sort by PCT to fix ESPN API out-of-order arrays
+      entries.sort((a, b) => {
+        const pctA = Number(a.pct) || 0;
+        const pctB = Number(b.pct) || 0;
+        if (pctB !== pctA) return pctB - pctA;
+        return (Number(b.wins) || 0) - (Number(a.wins) || 0);
+      });
+
+      // Recalculate seeds after sorting
+      entries.forEach((e, idx) => {
+        e.seed = idx + 1;
+      });
+
       return entries;
     } catch (error) {
       this.logger.error('Failed to fetch ESPN standings', (error as Error).message);
