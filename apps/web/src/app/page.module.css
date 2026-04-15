@@ -1,0 +1,158 @@
+/* ============================================================
+   Na Quadra — Home Page
+   ============================================================ */
+
+.heroSection {
+  padding: var(--nq-space-6) 0 0;
+}
+
+/* News grid */
+.newsSection {
+  padding: var(--nq-space-8) var(--nq-space-4);
+}
+
+@media (min-width: 640px) {
+  .newsSection {
+    padding: var(--nq-space-8) var(--nq-space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .newsSection {
+    padding: var(--nq-space-8) var(--nq-space-8);
+    max-width: var(--nq-max-width);
+    margin: 0 auto;
+  }
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--nq-space-5);
+}
+
+.sectionTitle {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-2xl);
+  font-weight: var(--nq-font-bold);
+  color: var(--nq-text-primary);
+}
+
+.sectionLink {
+  font-size: var(--nq-text-sm);
+  font-weight: var(--nq-font-medium);
+  color: var(--nq-text-secondary);
+  text-decoration: none;
+  transition: color var(--nq-duration-fast) var(--nq-ease-default);
+}
+
+.sectionLink:hover {
+  color: var(--nq-text-primary);
+}
+
+.articlesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--nq-space-5);
+}
+
+@media (min-width: 640px) {
+  .articlesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .articlesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Edu block */
+.eduSection {
+  padding: 0 var(--nq-space-4) var(--nq-space-8);
+}
+
+@media (min-width: 640px) {
+  .eduSection {
+    padding: 0 var(--nq-space-6) var(--nq-space-8);
+  }
+}
+
+@media (min-width: 1024px) {
+  .eduSection {
+    padding: 0 var(--nq-space-8) var(--nq-space-8);
+    max-width: var(--nq-max-width);
+    margin: 0 auto;
+  }
+}
+
+.eduCard {
+  background: var(--nq-bg-secondary);
+  border: 1px solid color-mix(in srgb, var(--nq-system-edu) 20%, transparent);
+  border-radius: var(--nq-radius-lg);
+  padding: var(--nq-space-5) var(--nq-space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--nq-space-3);
+}
+
+.eduBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nq-space-2);
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-xs);
+  font-weight: var(--nq-font-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--nq-tracking-wide);
+  color: var(--nq-system-edu);
+  width: fit-content;
+}
+
+.eduTitle {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-xl);
+  font-weight: var(--nq-font-bold);
+  color: var(--nq-text-primary);
+}
+
+.eduText {
+  font-size: var(--nq-text-sm);
+  line-height: var(--nq-leading-relaxed);
+  color: var(--nq-text-secondary);
+}
+
+.eduLink {
+  font-size: var(--nq-text-sm);
+  font-weight: var(--nq-font-semibold);
+  color: var(--nq-system-edu);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nq-space-1);
+  transition: opacity var(--nq-duration-fast) var(--nq-ease-default);
+}
+
+.eduLink:hover {
+  opacity: 0.8;
+}
+
+/* Footer */
+.footer {
+  border-top: 1px solid var(--nq-border-subtle);
+  padding: var(--nq-space-8) var(--nq-space-4);
+  text-align: center;
+}
+
+.footerText {
+  font-size: var(--nq-text-sm);
+  color: var(--nq-text-tertiary);
+}
+
+.footerBrand {
+  font-family: var(--nq-font-display);
+  font-weight: var(--nq-font-bold);
+  color: var(--nq-text-secondary);
+}

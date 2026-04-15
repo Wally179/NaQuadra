@@ -1,0 +1,254 @@
+/* ============================================================
+   Na Quadra — GameCard: Clash Gradient Component
+   ============================================================
+   The signature visual component. Team colors invade the dark
+   center from both sides, creating a clash/versus effect.
+   ============================================================ */
+
+.gameCard {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--nq-radius-lg);
+  background: var(--nq-bg-primary);
+  min-height: 200px;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--nq-space-5) var(--nq-space-6);
+  scroll-snap-align: center;
+  flex-shrink: 0;
+  transition: transform var(--nq-duration-fast) var(--nq-ease-default);
+}
+
+.gameCard:hover {
+  transform: scale(1.01);
+}
+
+/* Gradiente do time da casa (esquerda) */
+.gameCard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    var(--home-team-color) 0%,
+    color-mix(in srgb, var(--home-team-color) 40%, transparent) 20%,
+    color-mix(in srgb, var(--home-team-color) 12%, transparent) 38%,
+    transparent 52%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Gradiente do time visitante (direita) */
+.gameCard::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to left,
+    var(--away-team-color) 0%,
+    color-mix(in srgb, var(--away-team-color) 40%, transparent) 20%,
+    color-mix(in srgb, var(--away-team-color) 12%, transparent) 38%,
+    transparent 52%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Fallback for browsers without color-mix */
+@supports not (color: color-mix(in srgb, red, transparent)) {
+  .gameCard::before {
+    background: linear-gradient(
+      to right,
+      var(--home-team-color) 0%,
+      transparent 50%
+    );
+    opacity: 0.45;
+  }
+  .gameCard::after {
+    background: linear-gradient(
+      to left,
+      var(--away-team-color) 0%,
+      transparent 50%
+    );
+    opacity: 0.45;
+  }
+}
+
+/* Content sits above gradients */
+.content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--nq-space-2);
+}
+
+/* Top: conference + phase */
+.phase {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-xs);
+  font-weight: var(--nq-font-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--nq-tracking-wide);
+  color: var(--nq-text-primary);
+}
+
+.series {
+  font-size: var(--nq-text-xs);
+  color: var(--nq-text-secondary);
+}
+
+/* Matchup area */
+.matchup {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin: var(--nq-space-3) 0;
+  gap: var(--nq-space-4);
+}
+
+/* Team side */
+.teamSide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--nq-space-1);
+  flex: 1;
+  min-width: 0;
+}
+
+.teamLogo {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px var(--team-glow, rgba(255,255,255,0.1)));
+  transition: transform var(--nq-duration-normal) var(--nq-ease-default);
+}
+
+.gameCard:hover .teamLogo {
+  transform: scale(1.05);
+}
+
+.teamName {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-sm);
+  font-weight: var(--nq-font-semibold);
+  color: var(--nq-text-primary);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.teamRecord {
+  font-family: var(--nq-font-mono);
+  font-size: var(--nq-text-xs);
+  color: var(--nq-text-tertiary);
+}
+
+/* Center area (time / score) */
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--nq-space-1);
+  min-width: 80px;
+}
+
+.time {
+  font-family: var(--nq-font-mono);
+  font-size: var(--nq-text-2xl);
+  font-weight: var(--nq-font-bold);
+  color: var(--nq-text-primary);
+  text-shadow: 0 0 24px rgba(255, 255, 255, 0.08);
+}
+
+.score {
+  font-family: var(--nq-font-mono);
+  font-size: var(--nq-text-2xl);
+  font-weight: var(--nq-font-extrabold);
+  color: var(--nq-text-primary);
+  letter-spacing: 0.05em;
+}
+
+.quarter {
+  font-family: var(--nq-font-mono);
+  font-size: var(--nq-text-xs);
+  color: var(--nq-text-secondary);
+}
+
+.finalLabel {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-xs);
+  font-weight: var(--nq-font-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--nq-tracking-wide);
+  color: var(--nq-text-tertiary);
+}
+
+/* Live indicator */
+.live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-xs);
+  font-weight: var(--nq-font-bold);
+  color: var(--nq-system-live);
+  text-transform: uppercase;
+  letter-spacing: var(--nq-tracking-wide);
+}
+
+.liveDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--nq-system-live);
+  animation: live-pulse 1.5s ease-in-out infinite;
+}
+
+/* Bottom actions */
+.actions {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: var(--nq-space-2);
+  padding-top: var(--nq-space-2);
+  border-top: 1px solid var(--nq-border-subtle);
+}
+
+.action {
+  font-family: var(--nq-font-body);
+  font-size: var(--nq-text-xs);
+  font-weight: var(--nq-font-medium);
+  color: var(--nq-text-secondary);
+  cursor: pointer;
+  padding: var(--nq-space-1) var(--nq-space-2);
+  border-radius: var(--nq-radius-sm);
+  transition: all var(--nq-duration-fast) var(--nq-ease-default);
+  background: none;
+  border: none;
+}
+
+.action:hover {
+  color: var(--nq-text-primary);
+  background: var(--nq-overlay-light);
+}
+
+/* Broadcast badge */
+.broadcast {
+  font-family: var(--nq-font-mono);
+  font-size: 0.625rem;
+  font-weight: var(--nq-font-medium);
+  color: var(--nq-text-tertiary);
+  padding: 2px 6px;
+  background: var(--nq-overlay-light);
+  border-radius: var(--nq-radius-sm);
+  letter-spacing: var(--nq-tracking-wide);
+  text-transform: uppercase;
+}

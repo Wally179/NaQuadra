@@ -1,0 +1,52 @@
+/* ============================================================
+   Na Quadra — MobileNav: Bottom Navigation Bar
+   ============================================================ */
+
+.mobileNav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: var(--nq-mobile-nav-height);
+  background: rgba(10, 10, 12, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--nq-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 var(--nq-space-2);
+}
+
+@media (min-width: 768px) {
+  .mobileNav {
+    display: none;
+  }
+}
+
+.navItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--nq-space-1) var(--nq-space-2);
+  color: var(--nq-text-tertiary);
+  text-decoration: none;
+  border-radius: var(--nq-radius-md);
+  transition: color var(--nq-duration-fast) var(--nq-ease-default);
+  -webkit-tap-highlight-color: transparent;
+  min-width: 56px;
+}
+
+.navItem:hover,
+.navItemActive {
+  color: var(--nq-text-primary);
+}
+
+.navLabel {
+  font-family: var(--nq-font-body);
+  font-size: 0.625rem;
+  font-weight: var(--nq-font-medium);
+  letter-spacing: var(--nq-tracking-wide);
+}

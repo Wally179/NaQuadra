@@ -1,0 +1,322 @@
+/* ============================================================
+   Na Quadra — Design System: Global Styles & Design Tokens
+   ============================================================
+   Dark-first, premium, editorial. O preto é o sistema-base;
+   a cor do time é a camada contextual.
+   ============================================================ */
+
+/* === GOOGLE FONTS === */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+/* === ROOT DESIGN TOKENS === */
+:root {
+  /* --- Background Layers --- */
+  --nq-bg-primary: #0A0A0C;
+  --nq-bg-secondary: #111114;
+  --nq-bg-tertiary: #1A1A1F;
+  --nq-bg-elevated: #222228;
+  --nq-bg-hover: #2A2A32;
+
+  /* --- Text --- */
+  --nq-text-primary: #F0F0F2;
+  --nq-text-secondary: #A0A0A8;
+  --nq-text-tertiary: #6B6B75;
+  --nq-text-disabled: #4A4A52;
+
+  /* --- Borders --- */
+  --nq-border-subtle: #1F1F25;
+  --nq-border-default: #2D2D35;
+  --nq-border-strong: #3D3D45;
+
+  /* --- System Colors (não mudam por time) --- */
+  --nq-system-success: #2DD4A0;
+  --nq-system-warning: #F5A623;
+  --nq-system-error: #EF4444;
+  --nq-system-info: #60A5FA;
+  --nq-system-edu: #A78BFA;
+  --nq-system-live: #EF4444;
+
+  /* --- Overlays --- */
+  --nq-overlay-light: rgba(255, 255, 255, 0.04);
+  --nq-overlay-medium: rgba(255, 255, 255, 0.08);
+  --nq-overlay-heavy: rgba(255, 255, 255, 0.12);
+
+  /* --- Typography --- */
+  --nq-font-display: 'Outfit', sans-serif;
+  --nq-font-body: 'Inter', sans-serif;
+  --nq-font-mono: 'JetBrains Mono', monospace;
+
+  --nq-text-xs: 0.75rem;
+  --nq-text-sm: 0.875rem;
+  --nq-text-base: 1rem;
+  --nq-text-lg: 1.125rem;
+  --nq-text-xl: 1.25rem;
+  --nq-text-2xl: 1.5rem;
+  --nq-text-3xl: 1.875rem;
+  --nq-text-4xl: 2.25rem;
+  --nq-text-5xl: 3rem;
+
+  --nq-font-regular: 400;
+  --nq-font-medium: 500;
+  --nq-font-semibold: 600;
+  --nq-font-bold: 700;
+  --nq-font-extrabold: 800;
+
+  --nq-leading-tight: 1.15;
+  --nq-leading-normal: 1.5;
+  --nq-leading-relaxed: 1.7;
+
+  --nq-tracking-tight: -0.02em;
+  --nq-tracking-normal: 0;
+  --nq-tracking-wide: 0.05em;
+
+  /* --- Spacing --- */
+  --nq-space-0: 0;
+  --nq-space-1: 0.25rem;
+  --nq-space-2: 0.5rem;
+  --nq-space-3: 0.75rem;
+  --nq-space-4: 1rem;
+  --nq-space-5: 1.25rem;
+  --nq-space-6: 1.5rem;
+  --nq-space-8: 2rem;
+  --nq-space-10: 2.5rem;
+  --nq-space-12: 3rem;
+  --nq-space-16: 4rem;
+  --nq-space-20: 5rem;
+
+  /* --- Radius --- */
+  --nq-radius-sm: 6px;
+  --nq-radius-md: 10px;
+  --nq-radius-lg: 14px;
+  --nq-radius-xl: 20px;
+  --nq-radius-full: 9999px;
+
+  /* --- Motion --- */
+  --nq-duration-fast: 150ms;
+  --nq-duration-normal: 250ms;
+  --nq-duration-slow: 400ms;
+  --nq-duration-enter: 300ms;
+  --nq-duration-exit: 200ms;
+
+  --nq-ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --nq-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --nq-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --nq-ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* --- Shadows --- */
+  --nq-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --nq-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --nq-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --nq-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6);
+
+  /* --- Layout --- */
+  --nq-max-width: 1280px;
+  --nq-header-height: 64px;
+  --nq-mobile-nav-height: 64px;
+  --nq-sidebar-width: 280px;
+
+  /* --- Team Contextual Colors (set dynamically) --- */
+  --team-primary: transparent;
+  --team-secondary: transparent;
+}
+
+/* === RESET & BASE === */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--nq-font-body);
+  font-size: var(--nq-text-base);
+  font-weight: var(--nq-font-regular);
+  line-height: var(--nq-leading-normal);
+  color: var(--nq-text-primary);
+  background-color: var(--nq-bg-primary);
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+/* === TYPOGRAPHY === */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--nq-font-display);
+  line-height: var(--nq-leading-tight);
+  letter-spacing: var(--nq-tracking-tight);
+  font-weight: var(--nq-font-bold);
+  color: var(--nq-text-primary);
+}
+
+h1 { font-size: var(--nq-text-4xl); font-weight: var(--nq-font-extrabold); }
+h2 { font-size: var(--nq-text-3xl); }
+h3 { font-size: var(--nq-text-2xl); }
+h4 { font-size: var(--nq-text-xl); }
+h5 { font-size: var(--nq-text-lg); }
+h6 { font-size: var(--nq-text-base); font-weight: var(--nq-font-semibold); }
+
+p {
+  line-height: var(--nq-leading-normal);
+  color: var(--nq-text-secondary);
+}
+
+a {
+  color: var(--nq-system-info);
+  text-decoration: none;
+  transition: color var(--nq-duration-fast) var(--nq-ease-default);
+}
+
+a:hover {
+  color: var(--nq-text-primary);
+}
+
+/* === FOCUS STATES === */
+:focus-visible {
+  outline: 2px solid var(--nq-system-info);
+  outline-offset: 2px;
+  border-radius: var(--nq-radius-sm);
+}
+
+/* === SCROLLBAR === */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--nq-border-default);
+  border-radius: var(--nq-radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--nq-border-strong);
+}
+
+/* === SELECTION === */
+::selection {
+  background: var(--nq-system-info);
+  color: var(--nq-bg-primary);
+}
+
+/* === IMAGES === */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* === BUTTON RESET === */
+button {
+  font-family: inherit;
+  font-size: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+/* === LIST RESET === */
+ul, ol {
+  list-style: none;
+}
+
+/* === INPUT RESET === */
+input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+/* === UTILITY CLASSES === */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--nq-max-width);
+  margin: 0 auto;
+  padding: 0 var(--nq-space-4);
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding: 0 var(--nq-space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 var(--nq-space-8);
+  }
+}
+
+/* === SKELETON LOADER === */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--nq-bg-tertiary) 25%,
+    var(--nq-bg-elevated) 50%,
+    var(--nq-bg-tertiary) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--nq-radius-md);
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* === REDUCED MOTION === */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* === LIVE INDICATOR === */
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+/* === FADE IN === */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn var(--nq-duration-enter) var(--nq-ease-out) forwards;
+}
