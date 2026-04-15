@@ -1,0 +1,82 @@
+/* ============================================================
+   Na Quadra — News List Page
+   ============================================================ */
+
+.page {
+  padding: var(--nq-space-6) var(--nq-space-4) var(--nq-space-12);
+  max-width: var(--nq-max-width);
+  margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .page { padding: var(--nq-space-8) var(--nq-space-6) var(--nq-space-12); }
+}
+
+@media (min-width: 1024px) {
+  .page { padding: var(--nq-space-8) var(--nq-space-8) var(--nq-space-12); }
+}
+
+.title {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-3xl);
+  font-weight: var(--nq-font-extrabold);
+  color: var(--nq-text-primary);
+  margin-bottom: var(--nq-space-2);
+}
+
+.subtitle {
+  font-size: var(--nq-text-sm);
+  color: var(--nq-text-tertiary);
+  margin-bottom: var(--nq-space-6);
+}
+
+/* Category tabs */
+.tabs {
+  display: flex;
+  gap: var(--nq-space-2);
+  margin-bottom: var(--nq-space-6);
+  flex-wrap: wrap;
+}
+
+.tab {
+  font-family: var(--nq-font-body);
+  font-size: var(--nq-text-xs);
+  font-weight: var(--nq-font-medium);
+  color: var(--nq-text-tertiary);
+  padding: var(--nq-space-2) var(--nq-space-3);
+  border-radius: var(--nq-radius-full);
+  background: var(--nq-bg-secondary);
+  border: 1px solid var(--nq-border-subtle);
+  cursor: pointer;
+  transition: all var(--nq-duration-fast) var(--nq-ease-default);
+}
+
+.tab:hover {
+  color: var(--nq-text-secondary);
+  border-color: var(--nq-border-default);
+}
+
+.tabActive {
+  color: var(--nq-text-primary);
+  background: var(--nq-overlay-medium);
+  border-color: var(--nq-text-tertiary);
+}
+
+/* Articles grid */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--nq-space-5);
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

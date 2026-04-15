@@ -1,20 +1,63 @@
 import { ScoreboardBar } from '@/components/features/scoreboard/ScoreboardBar/ScoreboardBar';
 import { ArticleCard } from '@/components/features/news/ArticleCard/ArticleCard';
+import { fetchScoreboard, fetchNews, type ScoreboardGame } from '@/lib/api';
 import { MOCK_GAMES } from '@/data/mock-games';
 import { MOCK_ARTICLES } from '@/data/mock-articles';
 import { ArrowRight, BookOpen } from 'lucide-react';
 import Link from 'next/link';
+import type { NormalizedGame } from '@naquadra/types';
 import styles from './page.module.css';
 
-export default function HomePage() {
-  const featuredArticle = MOCK_ARTICLES[0];
-  const restArticles = MOCK_ARTICLES.slice(1);
+/** Map API scoreboard data to the NormalizedGame format the GameCard expects */
+function mapToNormalizedGame(game: ScoreboardGame): NormalizedGame {
+  return {
+    externalId: game.externalId,
+    date: game.date,
+    startTime: game.startTime,
+    status: game.status as NormalizedGame['status'],
+    homeTeamId: game.homeTeamId,
+    awayTeamId: game.awayTeamId,
+    homeScore: game.homeScore,
+    awayScore: game.awayScore,
+    homeRecord: game.homeRecord,
+    awayRecord: game.awayRecord,
+    quarter: game.quarter,
+    clock: game.clock,
+    conference: '',
+    phase: 'regular',
+    seriesInfo: game.seriesInfo,
+    venue: game.venue,
+    broadcast: game.broadcast,
+    lastUpdated: new Date().toISOString(),
+  };
+}
+
+export default async function HomePage() {
+  // Fetch real scoreboard from API (server-side, with ISR revalidation)
+  let games: NormalizedGame[];
+  try {
+    const apiGames = await fetchScoreboard();
+    games = apiGames.length > 0
+      ? apiGames.map(mapToNormalizedGame)
+      : MOCK_GAMES; // Fallback to mock if no games today
+  } catch {
+    games = MOCK_GAMES;
+  }
+
+  // Fetch real news from API
+  let articles = await fetchNews({ revalidate: 3600, tags: ['news'] });
+  if (!articles || articles.length === 0) {
+    articles = MOCK_ARTICLES;
+  }
+
+  const featuredArticle = articles[0];
+  const restArticles = articles.slice(1, 4); // Only show top 3 mostly in the home page
 
   return (
     <>
       {/* === SCOREBOARD BAR === */}
       <section className={styles.heroSection}>
-        <ScoreboardBar games={MOCK_GAMES} />
+        <ScoreboardBar games={games} />
       </section>
 
       {/* === NEWS FEED === */}
@@ -69,3 +112,4 @@ export default function HomePage() {
     </>
   );
 }
+

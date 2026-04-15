@@ -1,0 +1,70 @@
+# ============================================================
+# Na Quadra — Docker Compose: Local Development
+# Postgres 15 + MongoDB 7 + DynamoDB Local
+# ============================================================
+
+services:
+  # ──────────────────────────────────────
+  # PostgreSQL 15 — Users, Teams, Players, Favorites
+  # ──────────────────────────────────────
+  postgres:
+    image: postgres:15-alpine
+    container_name: nq-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_dev_password
+      POSTGRES_DB: naquadra
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ──────────────────────────────────────
+  # MongoDB 7 — Articles, Glossary
+  # ──────────────────────────────────────
+  mongodb:
+    image: mongo:7
+    container_name: nq-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./infra/mongo/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ──────────────────────────────────────
+  # DynamoDB Local — Game Scores (real-time)
+  # ──────────────────────────────────────
+  dynamodb:
+    image: amazon/dynamodb-local:latest
+    container_name: nq-dynamodb
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath /data"
+    volumes:
+      - dynamodb_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:8000 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  postgres_data:
+    driver: local
+  mongodb_data:
+    driver: local
+  dynamodb_data:
+    driver: local

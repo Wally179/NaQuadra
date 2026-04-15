@@ -1,0 +1,294 @@
+/* ============================================================
+   Na Quadra — Player Detail Page
+   ============================================================ */
+
+.page { padding-bottom: var(--nq-space-12); }
+
+/* === HERO === */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: var(--nq-space-8) var(--nq-space-4) var(--nq-space-10);
+}
+
+.heroBg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 80% 60% at 70% 50%,
+    color-mix(in srgb, var(--team-primary) 25%, transparent) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+@supports not (color: color-mix(in srgb, red, transparent)) {
+  .heroBg { background: radial-gradient(ellipse at 70% 50%, var(--team-primary) 0%, transparent 70%); opacity: 0.2; }
+}
+
+.heroInner {
+  position: relative;
+  z-index: 1;
+  max-width: var(--nq-max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--nq-space-5);
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .heroInner {
+    flex-direction: row;
+    align-items: flex-end;
+    text-align: left;
+    padding: 0 var(--nq-space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .heroInner { padding: 0 var(--nq-space-8); }
+}
+
+.heroHeadshot {
+  width: 140px;
+  height: 140px;
+  border-radius: var(--nq-radius-full);
+  object-fit: cover;
+  background: var(--nq-bg-tertiary);
+  border: 3px solid color-mix(in srgb, var(--team-primary) 60%, transparent);
+  box-shadow: 0 0 32px color-mix(in srgb, var(--team-primary) 30%, transparent);
+  flex-shrink: 0;
+}
+
+@supports not (color: color-mix(in srgb, red, transparent)) {
+  .heroHeadshot { border-color: var(--nq-border-default); }
+}
+
+.heroInfo { display: flex; flex-direction: column; gap: var(--nq-space-2); }
+
+.heroNumber {
+  font-family: var(--nq-font-mono);
+  font-size: var(--nq-text-sm);
+  color: var(--nq-text-tertiary);
+  font-weight: var(--nq-font-bold);
+}
+
+.heroName {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-4xl);
+  font-weight: var(--nq-font-extrabold);
+  color: var(--nq-text-primary);
+  line-height: var(--nq-leading-tight);
+}
+
+.heroBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--nq-space-2);
+  justify-content: center;
+}
+
+@media (min-width: 640px) { .heroBadges { justify-content: flex-start; } }
+
+.badge {
+  font-family: var(--nq-font-mono);
+  font-size: var(--nq-text-xs);
+  padding: 4px 10px;
+  border-radius: var(--nq-radius-full);
+  background: var(--nq-overlay-medium);
+  color: var(--nq-text-secondary);
+}
+
+.badgePrimary {
+  background: color-mix(in srgb, var(--team-primary) 20%, transparent);
+  color: var(--nq-text-primary);
+}
+
+@supports not (color: color-mix(in srgb, red, transparent)) {
+  .badgePrimary { background: var(--nq-overlay-heavy); }
+}
+
+/* === STATS GRID === */
+.statsSection {
+  max-width: var(--nq-max-width);
+  margin: 0 auto;
+  padding: var(--nq-space-6) var(--nq-space-4);
+}
+
+@media (min-width: 640px) { .statsSection { padding: var(--nq-space-6) var(--nq-space-6); } }
+@media (min-width: 1024px) { .statsSection { padding: var(--nq-space-6) var(--nq-space-8); } }
+
+.sectionTitle {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-xl);
+  font-weight: var(--nq-font-bold);
+  color: var(--nq-text-primary);
+  margin-bottom: var(--nq-space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--nq-space-2);
+}
+
+.sectionAccent {
+  width: 3px;
+  height: 20px;
+  border-radius: 2px;
+  background: var(--team-primary);
+}
+
+/* Main stats row */
+.mainStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--nq-space-3);
+  margin-bottom: var(--nq-space-5);
+}
+
+@media (min-width: 640px) {
+  .mainStats { grid-template-columns: repeat(5, 1fr); }
+}
+
+.mainStatCard {
+  background: var(--nq-bg-secondary);
+  border: 1px solid var(--nq-border-subtle);
+  border-radius: var(--nq-radius-lg);
+  padding: var(--nq-space-5) var(--nq-space-3);
+  text-align: center;
+}
+
+.mainStatValue {
+  font-family: var(--nq-font-mono);
+  font-size: var(--nq-text-3xl);
+  font-weight: var(--nq-font-extrabold);
+  color: var(--nq-text-primary);
+  line-height: 1;
+}
+
+.mainStatLabel {
+  font-size: var(--nq-text-xs);
+  color: var(--nq-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: var(--nq-tracking-wide);
+  margin-top: var(--nq-space-1);
+}
+
+/* Shooting stats */
+.shootingStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--nq-space-3);
+}
+
+.shootingCard {
+  background: var(--nq-bg-secondary);
+  border: 1px solid var(--nq-border-subtle);
+  border-radius: var(--nq-radius-lg);
+  padding: var(--nq-space-4) var(--nq-space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--nq-space-2);
+}
+
+.shootingLabel {
+  font-family: var(--nq-font-mono);
+  font-size: var(--nq-text-xs);
+  color: var(--nq-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: var(--nq-tracking-wide);
+}
+
+.shootingBar {
+  height: 6px;
+  background: var(--nq-bg-tertiary);
+  border-radius: var(--nq-radius-full);
+  overflow: hidden;
+}
+
+.shootingFill {
+  height: 100%;
+  border-radius: var(--nq-radius-full);
+  background: var(--team-primary);
+  transition: width 0.6s var(--nq-ease-out);
+}
+
+.shootingValue {
+  font-family: var(--nq-font-mono);
+  font-size: var(--nq-text-lg);
+  font-weight: var(--nq-font-bold);
+  color: var(--nq-text-primary);
+}
+
+/* Bio */
+.bioSection {
+  max-width: var(--nq-max-width);
+  margin: 0 auto;
+  padding: 0 var(--nq-space-4) var(--nq-space-8);
+}
+
+@media (min-width: 640px) { .bioSection { padding: 0 var(--nq-space-6) var(--nq-space-8); } }
+@media (min-width: 1024px) { .bioSection { padding: 0 var(--nq-space-8) var(--nq-space-8); } }
+
+.bioCard {
+  background: var(--nq-bg-secondary);
+  border: 1px solid var(--nq-border-subtle);
+  border-radius: var(--nq-radius-lg);
+  padding: var(--nq-space-6);
+}
+
+.bioText {
+  font-size: var(--nq-text-base);
+  line-height: var(--nq-leading-relaxed);
+  color: var(--nq-text-secondary);
+}
+
+/* Info grid */
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--nq-space-3);
+  margin-top: var(--nq-space-5);
+}
+
+@media (min-width: 640px) {
+  .infoGrid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nq-space-1);
+}
+
+.infoLabel {
+  font-size: var(--nq-text-xs);
+  color: var(--nq-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: var(--nq-tracking-wide);
+}
+
+.infoValue {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-base);
+  font-weight: var(--nq-font-semibold);
+  color: var(--nq-text-primary);
+}
+
+/* Not found */
+.notFound {
+  padding: var(--nq-space-16) var(--nq-space-4);
+  text-align: center;
+}
+
+.notFoundTitle {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-2xl);
+  color: var(--nq-text-secondary);
+  margin-bottom: var(--nq-space-4);
+}
+
+.backLink {
+  color: var(--nq-system-info);
+  font-weight: var(--nq-font-medium);
+}

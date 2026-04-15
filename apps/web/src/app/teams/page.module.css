@@ -1,0 +1,153 @@
+/* ============================================================
+   Na Quadra — Teams List Page
+   ============================================================ */
+
+.page {
+  padding: var(--nq-space-6) var(--nq-space-4) var(--nq-space-12);
+  max-width: var(--nq-max-width);
+  margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .page { padding: var(--nq-space-8) var(--nq-space-6) var(--nq-space-12); }
+}
+
+@media (min-width: 1024px) {
+  .page { padding: var(--nq-space-8) var(--nq-space-8) var(--nq-space-12); }
+}
+
+.title {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-3xl);
+  font-weight: var(--nq-font-extrabold);
+  color: var(--nq-text-primary);
+  margin-bottom: var(--nq-space-2);
+}
+
+.subtitle {
+  font-size: var(--nq-text-sm);
+  color: var(--nq-text-tertiary);
+  margin-bottom: var(--nq-space-8);
+}
+
+/* Conference section */
+.conferenceSection {
+  margin-bottom: var(--nq-space-8);
+}
+
+.conferenceTitle {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-xl);
+  font-weight: var(--nq-font-bold);
+  color: var(--nq-text-primary);
+  margin-bottom: var(--nq-space-5);
+  display: flex;
+  align-items: center;
+  gap: var(--nq-space-2);
+}
+
+.conferenceBadge {
+  font-family: var(--nq-font-mono);
+  font-size: var(--nq-text-xs);
+  font-weight: var(--nq-font-bold);
+  padding: 3px 8px;
+  border-radius: var(--nq-radius-full);
+  background: var(--nq-overlay-medium);
+  color: var(--nq-text-secondary);
+  letter-spacing: var(--nq-tracking-wide);
+}
+
+/* Teams grid */
+.teamsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--nq-space-3);
+}
+
+@media (min-width: 640px) {
+  .teamsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--nq-space-4);
+  }
+}
+
+/* Team card */
+.teamCard {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--nq-space-4);
+  padding: var(--nq-space-4) var(--nq-space-5);
+  background: var(--nq-bg-secondary);
+  border: 1px solid var(--nq-border-subtle);
+  border-radius: var(--nq-radius-lg);
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  transition: all var(--nq-duration-normal) var(--nq-ease-default);
+}
+
+.teamCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--card-team-color, var(--nq-border-default));
+  border-radius: var(--nq-radius-lg) 0 0 var(--nq-radius-lg);
+  transition: width var(--nq-duration-fast) var(--nq-ease-default);
+}
+
+.teamCard:hover {
+  transform: translateY(-2px);
+  border-color: var(--nq-border-default);
+  box-shadow: var(--nq-shadow-md);
+}
+
+.teamCard:hover::before {
+  width: 6px;
+}
+
+.teamCardLogo {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  flex-shrink: 0;
+  transition: transform var(--nq-duration-normal) var(--nq-ease-default);
+}
+
+.teamCard:hover .teamCardLogo {
+  transform: scale(1.08);
+}
+
+.teamCardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.teamCardName {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-sm);
+  font-weight: var(--nq-font-semibold);
+  color: var(--nq-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.teamCardDetail {
+  font-size: var(--nq-text-xs);
+  color: var(--nq-text-tertiary);
+}
+
+.teamCardDivision {
+  font-family: var(--nq-font-mono);
+  font-size: 0.625rem;
+  color: var(--nq-text-disabled);
+  letter-spacing: var(--nq-tracking-wide);
+  text-transform: uppercase;
+}

@@ -23,6 +23,7 @@ export function Header() {
           <Link href="/teams" className={styles.navLink}>Times</Link>
           <Link href="/news" className={styles.navLink}>Notícias</Link>
           <Link href="/glossary" className={styles.navLink}>Glossário</Link>
+          <Link href="/about" className={styles.navLink}>Sobre</Link>
         </nav>
 
         {/* Actions */}
@@ -30,9 +31,11 @@ export function Header() {
           <button className={styles.iconButton} type="button" aria-label="Buscar">
             <Search size={20} />
           </button>
-          <button className={styles.iconButton} type="button" aria-label="Perfil">
-            <User size={20} />
-          </button>
+          <Link href="/login" style={{ textDecoration: 'none' }}>
+            <button className={styles.loginButton} type="button">
+              Entrar
+            </button>
+          </Link>
         </div>
       </div>
     </header>

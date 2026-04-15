@@ -1,0 +1,177 @@
+/* ============================================================
+   Na Quadra — Auth Pages (Login / Register)
+   ============================================================ */
+
+.page {
+  min-height: calc(100dvh - var(--nq-header-height));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--nq-space-8) var(--nq-space-4);
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--nq-bg-secondary);
+  border: 1px solid var(--nq-border-subtle);
+  border-radius: var(--nq-radius-xl);
+  padding: var(--nq-space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--nq-space-6);
+}
+
+/* Logo area */
+.logo {
+  text-align: center;
+}
+
+.logoIcon { font-size: 2rem; display: block; margin-bottom: var(--nq-space-2); }
+
+.logoTitle {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-2xl);
+  font-weight: var(--nq-font-extrabold);
+  color: var(--nq-text-primary);
+}
+
+.logoAccent { color: var(--nq-system-warning); }
+
+.logoSubtitle {
+  font-size: var(--nq-text-sm);
+  color: var(--nq-text-tertiary);
+  margin-top: var(--nq-space-1);
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  background: var(--nq-bg-tertiary);
+  border-radius: var(--nq-radius-md);
+  padding: 3px;
+}
+
+.tab {
+  flex: 1;
+  padding: var(--nq-space-2);
+  text-align: center;
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-sm);
+  font-weight: var(--nq-font-semibold);
+  color: var(--nq-text-tertiary);
+  cursor: pointer;
+  border-radius: var(--nq-radius-sm);
+  transition: all var(--nq-duration-fast) var(--nq-ease-default);
+  background: none;
+  border: none;
+}
+
+.tabActive {
+  background: var(--nq-bg-elevated);
+  color: var(--nq-text-primary);
+  box-shadow: var(--nq-shadow-sm);
+}
+
+/* Form */
+.form { display: flex; flex-direction: column; gap: var(--nq-space-4); }
+
+.field { display: flex; flex-direction: column; gap: var(--nq-space-2); }
+
+.label {
+  font-size: var(--nq-text-sm);
+  font-weight: var(--nq-font-medium);
+  color: var(--nq-text-secondary);
+}
+
+.input {
+  width: 100%;
+  padding: var(--nq-space-3) var(--nq-space-4);
+  background: var(--nq-bg-tertiary);
+  border: 1px solid var(--nq-border-default);
+  border-radius: var(--nq-radius-md);
+  color: var(--nq-text-primary);
+  font-size: var(--nq-text-sm);
+  font-family: var(--nq-font-body);
+  transition: border-color var(--nq-duration-fast) var(--nq-ease-default);
+}
+
+.input::placeholder { color: var(--nq-text-disabled); }
+
+.input:focus {
+  border-color: var(--nq-system-info);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+}
+
+/* Submit button */
+.submitBtn {
+  width: 100%;
+  padding: var(--nq-space-3) var(--nq-space-4);
+  background: var(--nq-text-primary);
+  color: var(--nq-bg-primary);
+  border: none;
+  border-radius: var(--nq-radius-md);
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-base);
+  font-weight: var(--nq-font-bold);
+  cursor: pointer;
+  transition: all var(--nq-duration-fast) var(--nq-ease-default);
+  margin-top: var(--nq-space-2);
+}
+
+.submitBtn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: var(--nq-shadow-md);
+}
+
+.submitBtn:active { transform: translateY(0); }
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: var(--nq-space-3);
+  font-size: var(--nq-text-xs);
+  color: var(--nq-text-disabled);
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--nq-border-subtle);
+}
+
+/* Social login placeholder */
+.socialBtn {
+  width: 100%;
+  padding: var(--nq-space-3) var(--nq-space-4);
+  background: var(--nq-bg-tertiary);
+  border: 1px solid var(--nq-border-default);
+  border-radius: var(--nq-radius-md);
+  color: var(--nq-text-secondary);
+  font-size: var(--nq-text-sm);
+  font-weight: var(--nq-font-medium);
+  cursor: pointer;
+  transition: all var(--nq-duration-fast) var(--nq-ease-default);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--nq-space-2);
+}
+
+.socialBtn:hover {
+  background: var(--nq-bg-hover);
+  color: var(--nq-text-primary);
+}
+
+/* Footer note */
+.note {
+  text-align: center;
+  font-size: var(--nq-text-xs);
+  color: var(--nq-text-tertiary);
+  line-height: var(--nq-leading-relaxed);
+}
