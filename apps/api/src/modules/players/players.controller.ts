@@ -18,6 +18,14 @@ export class PlayersController {
     return { data: roster };
   }
 
+  @Get('search/:query')
+  @ApiOperation({ summary: 'Pesquisar jogador' })
+  @ApiResponse({ status: 200 })
+  async searchPlayer(@Param('query') query: string) {
+    const player = await this.playersService.findByQuery(query);
+    return { data: player };
+  }
+
   @Get(':playerId')
   @ApiOperation({ summary: 'Detalhes de um jogador (via ESPN)' })
   @ApiResponse({ status: 200, description: 'Dados do jogador' })

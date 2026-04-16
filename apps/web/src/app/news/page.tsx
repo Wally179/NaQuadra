@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default async function NewsPage() {
   let articles;
   try {
-    articles = await fetchNews({ revalidate: 3600, tags: ['news'] });
+    articles = await fetchNews({ revalidate: process.env.NODE_ENV === 'development' ? 0 : 3600, tags: ['news'] });
   } catch (error) {
     console.error('Failed to fetch news, falling back to mock.');
   }

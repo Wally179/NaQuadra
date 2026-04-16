@@ -8,14 +8,16 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 export interface Article {
   id: string;
-  title: string;
-  summary: string;
-  content: string;
-  imageUrl: string;
-  publishedAt: string;
-  author: string;
   slug: string;
-  tags?: string[];
+  title: string;
+  subtitle?: string;
+  content: string;
+  coverImage: string | null;
+  author: { id: string; name: string };
+  category: 'news' | 'analysis' | 'feature' | 'explainer' | 'highlight';
+  tags: string[];
+  publishedAt: string;
+  readTimeMinutes: number;
   link?: string;
 }
 
@@ -171,7 +173,7 @@ export interface PlayerDetail {
 
 export async function fetchPlayerDetail(playerId: string, options?: FetchOptions) {
   try {
-    const res = await apiFetch<{ data: PlayerDetail }>(`/v1/players/${playerId}`, options);
+    const res = await apiFetch<{ data: PlayerDetail }>(`/api/v1/players/${playerId}`, options);
     if (!res) return null;
     return res.data;
   } catch (err) {
@@ -182,12 +184,34 @@ export async function fetchPlayerDetail(playerId: string, options?: FetchOptions
 
 export async function fetchNews(options?: FetchOptions): Promise<Article[]> {
   try {
-    const res = await apiFetch<{ data: Article[] }>('/v1/news', options);
+    const res = await apiFetch<{ data: Article[] }>('/api/v1/news', options);
     if (!res || !res.data) return [];
     return res.data;
   } catch (err) {
     console.error('Failed to fetch news:', err);
     return [];
+  }
+}
+
+export async function fetchNewsArticle(slug: string, options?: FetchOptions): Promise<Article | null> {
+  try {
+    const res = await apiFetch<{ data: Article }>(`/api/v1/news/${slug}`, options);
+    if (!res || !res.data) return null;
+    return res.data;
+  } catch (err) {
+    console.error(`Failed to fetch news article ${slug}:`, err);
+    return null;
+  }
+}
+
+export async function fetchSearchPlayer(query: string, options?: FetchOptions): Promise<PlayerDetail | null> {
+  try {
+    const res = await apiFetch<{ data: PlayerDetail }>(`/api/v1/players/search/${encodeURIComponent(query)}`, options);
+    if (!res || !res.data) return null;
+    return res.data;
+  } catch (err) {
+    console.error(`Failed to search player ${query}:`, err);
+    return null;
   }
 }
 

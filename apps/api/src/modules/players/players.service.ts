@@ -27,5 +27,14 @@ export class PlayersService {
       teamId: slugToEspnId(player.teamId) === player.teamId ? espnIdToSlug(player.teamId) : player.teamId,
     };
   }
+
+  async findByQuery(query: string) {
+    const player = await this.espnService.searchPlayer(query);
+    if (!player) return null;
+    return {
+      ...player,
+      teamId: slugToEspnId(player.teamId) === player.teamId ? espnIdToSlug(player.teamId) : player.teamId,
+    };
+  }
 }
 

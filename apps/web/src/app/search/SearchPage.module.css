@@ -1,0 +1,136 @@
+.main {
+  max-width: var(--nq-container-md);
+  margin: 0 auto;
+  padding: var(--nq-space-8) var(--nq-space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--nq-space-12);
+}
+
+.pageTitle {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-2xl);
+  font-weight: var(--nq-font-bold);
+  color: var(--nq-text-primary);
+}
+
+.sectionTitle {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-xl);
+  font-weight: var(--nq-font-bold);
+  margin-bottom: var(--nq-space-6);
+  color: var(--nq-text-secondary);
+}
+
+/* Player Card */
+.playerSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.playerCardContainer {
+  margin-top: 60px; /* Space for the overlapping headshot */
+  max-width: 400px;
+}
+
+.playerCard {
+  background: linear-gradient(135deg, #5b2c6f 0%, #3e1f4b 100%);
+  border-radius: var(--nq-radius-2xl);
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: var(--nq-space-6);
+  padding-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: var(--nq-shadow-lg);
+}
+
+.playerHeadshotWrapper {
+  position: absolute;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 140px;
+  border-bottom: 2px solid transparent; 
+  /* To recreate the exact user look, the headshot is transparent background */
+}
+
+.playerHeadshot {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  filter: drop-shadow(0px 10px 10px rgba(0,0,0,0.5));
+}
+
+.playerHeadshotPlaceholder {
+  width: 100%;
+  height: 100%;
+  background: var(--nq-overlay-light);
+  border-radius: var(--nq-radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+}
+
+.playerInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  text-align: center;
+  gap: var(--nq-space-2);
+}
+
+.playerName {
+  font-family: var(--nq-font-display);
+  font-size: 1.5rem;
+  font-weight: var(--nq-font-bold);
+  color: var(--nq-text-primary);
+}
+
+.playerTeam {
+  font-size: var(--nq-text-sm);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.playerStats {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: var(--nq-space-4);
+  font-size: var(--nq-text-sm);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.playerLink {
+  margin-top: var(--nq-space-4);
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: underline;
+  font-weight: var(--nq-font-medium);
+  cursor: pointer;
+}
+
+/* News Section */
+.newsSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.newsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--nq-space-6);
+}
+
+.emptyState {
+  padding: var(--nq-space-8);
+  text-align: center;
+  color: var(--nq-text-tertiary);
+  background: var(--nq-bg-secondary);
+  border-radius: var(--nq-radius-md);
+  border: 1px dashed var(--nq-border-subtle);
+}

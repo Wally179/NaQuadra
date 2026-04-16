@@ -2,9 +2,24 @@
 
 import { Search, User } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import styles from './Header.module.css';
 
 export function Header() {
+  const router = useRouter();
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState('');
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (query.trim()) {
+      router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+      setSearchOpen(false);
+      setQuery('');
+    }
+  };
+
   return (
     <header className={styles.header}>
       <div className={styles.headerInner}>
@@ -28,9 +43,24 @@ export function Header() {
 
         {/* Actions */}
         <div className={styles.actions}>
-          <button className={styles.iconButton} type="button" aria-label="Buscar">
-            <Search size={20} />
-          </button>
+          {searchOpen ? (
+            <form onSubmit={handleSearch} className={styles.searchForm}>
+              <input 
+                type="text" 
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Pesquisar (ex: LeBron)..."
+                className={styles.searchInput}
+                autoFocus
+                onBlur={() => !query && setSearchOpen(false)}
+              />
+            </form>
+          ) : (
+            <button className={styles.iconButton} onClick={() => setSearchOpen(true)} type="button" aria-label="Buscar">
+              <Search size={20} />
+            </button>
+          )}
+
           <Link href="/login" style={{ textDecoration: 'none' }}>
             <button className={styles.loginButton} type="button">
               Entrar

@@ -45,7 +45,7 @@ export default async function HomePage() {
   }
 
   // Fetch real news from API
-  let articles = await fetchNews({ revalidate: 3600, tags: ['news'] });
+  let articles = await fetchNews({ revalidate: process.env.NODE_ENV === 'development' ? 0 : 3600, tags: ['news'] });
   if (!articles || articles.length === 0) {
     articles = MOCK_ARTICLES;
   }

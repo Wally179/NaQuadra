@@ -157,6 +157,8 @@ export class EspnService {
       const entries: NormalizedStandingsEntry[] = [];
       for (const conf of data.children) {
         const confName = conf.name.toLowerCase().includes('east') ? 'east' : 'west';
+        const confEntries: NormalizedStandingsEntry[] = [];
+        
         conf.standings.entries.forEach((entry, index) => {
           const getStat = (name: string) => {
             const stat = entry.stats.find((s) => s.name === name);
@@ -167,7 +169,7 @@ export class EspnService {
             return stat ? stat.displayValue : '-';
           };
 
-          entries.push({
+          confEntries.push({
             teamId: espnIdToSlug(entry.team.id),
             teamName: entry.team.displayName,
             teamAbbr: entry.team.abbreviation,
@@ -181,20 +183,22 @@ export class EspnService {
             seed: index + 1,
           });
         });
+
+        // Sort properly inside the current conference
+        confEntries.sort((a, b) => {
+          const pctA = Number(a.pct) || 0;
+          const pctB = Number(b.pct) || 0;
+          if (pctB !== pctA) return pctB - pctA;
+          return (Number(b.wins) || 0) - (Number(a.wins) || 0);
+        });
+
+        // Recalculate seeds after sorting
+        confEntries.forEach((e, idx) => {
+          e.seed = idx + 1;
+        });
+
+        entries.push(...confEntries);
       }
-
-      // Add a descending sort by PCT to fix ESPN API out-of-order arrays
-      entries.sort((a, b) => {
-        const pctA = Number(a.pct) || 0;
-        const pctB = Number(b.pct) || 0;
-        if (pctB !== pctA) return pctB - pctA;
-        return (Number(b.wins) || 0) - (Number(a.wins) || 0);
-      });
-
-      // Recalculate seeds after sorting
-      entries.forEach((e, idx) => {
-        e.seed = idx + 1;
-      });
 
       return entries;
     } catch (error) {
@@ -231,6 +235,13 @@ export class EspnService {
 
   // ── Player Details ──
   async getPlayerDetails(playerId: string): Promise<NormalizedPlayer & { teamId: string; draftInfo: string; experience: number } | null> {
+    // If playerId is not numeric, it's likely a slug. Try searching for it first.
+    if (!/^\d+$/.test(playerId)) {
+      const searchedPlayer = await this.searchPlayer(playerId);
+      if (searchedPlayer) return searchedPlayer;
+      return null;
+    }
+
     const url = `http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/${playerId}`;
 
     try {
@@ -267,29 +278,88 @@ export class EspnService {
 
   // ── News ──
   async getNews(): Promise<any[]> {
-    const url = 'http://site.api.espn.com/apis/site/v2/sports/basketball/nba/news';
+    // Fetch specifically Portuguese localized news with a higher limit to filter downstream
+    const url = 'http://site.api.espn.com/apis/site/v2/sports/basketball/nba/news?limit=30&lang=pt&region=br';
     try {
       const res = await fetch(url);
       if (!res.ok) throw new Error(`ESPN news responded ${res.status}`);
       const data = (await res.json()) as any;
       if (!data.articles) return [];
 
-      return data.articles.map((article: any) => ({
-        id: article.id?.toString() || Math.random().toString(),
-        title: article.headline,
-        summary: article.description,
-        content: article.description,
-        imageUrl: article.images?.[0]?.url || 'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&q=80',
-        publishedAt: article.published,
-        author: article.byline || 'ESPN',
-        slug: article.nowId || article.id?.toString(),
-        tags: ['NBA'],
-        link: article.links?.web?.href,
-      }));
+      let rawArticles = data.articles;
+      
+      // Strict rule: user explicitly wants only articles that possess an image
+      rawArticles = rawArticles.filter((a: any) => a.images && a.images.length > 0 && a.images[0].url);
+      
+      // Sliced strictly to 10 items
+      rawArticles = rawArticles.slice(0, 10);
+
+      return rawArticles.map((article: any) => {
+        let categoryAssigned = 'news';
+        if (article.categories && article.categories.length > 0) {
+           const desc = article.categories[0].description?.toLowerCase();
+           if (desc === 'análise') categoryAssigned = 'analysis';
+           if (desc === 'feature' || desc === 'destaque') categoryAssigned = 'feature';
+        }
+        if (article.type === 'Media') categoryAssigned = 'highlight'; // Optional styling feature
+
+        return {
+          id: article.id?.toString() || Math.random().toString(),
+          title: article.headline,
+          summary: article.description || article.title,
+          content: article.story || article.description,
+          coverImage: article.images[0].url,
+          publishedAt: article.published,
+          author: { id: 'espn', name: article.byline || 'ESPN Brasil' },
+          slug: article.nowId || article.id?.toString(),
+          tags: article.categories ? article.categories.map((c: any) => c.description).filter(Boolean) : ['NBA'],
+          link: article.links?.web?.href,
+          category: categoryAssigned,
+          readTimeMinutes: Math.floor(Math.random() * 5) + 2, // Dummy read time
+          source: 'espn-ingested',
+          status: 'published',
+          relatedTeams: [],
+          relatedPlayers: [],
+        };
+      });
     } catch (error) {
       this.logger.error('Failed to fetch ESPN news', (error as Error).message);
       return [];
     }
+  }
+
+  // ── Search Player ──
+  async searchPlayer(query: string): Promise<NormalizedPlayer & { teamId: string; draftInfo: string; experience: number } | null> {
+    const url = `http://site.api.espn.com/apis/common/v3/search?region=us&lang=en&query=${encodeURIComponent(query)}&limit=5&type=player`;
+    try {
+      const res = await fetch(url);
+      if (!res.ok) return null;
+      const data = await res.json();
+      
+      const athletes = data.items?.[0]?.athletes || [];
+      if (athletes.length === 0) return null;
+
+      // Extract ESPN athlete ID from uid (e.g. "s:40~l:46~a:1966")
+      const firstMatch = athletes[0];
+      const match = firstMatch.uid?.match(/~a:(\d+)/);
+      if (!match) return null;
+
+      const playerId = match[1];
+      // Reuse the existing detail fetcher
+      return this.getPlayerDetails(playerId);
+    } catch (error) {
+      this.logger.error(`Search failed for ${query}`, (error as Error).message);
+      return null;
+    }
+  }
+
+  // ── Single News Article ──
+  async getNewsArticleBySlug(slug: string): Promise<any | null> {
+    // For simplicity, we filter over the recent news. In a production caching layer, 
+    // we would pull from DB or fetch a specific endpoint like now.core.api.espn.com
+    const news = await this.getNews();
+    const article = news.find((n) => n.slug === slug);
+    return article || null;
   }
 
   // ── Internal: Normalize ESPN Event ──

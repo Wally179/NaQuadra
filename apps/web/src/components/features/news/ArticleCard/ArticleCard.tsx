@@ -2,6 +2,7 @@
 
 import type { NormalizedArticle } from '@naquadra/types';
 import { formatRelativeTime } from '@/lib/formatters';
+import Link from 'next/link';
 import styles from './ArticleCard.module.css';
 
 interface ArticleCardProps {
@@ -20,16 +21,21 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
   const categoryLabel = CATEGORY_LABELS[article.category] || article.category;
 
   return (
-    <article className={`${styles.card} ${featured ? styles.featured : ''}`}>
+    <Link href={`/news/${article.slug}`} style={{ textDecoration: 'none', display: 'contents' }}>
+      <article className={`${styles.card} ${featured ? styles.featured : ''}`}>
       {/* Image */}
       <div className={styles.imageWrapper}>
-        {article.coverImage && (
+        {article.coverImage ? (
           <img
             src={article.coverImage}
             alt={article.title}
             className={styles.image}
             loading={featured ? 'eager' : 'lazy'}
           />
+        ) : (
+          <div className={`${styles.image} ${styles.imagePlaceholder}`}>
+            <span className={styles.placeholderIcon}>🏀</span>
+          </div>
         )}
         <span
           className={`${styles.categoryBadge} ${
@@ -59,5 +65,6 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
         </div>
       </div>
     </article>
+  </Link>
   );
 }

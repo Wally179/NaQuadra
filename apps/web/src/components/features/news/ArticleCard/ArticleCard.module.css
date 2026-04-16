@@ -39,6 +39,20 @@
   transform: scale(1.03);
 }
 
+.imagePlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--nq-overlay-light);
+  border: 1px dashed var(--nq-border-subtle);
+}
+
+.placeholderIcon {
+  font-size: 3rem;
+  opacity: 0.5;
+  filter: grayscale(100%);
+}
+
 /* Category badge */
 .categoryBadge {
   position: absolute;
