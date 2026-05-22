@@ -1,5 +1,5 @@
 // ============================================================
-// Na Quadra — Entity: Team (MySQL / TypeORM)
+// Na Quadra — Entity: Team (PostgreSQL / TypeORM)
 // ============================================================
 import {
   Entity,
@@ -26,7 +26,7 @@ export class TeamEntity {
   @Column({ type: 'varchar', length: 100 })
   city!: string;
 
-  @Column({ type: 'enum', enum: ['east', 'west'] })
+  @Column({ type: 'varchar', length: 4 })
   conference!: 'east' | 'west';
 
   @Column({ type: 'varchar', length: 50 })

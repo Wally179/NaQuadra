@@ -1,12 +1,12 @@
 'use client';
 
-import type { NormalizedArticle } from '@naquadra/types';
+import type { Article } from '@/lib/api';
 import { formatRelativeTime } from '@/lib/formatters';
 import Link from 'next/link';
 import styles from './ArticleCard.module.css';
 
 interface ArticleCardProps {
-  article: NormalizedArticle;
+  article: Article;
   featured?: boolean;
 }
 

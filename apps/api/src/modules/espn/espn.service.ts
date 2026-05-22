@@ -237,7 +237,8 @@ export class EspnService {
   async getPlayerDetails(playerId: string): Promise<NormalizedPlayer & { teamId: string; draftInfo: string; experience: number } | null> {
     // If playerId is not numeric, it's likely a slug. Try searching for it first.
     if (!/^\d+$/.test(playerId)) {
-      const searchedPlayer = await this.searchPlayer(playerId);
+      const normalizedQuery = decodeURIComponent(playerId).replace(/[-_]+/g, ' ').trim();
+      const searchedPlayer = await this.searchPlayer(normalizedQuery);
       if (searchedPlayer) return searchedPlayer;
       return null;
     }
@@ -311,7 +312,7 @@ export class EspnService {
           coverImage: article.images[0].url,
           publishedAt: article.published,
           author: { id: 'espn', name: article.byline || 'ESPN Brasil' },
-          slug: article.nowId || article.id?.toString(),
+          slug: String(article.id),
           tags: article.categories ? article.categories.map((c: any) => c.description).filter(Boolean) : ['NBA'],
           link: article.links?.web?.href,
           category: categoryAssigned,
@@ -330,23 +331,40 @@ export class EspnService {
 
   // ── Search Player ──
   async searchPlayer(query: string): Promise<NormalizedPlayer & { teamId: string; draftInfo: string; experience: number } | null> {
-    const url = `http://site.api.espn.com/apis/common/v3/search?region=us&lang=en&query=${encodeURIComponent(query)}&limit=5&type=player`;
-    try {
-      const res = await fetch(url);
-      if (!res.ok) return null;
-      const data = await res.json();
-      
-      const athletes = data.items?.[0]?.athletes || [];
-      if (athletes.length === 0) return null;
+    const performSearch = async (q: string) => {
+      try {
+        const url = `http://site.api.espn.com/apis/common/v3/search?region=us&lang=en&query=${encodeURIComponent(q)}&limit=25&type=player`;
+        const res = await fetch(url);
+        if (!res.ok) return null;
+        const data = (await res.json()) as { items?: { athletes?: { uid?: string }[] }[] };
+        
+        const allAthletes: any[] = [];
+        (data.items || []).forEach((item: any) => {
+          if (item.athletes) allAthletes.push(...item.athletes);
+        });
 
-      // Extract ESPN athlete ID from uid (e.g. "s:40~l:46~a:1966")
-      const firstMatch = athletes[0];
-      const match = firstMatch.uid?.match(/~a:(\d+)/);
+        // Match Priority: Basketball (s:40)
+        return allAthletes.find((a: any) => a.uid?.includes('s:40')) || null;
+      } catch {
+        return null;
+      }
+    };
+
+    try {
+      // First attempt
+      let targetAthlete = await performSearch(query);
+      
+      // Fallback attempt: if no b-baller found, try appending " nba"
+      if (!targetAthlete && !query.toLowerCase().includes('nba')) {
+        targetAthlete = await performSearch(`${query} nba`);
+      }
+
+      if (!targetAthlete) return null;
+
+      const match = targetAthlete.uid?.match(/~a:(\d+)/);
       if (!match) return null;
 
-      const playerId = match[1];
-      // Reuse the existing detail fetcher
-      return this.getPlayerDetails(playerId);
+      return this.getPlayerDetails(match[1]);
     } catch (error) {
       this.logger.error(`Search failed for ${query}`, (error as Error).message);
       return null;
@@ -354,12 +372,9 @@ export class EspnService {
   }
 
   // ── Single News Article ──
-  async getNewsArticleBySlug(slug: string): Promise<any | null> {
-    // For simplicity, we filter over the recent news. In a production caching layer, 
-    // we would pull from DB or fetch a specific endpoint like now.core.api.espn.com
+  async getNewsArticleBySlug(slug: string): Promise<Record<string, unknown> | null> {
     const news = await this.getNews();
-    const article = news.find((n) => n.slug === slug);
-    return article || null;
+    return news.find((n: Record<string, unknown>) => n.slug === slug) ?? null;
   }
 
   // ── Internal: Normalize ESPN Event ──

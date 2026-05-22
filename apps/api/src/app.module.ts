@@ -37,7 +37,7 @@ const SKIP_DB = process.env.SKIP_DB === 'true';
 // ── Database imports (only when SKIP_DB is not true) ──
 const databaseImports = SKIP_DB
   ? (() => {
-      logger.warn('⚠️  SKIP_DB=true — Running in ESPN-only mode (no MySQL/MongoDB)');
+      logger.warn('⚠️  SKIP_DB=true — Running in ESPN-only mode (no PostgreSQL/MongoDB)');
       return [];
     })()
   : [

@@ -1,5 +1,5 @@
 // ============================================================
-// Na Quadra — Database Seed: Teams (MySQL)
+// Na Quadra — Database Seed: Teams (PostgreSQL)
 // All 30 NBA teams with real data
 // ============================================================
 
@@ -35,7 +35,7 @@ export const TEAMS_SEED: TeamSeedData[] = [
   { id: 'orl', externalId: '19', name: 'Orlando Magic', abbreviation: 'ORL', city: 'Orlando', conference: 'east', division: 'Southeast', colorPrimary: '#0077C0', colorSecondary: '#C4CED4', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/orl.png', arena: 'Amway Center', founded: 1989, championships: 0 },
   { id: 'phi', externalId: '20', name: 'Philadelphia 76ers', abbreviation: 'PHI', city: 'Philadelphia', conference: 'east', division: 'Atlantic', colorPrimary: '#006BB6', colorSecondary: '#ED174C', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/phi.png', arena: 'Wells Fargo Center', founded: 1946, championships: 3 },
   { id: 'tor', externalId: '28', name: 'Toronto Raptors', abbreviation: 'TOR', city: 'Toronto', conference: 'east', division: 'Atlantic', colorPrimary: '#CE1141', colorSecondary: '#000000', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/tor.png', arena: 'Scotiabank Arena', founded: 1995, championships: 1 },
-  { id: 'was', externalId: '27', name: 'Washington Wizards', abbreviation: 'WAS', city: 'Washington', conference: 'east', division: 'Southeast', colorPrimary: '#002B5C', colorSecondary: '#E31837', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/wsh.png', arena: 'Capital One Arena', founded: 1961, championships: 1 },
+  { id: 'wsh', externalId: '27', name: 'Washington Wizards', abbreviation: 'WAS', city: 'Washington', conference: 'east', division: 'Southeast', colorPrimary: '#002B5C', colorSecondary: '#E31837', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/wsh.png', arena: 'Capital One Arena', founded: 1961, championships: 1 },
   // ── Western Conference ──
   { id: 'dal', externalId: '6', name: 'Dallas Mavericks', abbreviation: 'DAL', city: 'Dallas', conference: 'west', division: 'Southwest', colorPrimary: '#00538C', colorSecondary: '#002B5E', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/dal.png', arena: 'American Airlines Center', founded: 1980, championships: 1 },
   { id: 'den', externalId: '7', name: 'Denver Nuggets', abbreviation: 'DEN', city: 'Denver', conference: 'west', division: 'Northwest', colorPrimary: '#0E2240', colorSecondary: '#FEC524', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/den.png', arena: 'Ball Arena', founded: 1967, championships: 1 },

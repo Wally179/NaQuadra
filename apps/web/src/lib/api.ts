@@ -11,14 +11,21 @@ export interface Article {
   slug: string;
   title: string;
   subtitle?: string;
+  summary?: string;
   content: string;
   coverImage: string | null;
-  author: { id: string; name: string };
+  author: { id: string; name: string; avatar?: string };
   category: 'news' | 'analysis' | 'feature' | 'explainer' | 'highlight';
   tags: string[];
+  relatedTeams: string[];
+  relatedPlayers: string[];
+  source: 'editorial' | 'espn-ingested';
+  sourceUrl?: string;
+  status: 'published' | 'draft' | 'archived';
   publishedAt: string;
   readTimeMinutes: number;
   link?: string;
+  glossaryTerms?: string[];
 }
 
 interface FetchOptions {
@@ -161,11 +168,14 @@ export interface PlayerDetail {
   headshot: string;
   height: string;
   weight: string;
+  age?: number;
+  country?: string;
   dateOfBirth: string | null;
   birthPlace: string | null;
   college: string | null;
   draftInfo: string | null;
   experience: number | null;
+  teamId?: string;
   teamName: string;
   teamAbbr: string;
   teamLogo: string;
@@ -177,7 +187,10 @@ export async function fetchPlayerDetail(playerId: string, options?: FetchOptions
     if (!res) return null;
     return res.data;
   } catch (err) {
-    console.error(`Failed to fetch player detail ${playerId}:`, err);
+    const message = err instanceof Error ? err.message : String(err);
+    if (!message.includes('API error 404')) {
+      console.error(`Failed to fetch player detail ${playerId}:`, err);
+    }
     return null;
   }
 }
@@ -206,11 +219,11 @@ export async function fetchNewsArticle(slug: string, options?: FetchOptions): Pr
 
 export async function fetchSearchPlayer(query: string, options?: FetchOptions): Promise<PlayerDetail | null> {
   try {
-    const res = await apiFetch<{ data: PlayerDetail }>(`/api/v1/players/search/${encodeURIComponent(query)}`, options);
+    const res = await apiFetch<{ data: PlayerDetail }>(`/api/v1/players/search?q=${encodeURIComponent(query)}`, options);
     if (!res || !res.data) return null;
     return res.data;
-  } catch (err) {
-    console.error(`Failed to search player ${query}:`, err);
+  } catch (error) {
+    console.error(`Search failed for ${query}:`, error);
     return null;
   }
 }

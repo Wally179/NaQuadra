@@ -27,7 +27,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
   // Perform weak text searching over headlines and content
   const lowerQuery = query.toLowerCase();
   const relatedNews = allNews.filter(
-    (n) => n.title.toLowerCase().includes(lowerQuery) || n.summary.toLowerCase().includes(lowerQuery)
+    (n) => n.title.toLowerCase().includes(lowerQuery) || (n.summary ?? '').toLowerCase().includes(lowerQuery)
   ).slice(0, 4);
 
   return (
@@ -49,7 +49,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
               </div>
               <div className={styles.playerInfo}>
                 <h3 className={styles.playerName}>{player.name}</h3>
-                <p className={styles.playerTeam}>{player.teamId.toUpperCase()} • #{player.jersey} • {player.position}</p>
+                <p className={styles.playerTeam}>{(player.teamId ?? player.teamAbbr ?? '').toUpperCase()} • #{player.jersey} • {player.position}</p>
                 <div className={styles.playerStats}>
                   <span>Altura: {player.height}</span>
                   <span>Peso: {player.weight}</span>

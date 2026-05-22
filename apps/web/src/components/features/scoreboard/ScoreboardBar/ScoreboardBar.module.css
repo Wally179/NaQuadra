@@ -31,7 +31,9 @@
 
 @media (min-width: 1024px) {
   .track {
-    padding: 0 var(--nq-space-8);
+    /* Alinha o início do conteúdo com o container centralizado, mas permite o scroll até as bordas */
+    padding-left: calc((100vw - min(100vw, var(--nq-max-width))) / 2 + var(--nq-space-8));
+    padding-right: var(--nq-space-8);
   }
 }
 
@@ -54,6 +56,8 @@
 
 @media (min-width: 1024px) {
   .sectionTitle {
-    padding: 0 var(--nq-space-8);
+    padding-left: calc((100vw - min(100vw, var(--nq-max-width))) / 2 + var(--nq-space-8));
+    padding-right: var(--nq-space-8);
   }
 }
+

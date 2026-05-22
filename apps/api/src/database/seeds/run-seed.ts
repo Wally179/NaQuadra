@@ -1,58 +1,51 @@
 // ============================================================
 // Na Quadra — Database Seed Runner
-// Seeds MySQL (teams) + MongoDB (glossary, articles)
+// Seeds PostgreSQL (teams) + MongoDB (glossary, articles)
 // Usage: npx ts-node src/database/seeds/run-seed.ts
 // ============================================================
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import mongoose from 'mongoose';
+import { TeamEntity } from '../../modules/teams/entities/team.entity';
 import { TEAMS_SEED } from './teams.seed';
 import { GLOSSARY_SEED } from './glossary.seed';
 import { ARTICLES_SEED } from './articles.seed';
 
 // ── Config (reads from .env or uses defaults) ──
-const MYSQL_HOST = process.env.MYSQL_HOST || 'localhost';
-const MYSQL_PORT = parseInt(process.env.MYSQL_PORT || '3306', 10);
-const MYSQL_USER = process.env.MYSQL_USERNAME || 'naquadra';
-const MYSQL_PASS = process.env.MYSQL_PASSWORD || 'naquadra_dev_2026';
-const MYSQL_DB = process.env.MYSQL_DATABASE || 'naquadra';
+const DATABASE_URL = process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/naquadra';
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/naquadra';
 
 async function seed() {
   console.log('🏀 Na Quadra — Database Seed');
   console.log('═══════════════════════════════\n');
 
-  // ── MySQL: Teams ──
-  console.log('📦 Connecting to MySQL...');
-  const mysql = new DataSource({
-    type: 'mysql',
-    host: MYSQL_HOST,
-    port: MYSQL_PORT,
-    username: MYSQL_USER,
-    password: MYSQL_PASS,
-    database: MYSQL_DB,
+  // ── PostgreSQL: Teams ──
+  console.log('📦 Connecting to PostgreSQL...');
+  const postgres = new DataSource({
+    type: 'postgres',
+    url: DATABASE_URL,
     synchronize: true,
     logging: false,
     entities: [__dirname + '/../../modules/**/*.entity{.ts,.js}'],
   });
 
   try {
-    await mysql.initialize();
-    console.log('✅ MySQL connected\n');
+    await postgres.initialize();
+    console.log('✅ PostgreSQL connected\n');
 
     // Seed teams
     console.log('🏀 Seeding teams...');
-    const teamRepo = mysql.getRepository('TeamEntity');
+    const teamRepo = postgres.getRepository(TeamEntity);
 
     for (const team of TEAMS_SEED) {
       await teamRepo.save(teamRepo.create(team));
     }
     console.log(`   ✅ ${TEAMS_SEED.length} teams seeded\n`);
 
-    await mysql.destroy();
+    await postgres.destroy();
   } catch (err) {
-    console.error('❌ MySQL seed failed:', (err as Error).message);
-    console.log('   ⚠️  Make sure MySQL is running: docker compose up -d mysql\n');
+    console.error('❌ PostgreSQL seed failed:', (err as Error).message);
+    console.log('   ⚠️  Make sure PostgreSQL is running: docker compose up -d postgres\n');
   }
 
   // ── MongoDB: Glossary + Articles ──

@@ -3,9 +3,10 @@ import { notFound } from 'next/navigation';
 import { ArticleCard } from '@/components/features/news/ArticleCard/ArticleCard';
 import styles from './NewsArticlePage.module.css';
 import Link from 'next/link';
+import type { Metadata } from 'next';
 
 interface PageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
