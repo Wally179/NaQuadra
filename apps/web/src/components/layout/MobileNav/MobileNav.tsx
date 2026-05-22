@@ -2,28 +2,31 @@
 
 import { Home, BarChart3, Search, Heart, User } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import styles from './MobileNav.module.css';
 
 export function MobileNav() {
+  const pathname = usePathname();
+
   return (
     <nav className={styles.mobileNav} aria-label="Navegação mobile">
-      <Link href="/" className={styles.navItem}>
+      <Link href="/" className={`${styles.navItem} ${pathname === '/' ? styles.navItemActive : ''}`}>
         <Home size={22} />
         <span className={styles.navLabel}>Início</span>
       </Link>
-      <Link href="/standings" className={styles.navItem}>
+      <Link href="/standings" className={`${styles.navItem} ${pathname === '/standings' ? styles.navItemActive : ''}`}>
         <BarChart3 size={22} />
         <span className={styles.navLabel}>Standings</span>
       </Link>
-      <Link href="/search" className={styles.navItem}>
+      <Link href="/search" className={`${styles.navItem} ${pathname === '/search' ? styles.navItemActive : ''}`}>
         <Search size={22} />
         <span className={styles.navLabel}>Buscar</span>
       </Link>
-      <Link href="/favorites" className={styles.navItem}>
+      <Link href="/favorites" className={`${styles.navItem} ${pathname === '/favorites' ? styles.navItemActive : ''}`}>
         <Heart size={22} />
         <span className={styles.navLabel}>Favoritos</span>
       </Link>
-      <Link href="/profile" className={styles.navItem}>
+      <Link href="/profile" className={`${styles.navItem} ${pathname === '/profile' ? styles.navItemActive : ''}`}>
         <User size={22} />
         <span className={styles.navLabel}>Perfil</span>
       </Link>

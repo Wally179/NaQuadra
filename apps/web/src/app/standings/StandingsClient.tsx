@@ -27,26 +27,38 @@ export function StandingsClient({ eastStandings, westStandings, isLive }: Standi
         </p>
       </div>
 
-      <div className={styles.tabs} role="tablist">
+      <div className={styles.tabs} role="tablist" aria-label="Conferências da NBA">
         <button
+          id="tab-east"
+          aria-controls="panel-standings"
           className={`${styles.tab} ${conference === 'east' ? styles.tabActive : ''}`}
           onClick={() => setConference('east')}
           role="tab"
           aria-selected={conference === 'east'}
+          tabIndex={conference === 'east' ? 0 : -1}
         >
           Conferência Leste
         </button>
         <button
+          id="tab-west"
+          aria-controls="panel-standings"
           className={`${styles.tab} ${conference === 'west' ? styles.tabActive : ''}`}
           onClick={() => setConference('west')}
           role="tab"
           aria-selected={conference === 'west'}
+          tabIndex={conference === 'west' ? 0 : -1}
         >
           Conferência Oeste
         </button>
       </div>
 
-      <div className={styles.tableWrapper}>
+      <div 
+        id="panel-standings"
+        role="tabpanel"
+        aria-labelledby={conference === 'east' ? 'tab-east' : 'tab-west'}
+        className={styles.tableWrapper}
+        tabIndex={0}
+      >
         <table className={styles.table}>
           <thead>
             <tr>

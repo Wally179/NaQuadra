@@ -116,7 +116,11 @@ export default async function TeamDetailPage({ params }: PageProps) {
         <div className={styles.rosterGrid}>
           {roster.length > 0 ? (
             roster.map((player) => (
-              <div key={player.externalId} className={styles.playerCard}>
+              <Link 
+                key={player.externalId} 
+                href={`/players/${player.externalId}`}
+                className={styles.playerCard}
+              >
                 {player.headshot && (
                   <img
                     src={player.headshot}
@@ -130,7 +134,7 @@ export default async function TeamDetailPage({ params }: PageProps) {
                 <span className={styles.playerNumber}>#{player.jersey}</span>
                 <span className={styles.playerName}>{player.name}</span>
                 <span className={styles.playerPosition}>{player.position}</span>
-              </div>
+              </Link>
             ))
           ) : (
             <p className={styles.emptyRoster}>

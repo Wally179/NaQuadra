@@ -2,12 +2,13 @@
 
 import { Search, User } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useState } from 'react';
 import styles from './Header.module.css';
 
 export function Header() {
   const router = useRouter();
+  const pathname = usePathname();
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
 
@@ -33,12 +34,12 @@ export function Header() {
 
         {/* Desktop Nav */}
         <nav className={styles.nav} aria-label="Navegação principal">
-          <Link href="/" className={styles.navLink}>Início</Link>
-          <Link href="/standings" className={styles.navLink}>Standings</Link>
-          <Link href="/teams" className={styles.navLink}>Times</Link>
-          <Link href="/news" className={styles.navLink}>Notícias</Link>
-          <Link href="/glossary" className={styles.navLink}>Glossário</Link>
-          <Link href="/about" className={styles.navLink}>Sobre</Link>
+          <Link href="/" className={`${styles.navLink} ${pathname === '/' ? styles.navLinkActive : ''}`}>Início</Link>
+          <Link href="/standings" className={`${styles.navLink} ${pathname === '/standings' ? styles.navLinkActive : ''}`}>Standings</Link>
+          <Link href="/teams" className={`${styles.navLink} ${pathname === '/teams' ? styles.navLinkActive : ''}`}>Times</Link>
+          <Link href="/news" className={`${styles.navLink} ${pathname === '/news' ? styles.navLinkActive : ''}`}>Notícias</Link>
+          <Link href="/glossary" className={`${styles.navLink} ${pathname === '/glossary' ? styles.navLinkActive : ''}`}>Glossário</Link>
+          <Link href="/about" className={`${styles.navLink} ${pathname === '/about' ? styles.navLinkActive : ''}`}>Sobre</Link>
         </nav>
 
         {/* Actions */}
