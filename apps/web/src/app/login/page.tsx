@@ -10,11 +10,11 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [message, setMessage] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: connect to API
-    alert(tab === 'login' ? 'Login em breve! 🚧' : 'Cadastro em breve! 🚧');
+    setMessage('A funcionalidade de autenticação ainda não está disponível. Em breve você poderá criar sua conta e entrar na plataforma.');
   };
 
   return (
@@ -50,6 +50,12 @@ export default function LoginPage() {
             Cadastrar
           </button>
         </div>
+
+        {message && (
+          <div style={{ padding: '1rem', marginBottom: '1rem', backgroundColor: 'var(--nq-bg-elevated)', borderRadius: 'var(--nq-radius-md)', color: 'var(--nq-text-secondary)', fontSize: 'var(--nq-text-sm)', textAlign: 'center', border: '1px solid var(--nq-border-subtle)' }}>
+            {message}
+          </div>
+        )}
 
         {/* Form */}
         <form className={styles.form} onSubmit={handleSubmit}>

@@ -1,6 +1,6 @@
 import { fetchSearchPlayer, fetchNews } from '@/lib/api';
 import { ArticleCard } from '@/components/features/news/ArticleCard/ArticleCard';
-import styles from './SearchPage.module.css';
+import styles from './page.module.css';
 import Link from 'next/link';
 
 interface PageProps {
@@ -10,10 +10,28 @@ interface PageProps {
 export default async function SearchPage({ searchParams }: PageProps) {
   const { q: query = '' } = await searchParams;
   
+  const searchForm = (
+    <form action="/search" method="GET" className={styles.searchBar}>
+      <span className={styles.searchIcon}>🔍</span>
+      <input
+        type="text"
+        name="q"
+        defaultValue={query}
+        placeholder="Busque por jogadores, times ou notícias..."
+        className={styles.searchInput}
+        autoFocus={!query}
+      />
+    </form>
+  );
+
   if (!query) {
     return (
       <main className={styles.main}>
-        <h1>Digite algo para buscar</h1>
+        <h1 className={styles.pageTitle}>Buscar no Na Quadra</h1>
+        {searchForm}
+        <div className={styles.emptyState}>
+          <p>Digite o nome de um jogador, time ou assunto para buscar.</p>
+        </div>
       </main>
     );
   }
@@ -33,6 +51,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
   return (
     <main className={styles.main}>
       <h1 className={styles.pageTitle}>Resultados da busca</h1>
+      {searchForm}
 
       {player && (
         <section className={styles.playerSection}>

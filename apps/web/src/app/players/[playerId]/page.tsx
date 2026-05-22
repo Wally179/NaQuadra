@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const player = await fetchPlayerDetail(playerId);
   if (!player) return { title: 'Jogador não encontrado' };
   return {
-    title: player.name,
+    title: `NaQuadra — ${player.name} (${player.teamAbbr})`,
     description: `Estatísticas, perfil e informações de ${player.name}.`,
   };
 }

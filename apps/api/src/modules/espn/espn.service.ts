@@ -316,7 +316,7 @@ export class EspnService {
           tags: article.categories ? article.categories.map((c: any) => c.description).filter(Boolean) : ['NBA'],
           link: article.links?.web?.href,
           category: categoryAssigned,
-          readTimeMinutes: Math.floor(Math.random() * 5) + 2, // Dummy read time
+          readTimeMinutes: Math.max(1, Math.ceil((article.story || article.description || article.headline || '').length / 1000)),
           source: 'espn-ingested',
           status: 'published',
           relatedTeams: [],

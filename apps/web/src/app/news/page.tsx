@@ -18,7 +18,7 @@ export default async function NewsPage() {
 
   // Fallback to mock data if API is down or returns empty
   if (!articles || articles.length === 0) {
-    articles = MOCK_ARTICLES as any;
+    articles = MOCK_ARTICLES;
   }
 
   return <NewsFeed initialArticles={articles} />;

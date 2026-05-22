@@ -2,9 +2,9 @@
 // Na Quadra — Mock Data: Articles (News Feed)
 // ============================================================
 
-import type { NormalizedArticle } from '@naquadra/types';
+import type { Article } from '@/lib/api';
 
-export const MOCK_ARTICLES: NormalizedArticle[] = [
+export const MOCK_ARTICLES: Article[] = [
   {
     id: 'art-1',
     slug: 'celtics-dominam-heat-jogo-3',

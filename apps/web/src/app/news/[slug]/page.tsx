@@ -16,6 +16,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${article.title} | Na Quadra`,
     description: article.summary,
+    openGraph: {
+      title: article.title,
+      description: article.summary,
+      images: article.coverImage ? [article.coverImage] : [],
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: article.title,
+      description: article.summary,
+      images: article.coverImage ? [article.coverImage] : [],
+    },
   };
 }
 

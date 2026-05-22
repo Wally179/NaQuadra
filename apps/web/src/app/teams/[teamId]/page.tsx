@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const team = getTeam(teamId);
   if (!team) return { title: 'Time não encontrado' };
   return {
-    title: team.name,
+    title: `NaQuadra — ${team.name}`,
     description: `Tudo sobre o ${team.name}: elenco, estatísticas, notícias e história.`,
   };
 }
