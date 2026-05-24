@@ -70,8 +70,8 @@ export default async function NewsArticlePage({ params }: PageProps) {
 
         <div className={styles.content}>
           <p>{article.content}</p>
-          <a href={article.link} target="_blank" rel="noopener noreferrer" className={styles.sourceLink}>
-            Ler matéria completa na ESPN ↗
+          <a href={article.link || article.sourceUrl} target="_blank" rel="noopener noreferrer" className={styles.sourceButton}>
+            Ler matéria completa em {article.author?.name || 'ESPN'} ↗
           </a>
         </div>
       </article>

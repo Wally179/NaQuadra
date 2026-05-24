@@ -102,23 +102,26 @@
   gap: var(--nq-space-4);
 }
 
-.sourceLink {
-  display: inline-block;
-  margin-top: var(--nq-space-6);
+.sourceButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--nq-space-8);
   padding: var(--nq-space-3) var(--nq-space-6);
-  background: var(--nq-bg-tertiary);
-  color: var(--nq-text-primary);
-  border-radius: var(--nq-radius-md);
+  background: var(--nq-bg-brand);
+  color: #fff;
+  font-family: var(--nq-font-body);
+  font-size: var(--nq-text-base);
+  font-weight: 600;
   text-decoration: none;
-  font-weight: var(--nq-font-medium);
-  border: 1px solid var(--nq-border-subtle);
-  transition: all var(--nq-duration-normal) var(--nq-ease-default);
-  align-self: flex-start;
+  border-radius: var(--nq-radius-md);
+  transition: background 0.2s, transform 0.2s;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
 
-.sourceLink:hover {
-  background: var(--nq-overlay-light);
-  border-color: var(--nq-border-default);
+.sourceButton:hover {
+  background: color-mix(in srgb, var(--nq-bg-brand) 80%, black);
+  transform: translateY(-2px);
 }
 
 /* Related News */
