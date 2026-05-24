@@ -15,7 +15,6 @@ export class NewsController {
   @ApiResponse({ status: 200, description: 'Lista de notícias mais recentes' })
   async getNews() {
     const articles = await this.espnService.getNews();
-    console.log('articles', articles)
 
     return { data: articles, meta: { total: articles.length } };
   }
@@ -29,7 +28,6 @@ export class NewsController {
     if (!article) {
       throw new NotFoundException(`Notícia '${slug}' não encontrada`);
     }
-    console.log('article', article)
     return { data: article };
   }
 }
