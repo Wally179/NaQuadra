@@ -74,7 +74,7 @@ const databaseImports = SKIP_DB
     ConfigModule.forRoot({
       isGlobal: true,
       load: [appConfig, databaseConfig, authConfig, espnConfig],
-      envFilePath: ['.env', '.env.example'],
+      envFilePath: ['.env.local', '.env', '.env.example'],
     }),
     ThrottlerModule.forRootAsync({
       inject: [ConfigService],

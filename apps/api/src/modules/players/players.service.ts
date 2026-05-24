@@ -3,7 +3,7 @@
 // ============================================================
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { EspnService } from '../espn/espn.service';
-import { slugToEspnId, espnIdToSlug } from '../espn/team-mapping';
+import { slugToEspnId } from '../espn/team-mapping';
 
 @Injectable()
 export class PlayersService {
@@ -21,20 +21,15 @@ export class PlayersService {
     if (!player) {
       throw new NotFoundException(`Jogador '${playerId}' não encontrado`);
     }
-
-    return {
-      ...player,
-      teamId: slugToEspnId(player.teamId) === player.teamId ? espnIdToSlug(player.teamId) : player.teamId,
-    };
+    // ESPN service already returns enriched data with teamId as slug + teamName/teamAbbr/teamLogo
+    return player;
   }
 
   async findByQuery(query: string) {
     const player = await this.espnService.searchPlayer(query);
     if (!player) return null;
-    return {
-      ...player,
-      teamId: slugToEspnId(player.teamId) === player.teamId ? espnIdToSlug(player.teamId) : player.teamId,
-    };
+    // ESPN service already returns enriched data
+    return player;
   }
 }
 

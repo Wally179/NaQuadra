@@ -7,7 +7,9 @@ import styles from './page.module.css';
 
 const CATEGORY_TABS: { key: string; label: string }[] = [
   { key: 'all', label: 'Todas' },
-  { key: 'NBA', label: 'Notícias' },
+  { key: 'news', label: 'Notícias' },
+  { key: 'highlight', label: 'Destaques' },
+  { key: 'analysis', label: 'Análises' },
 ];
 
 interface NewsFeedProps {
@@ -16,10 +18,9 @@ interface NewsFeedProps {
 
 export function NewsFeed({ initialArticles }: NewsFeedProps) {
   const [activeTab, setActiveTab] = useState<string>('all');
-
   const filtered = useMemo(() => {
     if (activeTab === 'all') return initialArticles;
-    return initialArticles.filter((a) => a.tags?.includes(activeTab));
+    return initialArticles.filter((a) => a.category === activeTab);
   }, [activeTab, initialArticles]);
 
   return (
@@ -44,9 +45,13 @@ export function NewsFeed({ initialArticles }: NewsFeedProps) {
 
       {/* Articles grid */}
       <div className={styles.grid}>
-        {filtered.map((article) => (
-          <ArticleCard key={article.id} article={article as any} />
-        ))}
+        {filtered.length > 0 ? (
+          filtered.map((article) => (
+            <ArticleCard key={article.id} article={article} />
+          ))
+        ) : (
+          <p className={styles.emptyState}>Nenhuma notícia encontrada nesta categoria.</p>
+        )}
       </div>
     </div>
   );

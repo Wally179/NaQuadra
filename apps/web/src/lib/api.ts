@@ -168,14 +168,14 @@ export interface PlayerDetail {
   headshot: string;
   height: string;
   weight: string;
-  age?: number;
-  country?: string;
-  dateOfBirth: string | null;
-  birthPlace: string | null;
-  college: string | null;
+  age: number;
+  country: string;
+  dateOfBirth?: string | null;
+  birthPlace?: string | null;
+  college?: string | null;
   draftInfo: string | null;
   experience: number | null;
-  teamId?: string;
+  teamId: string;
   teamName: string;
   teamAbbr: string;
   teamLogo: string;
@@ -208,9 +208,17 @@ export async function fetchNews(options?: FetchOptions): Promise<Article[]> {
 
 export async function fetchNewsArticle(slug: string, options?: FetchOptions): Promise<Article | null> {
   try {
-    const res = await apiFetch<{ data: Article }>(`/api/v1/news/${slug}`, options);
-    if (!res || !res.data) return null;
-    return res.data;
+    // Use no-store to ensure each article slug gets a fresh fetch
+    // (Next.js data cache can incorrectly serve stale results across dynamic routes)
+    const url = `${API_BASE}/api/v1/news/${slug}`;
+    const res = await fetch(url, {
+      cache: 'no-store',
+      headers: { 'Accept': 'application/json' },
+    });
+    if (!res.ok) return null;
+    const json = (await res.json()) as { data: Article };
+    if (!json || !json.data) return null;
+    return json.data;
   } catch (err) {
     console.error(`Failed to fetch news article ${slug}:`, err);
     return null;

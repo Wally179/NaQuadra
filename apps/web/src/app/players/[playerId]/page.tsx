@@ -2,6 +2,7 @@ import { getTeam } from '@/data/teams';
 import { fetchPlayerDetail } from '@/lib/api';
 import { PlayerHeadshot } from '@/components/features/players/PlayerHeadshot/PlayerHeadshot';
 import Link from 'next/link';
+import { Info } from 'lucide-react';
 import type { Metadata } from 'next';
 import type { CSSProperties } from 'react';
 import styles from './page.module.css';
@@ -38,8 +39,8 @@ export default async function PlayerDetailPage({ params }: PageProps) {
     );
   }
 
-  // The API now returns teamId directly via the mapping
-  const team = getTeam((player as any).teamId);
+  // The API returns teamId as a slug directly
+  const team = getTeam(player.teamId);
 
   // Fallback temporary stats (since core API doesn't provide stats in the same endpoint)
   const s = {
@@ -82,7 +83,7 @@ export default async function PlayerDetailPage({ params }: PageProps) {
                   <span className={styles.badge}>{team.name}</span>
                 </Link>
               )}
-              <span className={styles.badge}>{player.country || (player as any).birthPlace || 'USA'}</span>
+              <span className={styles.badge}>{player.country || 'USA'}</span>
             </div>
           </div>
         </div>
@@ -97,15 +98,21 @@ export default async function PlayerDetailPage({ params }: PageProps) {
 
         <div className={styles.mainStats}>
           {[
-            { value: s.ppg.toFixed(1), label: 'PPG' },
-            { value: s.rpg.toFixed(1), label: 'RPG' },
-            { value: s.apg.toFixed(1), label: 'APG' },
-            { value: s.spg.toFixed(1), label: 'SPG' },
-            { value: s.bpg.toFixed(1), label: 'BPG' },
+            { value: s.ppg.toFixed(1), label: 'PPG', desc: 'Pontos por Jogo: Média de pontos feitos a cada partida.' },
+            { value: s.rpg.toFixed(1), label: 'RPG', desc: 'Rebotes por Jogo: Média de bolas recuperadas após um arremesso errado.' },
+            { value: s.apg.toFixed(1), label: 'APG', desc: 'Assistências por Jogo: Passes que resultaram diretamente em cesta.' },
+            { value: s.spg.toFixed(1), label: 'SPG', desc: 'Roubos por Jogo: Vezes que tomou a bola do adversário.' },
+            { value: s.bpg.toFixed(1), label: 'BPG', desc: 'Tocos por Jogo: Arremessos adversários bloqueados.' },
           ].map((stat) => (
             <div key={stat.label} className={styles.mainStatCard}>
               <div className={styles.mainStatValue}>{stat.value}</div>
-              <div className={styles.mainStatLabel}>{stat.label}</div>
+              <div className={styles.mainStatLabelWrapper}>
+                <div className={styles.mainStatLabel}>{stat.label}</div>
+                <div className={styles.tooltipContainer}>
+                  <Info size={14} className={styles.infoIcon} />
+                  <div className={styles.tooltipText}>{stat.desc}</div>
+                </div>
+              </div>
             </div>
           ))}
         </div>
@@ -113,12 +120,18 @@ export default async function PlayerDetailPage({ params }: PageProps) {
         {/* Shooting percentages with bar */}
         <div className={styles.shootingStats}>
           {[
-            { label: 'FG%', value: s.fgPct },
-            { label: '3P%', value: s.threePct },
-            { label: 'FT%', value: s.ftPct },
+            { label: 'FG%', value: s.fgPct, desc: 'Aproveitamento geral: Porcentagem de acerto em todos os arremessos.' },
+            { label: '3P%', value: s.threePct, desc: '3 Pontos: Porcentagem de acerto nos arremessos de longa distância.' },
+            { label: 'FT%', value: s.ftPct, desc: 'Lance Livre: Porcentagem de acerto nos arremessos sem marcação (após falta).' },
           ].map((stat) => (
             <div key={stat.label} className={styles.shootingCard}>
-              <span className={styles.shootingLabel}>{stat.label}</span>
+              <div className={styles.shootingLabelWrapper}>
+                <span className={styles.shootingLabel}>{stat.label}</span>
+                <div className={styles.tooltipContainer}>
+                  <Info size={14} className={styles.infoIcon} />
+                  <div className={styles.tooltipText}>{stat.desc}</div>
+                </div>
+              </div>
               <div className={styles.shootingBar}>
                 <div
                   className={styles.shootingFill}
@@ -147,7 +160,7 @@ export default async function PlayerDetailPage({ params }: PageProps) {
           <div className={styles.infoGrid}>
             <div className={styles.infoItem}>
               <span className={styles.infoLabel}>Idade</span>
-              <span className={styles.infoValue}>{(player as any).age} anos</span>
+              <span className={styles.infoValue}>{player.age} anos</span>
             </div>
             <div className={styles.infoItem}>
               <span className={styles.infoLabel}>Altura</span>

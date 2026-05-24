@@ -4,7 +4,7 @@
 // ============================================================
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { espnIdToSlug, espnAbbrToSlug } from './team-mapping';
+import { espnIdToSlug, espnAbbrToSlug, getAllMappings } from './team-mapping';
 
 // ── Response types (ESPN API is untyped, we define what we need) ──
 interface EspnScoreboardResponse {
@@ -103,6 +103,15 @@ export interface NormalizedPlayer {
   weight: string;
   age: number;
   country: string;
+}
+
+export interface EnrichedPlayerDetail extends NormalizedPlayer {
+  teamId: string;
+  teamName: string;
+  teamAbbr: string;
+  teamLogo: string;
+  draftInfo: string;
+  experience: number;
 }
 
 export interface NormalizedStandingsEntry {
@@ -234,7 +243,7 @@ export class EspnService {
   }
 
   // ── Player Details ──
-  async getPlayerDetails(playerId: string): Promise<NormalizedPlayer & { teamId: string; draftInfo: string; experience: number } | null> {
+  async getPlayerDetails(playerId: string): Promise<EnrichedPlayerDetail | null> {
     // If playerId is not numeric, it's likely a slug. Try searching for it first.
     if (!/^\d+$/.test(playerId)) {
       const normalizedQuery = decodeURIComponent(playerId).replace(/[-_]+/g, ' ').trim();
@@ -248,28 +257,42 @@ export class EspnService {
     try {
       const res = await fetch(url);
       if (!res.ok) return null;
-      const a = (await res.json()) as Record<string, any>;
+      const a = (await res.json()) as Record<string, unknown>;
 
       // Core API returns a team ref object, extract team external ID from the end of the ref URL
-      let teamId = 'free-agent';
-      if (a.team && a.team.$ref) {
-        const match = a.team.$ref.match(/teams\/(\d+)/);
-        if (match) teamId = match[1];
+      let espnTeamId = 'free-agent';
+      const teamRef = a.team as { $ref?: string } | undefined;
+      if (teamRef?.$ref) {
+        const match = teamRef.$ref.match(/teams\/(\d+)/);
+        if (match) espnTeamId = match[1];
       }
 
+      // Enrich with team info from our mapping
+      const teamSlug = espnIdToSlug(espnTeamId);
+      const teamMapping = getAllMappings().find((t) => t.slug === teamSlug);
+
+      const pos = a.position as { abbreviation?: string } | undefined;
+      const headshot = a.headshot as { href?: string } | undefined;
+      const birthPlace = a.birthPlace as { country?: string } | undefined;
+      const draft = a.draft as { displayText?: string } | undefined;
+      const experience = a.experience as { years?: number } | undefined;
+
       return {
-        externalId: a.id,
-        name: a.fullName || a.displayName,
-        jersey: a.jersey || '-',
-        position: a.position?.abbreviation || '-',
-        headshot: a.headshot?.href ?? null,
-        height: a.displayHeight || '-',
-        weight: a.displayWeight || '-',
-        age: a.age || 0,
-        country: a.birthPlace?.country || 'USA',
-        teamId, // ESPN format (numeric)
-        draftInfo: a.draft?.displayText || '-',
-        experience: a.experience?.years || 0,
+        externalId: String(a.id),
+        name: (a.fullName || a.displayName) as string,
+        jersey: (a.jersey as string) || '-',
+        position: pos?.abbreviation || '-',
+        headshot: headshot?.href ?? null,
+        height: (a.displayHeight as string) || '-',
+        weight: (a.displayWeight as string) || '-',
+        age: (a.age as number) || 0,
+        country: birthPlace?.country || 'USA',
+        teamId: teamSlug,
+        teamName: teamMapping?.name || 'Free Agent',
+        teamAbbr: teamMapping?.espnAbbr || '-',
+        teamLogo: `https://a.espncdn.com/i/teamlogos/nba/500/${teamSlug}.png`,
+        draftInfo: draft?.displayText || '-',
+        experience: experience?.years || 0,
       };
     } catch (error) {
       this.logger.error(`Failed to fetch player ${playerId}`, (error as Error).message);
@@ -278,7 +301,7 @@ export class EspnService {
   }
 
   // ── News ──
-  async getNews(): Promise<any[]> {
+  async getNews(): Promise<Record<string, unknown>[]> {
     // Fetch specifically Portuguese localized news with a higher limit to filter downstream
     const url = 'http://site.api.espn.com/apis/site/v2/sports/basketball/nba/news?limit=30&lang=pt&region=br';
     try {
@@ -330,21 +353,16 @@ export class EspnService {
   }
 
   // ── Search Player ──
-  async searchPlayer(query: string): Promise<NormalizedPlayer & { teamId: string; draftInfo: string; experience: number } | null> {
+  async searchPlayer(query: string): Promise<EnrichedPlayerDetail | null> {
     const performSearch = async (q: string) => {
       try {
         const url = `http://site.api.espn.com/apis/common/v3/search?region=us&lang=en&query=${encodeURIComponent(q)}&limit=25&type=player`;
         const res = await fetch(url);
         if (!res.ok) return null;
-        const data = (await res.json()) as { items?: { athletes?: { uid?: string }[] }[] };
+        const data = (await res.json()) as { items?: any[] };
         
-        const allAthletes: any[] = [];
-        (data.items || []).forEach((item: any) => {
-          if (item.athletes) allAthletes.push(...item.athletes);
-        });
-
         // Match Priority: Basketball (s:40)
-        return allAthletes.find((a: any) => a.uid?.includes('s:40')) || null;
+        return (data.items || []).find((a: any) => a.uid?.includes('s:40')) || null;
       } catch {
         return null;
       }
@@ -373,8 +391,51 @@ export class EspnService {
 
   // ── Single News Article ──
   async getNewsArticleBySlug(slug: string): Promise<Record<string, unknown> | null> {
-    const news = await this.getNews();
-    return news.find((n: Record<string, unknown>) => n.slug === slug) ?? null;
+    // Fetch full article list (unfiltered) and find by ID
+    const url = 'http://site.api.espn.com/apis/site/v2/sports/basketball/nba/news?limit=50&lang=pt&region=br';
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`ESPN news responded ${res.status}`);
+      const data = (await res.json()) as { articles?: Array<Record<string, unknown>> };
+      if (!data.articles) return null;
+
+      const article = data.articles.find((a) => String(a.id) === slug);
+      if (!article) return null;
+
+      const images = article.images as Array<{ url: string }> | undefined;
+      const categories = article.categories as Array<{ description?: string }> | undefined;
+      const links = article.links as { web?: { href?: string } } | undefined;
+
+      let categoryAssigned = 'news';
+      if (categories && categories.length > 0) {
+        const desc = categories[0].description?.toLowerCase();
+        if (desc === 'análise') categoryAssigned = 'analysis';
+        if (desc === 'feature' || desc === 'destaque') categoryAssigned = 'feature';
+      }
+      if (article.type === 'Media') categoryAssigned = 'highlight';
+
+      return {
+        id: String(article.id),
+        title: article.headline,
+        summary: article.description || article.title,
+        content: article.story || article.description,
+        coverImage: images?.[0]?.url ?? null,
+        publishedAt: article.published,
+        author: { id: 'espn', name: (article.byline as string) || 'ESPN Brasil' },
+        slug: String(article.id),
+        tags: categories ? categories.map((c) => c.description).filter(Boolean) : ['NBA'],
+        link: links?.web?.href,
+        category: categoryAssigned,
+        readTimeMinutes: Math.max(1, Math.ceil(((article.story || article.description || article.headline || '') as string).length / 1000)),
+        source: 'espn-ingested',
+        status: 'published',
+        relatedTeams: [],
+        relatedPlayers: [],
+      };
+    } catch (error) {
+      this.logger.error(`Failed to fetch article ${slug}`, (error as Error).message);
+      return null;
+    }
   }
 
   // ── Internal: Normalize ESPN Event ──

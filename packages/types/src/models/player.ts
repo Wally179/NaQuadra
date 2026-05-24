@@ -37,3 +37,25 @@ export interface NormalizedPlayer {
   currentStats?: PlayerSeasonStats;
   lastUpdated: string;
 }
+
+/**
+ * Player detail as returned by the NaQuadra backend
+ * (sourced from ESPN Core API + team enrichment).
+ */
+export interface NormalizedPlayerDetail {
+  externalId: string;
+  name: string;
+  jersey: string;
+  position: string;
+  headshot: string | null;
+  height: string;
+  weight: string;
+  age: number;
+  country: string;
+  teamId: string;
+  teamName: string;
+  teamAbbr: string;
+  teamLogo: string;
+  draftInfo: string | null;
+  experience: number | null;
+}

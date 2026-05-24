@@ -1,10 +1,18 @@
 .main {
-  max-width: var(--nq-container-md);
+  max-width: var(--nq-max-width);
   margin: 0 auto;
-  padding: var(--nq-space-8) var(--nq-space-4);
+  padding: var(--nq-space-6) var(--nq-space-4);
   display: flex;
   flex-direction: column;
   gap: var(--nq-space-12);
+}
+
+@media (min-width: 640px) {
+  .main { padding: var(--nq-space-8) var(--nq-space-6); }
+}
+
+@media (min-width: 1024px) {
+  .main { padding: var(--nq-space-8) var(--nq-space-8); }
 }
 
 .articleContainer {

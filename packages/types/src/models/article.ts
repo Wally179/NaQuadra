@@ -2,7 +2,7 @@
 // Na Quadra — Shared Types: Article / News
 // ============================================================
 
-export type ArticleCategory = 'news' | 'analysis' | 'feature' | 'explainer';
+export type ArticleCategory = 'news' | 'analysis' | 'feature' | 'explainer' | 'highlight';
 export type ArticleSource = 'editorial' | 'espn-ingested';
 export type ArticleStatus = 'published' | 'draft' | 'archived';
 
@@ -17,6 +17,7 @@ export interface NormalizedArticle {
   slug: string;
   title: string;
   subtitle?: string;
+  summary?: string;
   content: string;
   coverImage: string | null;
   author: ArticleAuthor;
@@ -26,6 +27,7 @@ export interface NormalizedArticle {
   relatedPlayers: string[];
   source: ArticleSource;
   sourceUrl?: string;
+  link?: string;
   status: ArticleStatus;
   publishedAt: string;
   readTimeMinutes: number;

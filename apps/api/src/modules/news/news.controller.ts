@@ -1,7 +1,7 @@
 // ============================================================
 // Na Quadra — News Controller (ESPN Integration)
 // ============================================================
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, NotFoundException } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { EspnService } from '../espn/espn.service';
 
@@ -15,6 +15,8 @@ export class NewsController {
   @ApiResponse({ status: 200, description: 'Lista de notícias mais recentes' })
   async getNews() {
     const articles = await this.espnService.getNews();
+    console.log('articles', articles)
+
     return { data: articles, meta: { total: articles.length } };
   }
 
@@ -24,7 +26,10 @@ export class NewsController {
   @ApiResponse({ status: 404, description: 'Notícia não encontrada' })
   async getNewsArticle(@Param('slug') slug: string) {
     const article = await this.espnService.getNewsArticleBySlug(slug);
-    if (!article) return { data: null }; // NestJS can return 404 with exceptions, but for proxy we just return null payload
+    if (!article) {
+      throw new NotFoundException(`Notícia '${slug}' não encontrada`);
+    }
+    console.log('article', article)
     return { data: article };
   }
 }

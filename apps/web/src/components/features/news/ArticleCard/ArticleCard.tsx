@@ -15,6 +15,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   analysis: 'Análise',
   feature: 'Destaque',
   explainer: 'Explicação',
+  highlight: 'Destaque',
 };
 
 export function ArticleCard({ article, featured = false }: ArticleCardProps) {

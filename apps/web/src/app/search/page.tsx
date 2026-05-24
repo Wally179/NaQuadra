@@ -1,10 +1,36 @@
 import { fetchSearchPlayer, fetchNews } from '@/lib/api';
 import { ArticleCard } from '@/components/features/news/ArticleCard/ArticleCard';
+import { EntityCard } from '@/components/ui/EntityCard/EntityCard';
+import { getAllTeams, getTeamColors } from '@/data/teams';
 import styles from './page.module.css';
 import Link from 'next/link';
 
 interface PageProps {
   searchParams: { q?: string };
+}
+
+function formatHeight(usHeight: string): string {
+  if (!usHeight) return '-';
+  const match = usHeight.match(/(\d+)'\s*(\d+)"?/);
+  if (match) {
+    const feet = parseInt(match[1], 10);
+    const inches = parseInt(match[2], 10);
+    const cm = Math.round((feet * 12 + inches) * 2.54);
+    const m = (cm / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return `${m} M (${usHeight})`;
+  }
+  return usHeight;
+}
+
+function formatWeight(usWeight: string): string {
+  if (!usWeight) return '-';
+  const match = usWeight.match(/(\d+)\s*lbs?/i);
+  if (match) {
+    const lbs = parseInt(match[1], 10);
+    const kg = Math.round(lbs * 0.453592);
+    return `${kg} KG (${usWeight})`;
+  }
+  return usWeight;
 }
 
 export default async function SearchPage({ searchParams }: PageProps) {
@@ -36,14 +62,21 @@ export default async function SearchPage({ searchParams }: PageProps) {
     );
   }
 
+  const lowerQuery = query.toLowerCase();
+
   // Fetch player match
-  const player = await fetchSearchPlayer(query);
+  const player = await fetchSearchPlayer(query, { revalidate: 0 });
+  
+  // Find team matches
+  const allTeams = getAllTeams();
+  const matchedTeams = allTeams.filter(t => 
+    t.name.toLowerCase().includes(lowerQuery) || 
+    t.city.toLowerCase().includes(lowerQuery) ||
+    t.abbreviation.toLowerCase().includes(lowerQuery)
+  );
   
   // Fetch related news
   const allNews = await fetchNews({ revalidate: 0 }); // Bypass cache for search
-  
-  // Perform weak text searching over headlines and content
-  const lowerQuery = query.toLowerCase();
   const relatedNews = allNews.filter(
     (n) => n.title.toLowerCase().includes(lowerQuery) || (n.summary ?? '').toLowerCase().includes(lowerQuery)
   ).slice(0, 4);
@@ -53,31 +86,66 @@ export default async function SearchPage({ searchParams }: PageProps) {
       <h1 className={styles.pageTitle}>Resultados da busca</h1>
       {searchForm}
 
+      {matchedTeams.length > 0 && (
+        <section className={styles.playerSection}>
+          <h2 className={styles.sectionTitle}>Times:</h2>
+          <div className={styles.playerCardContainer}>
+            {matchedTeams.map((team) => (
+              <EntityCard
+                key={team.id}
+                href={`/teams/${team.id}`}
+                color={team.colors.primary}
+                imageSrc={team.logo}
+                imageAlt={team.name}
+                type="team"
+                title={team.name}
+                subtitle={`${team.conference === 'east' ? 'Leste' : 'Oeste'} - Divisão ${
+                  team.division === 'Atlantic' ? 'do Atlântico' :
+                  team.division === 'Central' ? 'Central' :
+                  team.division === 'Southeast' ? 'Sudeste' :
+                  team.division === 'Northwest' ? 'Noroeste' :
+                  team.division === 'Pacific' ? 'do Pacífico' :
+                  team.division === 'Southwest' ? 'Sudoeste' : team.division
+                }`}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
       {player && (
         <section className={styles.playerSection}>
           <h2 className={styles.sectionTitle}>Jogadores:</h2>
           
           <div className={styles.playerCardContainer}>
-            <div className={styles.playerCard}>
-              <div className={styles.playerHeadshotWrapper}>
-                {player.headshot ? (
-                  <img src={player.headshot} alt={player.name} className={styles.playerHeadshot} />
-                ) : (
-                  <div className={styles.playerHeadshotPlaceholder}>🏀</div>
-                )}
-              </div>
-              <div className={styles.playerInfo}>
-                <h3 className={styles.playerName}>{player.name}</h3>
-                <p className={styles.playerTeam}>{(player.teamId ?? player.teamAbbr ?? '').toUpperCase()} • #{player.jersey} • {player.position}</p>
-                <div className={styles.playerStats}>
-                  <span>Altura: {player.height}</span>
-                  <span>Peso: {player.weight}</span>
-                </div>
-                <Link href={`/players/${player.externalId}`} className={styles.playerLink}>
-                  Detalhes
-                </Link>
-              </div>
-            </div>
+            <EntityCard 
+              href={`/players/${player.externalId}`}
+              color={getTeamColors(player.teamId || player.teamAbbr || '')?.primary}
+              imageSrc={player.headshot}
+              imageAlt={player.name}
+              type="player"
+              title={player.name}
+              subtitle={
+                <>
+                  {player.teamName || (player.teamId ?? player.teamAbbr ?? '').toUpperCase()} - #{player.jersey} - {
+                    player.position === 'F' ? 'Ala' :
+                    player.position === 'G' ? 'Armador' :
+                    player.position === 'C' ? 'Pivô' :
+                    player.position === 'SF' ? 'Ala' :
+                    player.position === 'PF' ? 'Ala-Pivô' :
+                    player.position === 'PG' ? 'Armador' :
+                    player.position === 'SG' ? 'Ala-Armador' :
+                    player.position
+                  }
+                </>
+              }
+              details={
+                <>
+                  <span>Altura: {formatHeight(player.height)}</span>
+                  <span>Peso: {formatWeight(player.weight)}</span>
+                </>
+              }
+            />
           </div>
         </section>
       )}
@@ -93,7 +161,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
         </section>
       )}
 
-      {!player && relatedNews.length === 0 && (
+      {!player && matchedTeams.length === 0 && relatedNews.length === 0 && (
         <div className={styles.emptyState}>
           <p>Nenhum resultado encontrado para "{query}".</p>
         </div>

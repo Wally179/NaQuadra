@@ -51,7 +51,7 @@ export default async function HomePage() {
   }
 
   const featuredArticle = articles[0];
-  const restArticles = articles.slice(1, 4); // Only show top 3 mostly in the home page
+  const restArticles = articles.slice(1, 5); // Display 4 articles in the grid, making 5 total with the featured one
 
   return (
     <>

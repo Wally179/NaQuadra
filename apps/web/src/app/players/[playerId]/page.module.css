@@ -166,12 +166,81 @@
   line-height: 1;
 }
 
+.mainStatLabelWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-top: var(--nq-space-1);
+}
+
 .mainStatLabel {
   font-size: var(--nq-text-xs);
   color: var(--nq-text-tertiary);
   text-transform: uppercase;
   letter-spacing: var(--nq-tracking-wide);
-  margin-top: var(--nq-space-1);
+}
+
+/* Tooltip styles */
+.tooltipContainer {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  color: var(--nq-text-tertiary);
+  cursor: help;
+  transition: color 0.2s;
+}
+
+.tooltipContainer:hover {
+  color: var(--nq-text-primary);
+}
+
+.infoIcon {
+  display: block;
+}
+
+.tooltipText {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  background: var(--nq-bg-tertiary);
+  color: var(--nq-text-primary);
+  padding: 8px 12px;
+  border-radius: var(--nq-radius-md);
+  font-size: 0.75rem;
+  font-family: var(--nq-font-body);
+  font-weight: 400;
+  white-space: normal;
+  width: max-content;
+  max-width: 220px;
+  text-align: center;
+  text-transform: none;
+  letter-spacing: normal;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  box-shadow: var(--nq-shadow-lg);
+  z-index: 10;
+  border: 1px solid var(--nq-border-default);
+}
+
+.tooltipText::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: var(--nq-border-default) transparent transparent transparent;
+}
+
+.tooltipContainer:hover .tooltipText {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Shooting stats */
@@ -189,6 +258,13 @@
   display: flex;
   flex-direction: column;
   gap: var(--nq-space-2);
+}
+
+.shootingLabelWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .shootingLabel {
