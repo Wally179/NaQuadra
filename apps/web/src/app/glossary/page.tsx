@@ -43,9 +43,14 @@ export default function GlossaryPage() {
 
   const filtered = useMemo(() => {
     return MOCK_GLOSSARY.filter((entry) => {
+      const searchNormalized = search.toLowerCase().replace(/-/g, ' ');
+      const termNormalized = entry.term.toLowerCase().replace(/-/g, ' ');
+      const slugNormalized = entry.slug.toLowerCase().replace(/-/g, ' ');
+      
       const matchesSearch =
         search === '' ||
-        entry.term.toLowerCase().includes(search.toLowerCase()) ||
+        termNormalized.includes(searchNormalized) ||
+        slugNormalized.includes(searchNormalized) ||
         entry.shortDefinition.toLowerCase().includes(search.toLowerCase());
 
       const matchesCategory =
