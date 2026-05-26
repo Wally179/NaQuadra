@@ -2,21 +2,23 @@
    Na Quadra — ScoreboardBar
    ============================================================ */
 
-.verticalList {
-  display: flex;
-  flex-direction: column;
+.cardsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
   gap: var(--nq-space-4);
   padding: var(--nq-space-4) var(--nq-space-4);
 }
 
 @media (min-width: 640px) {
-  .verticalList {
+  .cardsGrid {
+    grid-template-columns: repeat(2, 1fr);
     padding: var(--nq-space-4) var(--nq-space-6);
   }
 }
 
 @media (min-width: 1024px) {
-  .verticalList {
+  .cardsGrid {
+    grid-template-columns: repeat(3, 1fr);
     padding-top: var(--nq-space-4);
     padding-bottom: var(--nq-space-4);
     padding-left: calc((100vw - min(100vw, var(--nq-max-width))) / 2 + var(--nq-space-8));
@@ -24,8 +26,27 @@
   }
 }
 
-.viewAllBtn {
+.actionContainer {
   display: flex;
+  justify-content: center;
+  padding: 0 var(--nq-space-4) var(--nq-space-4);
+}
+
+@media (min-width: 640px) {
+  .actionContainer {
+    padding: 0 var(--nq-space-6) var(--nq-space-4);
+  }
+}
+
+@media (min-width: 1024px) {
+  .actionContainer {
+    padding-left: calc((100vw - min(100vw, var(--nq-max-width))) / 2 + var(--nq-space-8));
+    padding-right: var(--nq-space-8);
+  }
+}
+
+.viewAllBtn {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: var(--nq-space-4);

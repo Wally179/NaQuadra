@@ -22,11 +22,13 @@ export function ScoreboardBar({ games }: ScoreboardBarProps) {
   return (
     <section aria-label="Próximos jogos">
       <p className={styles.sectionTitle}>🏀 Próximos Jogos</p>
-      <div className={styles.verticalList}>
+      <div className={styles.cardsGrid}>
         {sorted.map((game) => (
           <GameCard key={game.externalId} game={game} />
         ))}
-        
+      </div>
+      
+      <div className={styles.actionContainer}>
         <Link href="/games" className={styles.viewAllBtn}>
           Veja todos os jogos →
         </Link>
