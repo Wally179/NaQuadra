@@ -133,7 +133,7 @@
 }
 
 .gameCard:hover .teamLogo {
-  transform: scale(1.05);
+  transform: scale(1.25) translateY(-6px);
 }
 
 .teamName {

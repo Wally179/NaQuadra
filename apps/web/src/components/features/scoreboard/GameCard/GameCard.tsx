@@ -9,7 +9,7 @@
 import type { NormalizedGame } from '@naquadra/types';
 import type { CSSProperties } from 'react';
 import { getTeam } from '@/data/teams';
-import { formatToBRT, translatePhase, translateSeries } from '@/lib/formatters';
+import { formatToBRT, formatDateShort, translatePhase, translateSeries } from '@/lib/formatters';
 import styles from './GameCard.module.css';
 
 interface GameCardProps {
@@ -59,7 +59,7 @@ export function GameCard({ game }: GameCardProps) {
             {game.status === 'scheduled' && (
               <>
                 <time className={styles.time} dateTime={game.startTime}>
-                  {formatToBRT(game.startTime)}
+                  {formatDateShort(game.startTime)} · {formatToBRT(game.startTime)}
                 </time>
                 {game.broadcast && (
                   <span className={styles.broadcast}>{game.broadcast}</span>

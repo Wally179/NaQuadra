@@ -59,6 +59,7 @@ export function translatePhase(phase: string): string {
     'conference-semis': 'SEMIFINAL DE CONFERÊNCIA',
     'conference-finals': 'FINAL DE CONFERÊNCIA',
     finals: 'FINAIS DA NBA',
+    playoffs: 'PLAYOFFS',
   };
   return phases[phase] || phase.toUpperCase();
 }

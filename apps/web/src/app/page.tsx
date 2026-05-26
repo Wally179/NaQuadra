@@ -25,7 +25,7 @@ function mapToNormalizedGame(game: ScoreboardGame): NormalizedGame {
     quarter: game.quarter,
     clock: game.clock,
     conference: '',
-    phase: 'regular',
+    phase: game.seriesInfo ? 'playoffs' : 'regular',
     seriesInfo: game.seriesInfo,
     venue: game.venue,
     broadcast: game.broadcast,
@@ -40,8 +40,8 @@ export default async function HomePage() {
     const today = new Date();
     let currentDay = 1;
     
-    // Fetch future games up to 7 days ahead until we have at least 3
-    while (currentDay <= 7 && games.length < 3) {
+    // Fetch future games up to 14 days ahead until we have at least 6
+    while (currentDay <= 14 && games.length < 6) {
       const targetDate = addDays(today, currentDay);
       const dateStr = format(targetDate, 'yyyyMMdd');
       
@@ -50,6 +50,10 @@ export default async function HomePage() {
         games.push(...apiGames.map(mapToNormalizedGame));
       }
       currentDay++;
+    }
+
+    if (games.length > 6) {
+      games = games.slice(0, 6);
     }
   } catch {
     // If error, games will remain empty
