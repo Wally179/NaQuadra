@@ -128,6 +128,37 @@ export interface NormalizedStandingsEntry {
   seed: number;
 }
 
+// ── Metric conversion helpers (imperial → metric for BR audience) ──
+function feetInchesToMetric(ft: string): string {
+  if (!ft || ft === '-') return ft;
+  const match = ft.match(/(\d+)'(\d+)"?/);
+  if (!match) return ft;
+  const meters = parseInt(match[1]) * 0.3048 + parseInt(match[2]) * 0.0254;
+  return meters.toFixed(2).replace('.', ',') + ' m';
+}
+
+function lbsToKg(lbs: string): string {
+  if (!lbs || lbs === '-') return lbs;
+  const num = parseFloat(lbs.replace(/[^\d.]/g, ''));
+  if (isNaN(num)) return lbs;
+  return Math.round(num * 0.453592) + ' kg';
+}
+
+function translateCountry(country: string): string {
+  const map: Record<string, string> = {
+    'USA': 'EUA', 'United States': 'EUA',
+    'Canada': 'Canadá', 'France': 'França',
+    'Germany': 'Alemanha', 'Spain': 'Espanha',
+    'Australia': 'Austrália', 'Serbia': 'Sérvia',
+    'Greece': 'Grécia', 'Slovenia': 'Eslovênia',
+    'Cameroon': 'Camarões', 'Nigeria': 'Nigéria',
+    'Japan': 'Japão', 'South Sudan': 'Sudão do Sul',
+    'Dominican Republic': 'República Dominicana',
+    'Bahamas': 'Bahamas', 'Jamaica': 'Jamaica',
+  };
+  return map[country] || country;
+}
+
 @Injectable()
 export class EspnService {
   private readonly logger = new Logger(EspnService.name);
@@ -309,10 +340,10 @@ export class EspnService {
         jersey: a.jersey || '-',
         position: a.position?.abbreviation || '-',
         headshot: a.headshot?.href ?? null,
-        height: a.displayHeight || '-',
-        weight: a.displayWeight || '-',
+        height: feetInchesToMetric(a.displayHeight || '-'),
+        weight: lbsToKg(a.displayWeight || '-'),
         age: a.age || 0,
-        country: a.birthPlace?.country || 'USA',
+        country: translateCountry(a.birthPlace?.country || 'USA'),
       }));
     } catch (error) {
       this.logger.error(`Failed to fetch roster for team ${teamExternalId}`, (error as Error).message);
@@ -361,10 +392,10 @@ export class EspnService {
         jersey: (a.jersey as string) || '-',
         position: pos?.abbreviation || '-',
         headshot: headshot?.href ?? null,
-        height: (a.displayHeight as string) || '-',
-        weight: (a.displayWeight as string) || '-',
+        height: feetInchesToMetric((a.displayHeight as string) || '-'),
+        weight: lbsToKg((a.displayWeight as string) || '-'),
         age: (a.age as number) || 0,
-        country: birthPlace?.country || 'USA',
+        country: translateCountry(birthPlace?.country || 'USA'),
         teamId: teamSlug,
         teamName: teamMapping?.name || 'Free Agent',
         teamAbbr: teamMapping?.espnAbbr || '-',

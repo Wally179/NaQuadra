@@ -43,7 +43,7 @@ export function GameListItem({ game, isFavorite }: GameListItemProps) {
           <span className={styles.scheduledBadge}>AGENDADO</span>
         )}
         {status === 'final' && (
-          <span className={styles.finalBadge}>FINAL</span>
+          <span className={styles.finalBadge}>ENCERRADO</span>
         )}
         {isFavorite && <span className={styles.favStar}>★</span>}
       </div>
@@ -85,7 +85,7 @@ export function GameListItem({ game, isFavorite }: GameListItemProps) {
           )}
           {status === 'live' && game.clock && (
             <span className={styles.clockInfo}>
-              Q{game.period} · {game.clock}
+              {game.period}ºQ · {game.clock}
             </span>
           )}
         </div>

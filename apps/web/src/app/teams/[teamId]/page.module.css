@@ -34,9 +34,9 @@
   inset: 0;
   background: radial-gradient(
     ellipse at top center,
-    color-mix(in srgb, var(--team-primary) 30%, transparent) 0%,
-    color-mix(in srgb, var(--team-primary) 10%, transparent) 40%,
-    transparent 70%
+    color-mix(in srgb, var(--team-primary) 50%, transparent) 0%,
+    color-mix(in srgb, var(--team-primary) 20%, transparent) 40%,
+    transparent 80%
   );
   pointer-events: none;
   z-index: 0;
@@ -154,6 +154,7 @@
 .statCard {
   background: var(--nq-bg-secondary);
   border: 1px solid var(--nq-border-subtle);
+  border-bottom: 2px solid var(--team-primary);
   border-radius: var(--nq-radius-lg);
   padding: var(--nq-space-4);
   text-align: center;
@@ -229,9 +230,9 @@
 }
 
 .playerCard:hover {
-  border-color: var(--nq-border-default);
+  border-color: var(--team-primary);
   transform: translateY(-2px);
-  box-shadow: var(--nq-shadow-md);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--team-primary) 20%, transparent);
 }
 
 .playerNumber {

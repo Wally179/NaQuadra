@@ -82,7 +82,7 @@ export default async function TeamDetailPage({ params }: PageProps) {
         <div className={styles.statsBar}>
           <div className={styles.statCard}>
             <div className={styles.statValue}>#{standing.seed}</div>
-            <div className={styles.statLabel}>Seed</div>
+            <div className={styles.statLabel}>Posição</div>
           </div>
           <div className={styles.statCard}>
             <div className={styles.statValue}>{standing.wins}</div>
@@ -94,7 +94,7 @@ export default async function TeamDetailPage({ params }: PageProps) {
           </div>
           <div className={styles.statCard}>
             <div className={styles.statValue}>{standing.pct.toFixed(3).replace('0.', '.')}</div>
-            <div className={styles.statLabel}>Win %</div>
+            <div className={styles.statLabel} title="Aproveitamento">Aprov.</div>
           </div>
           <div className={styles.statCard}>
             <div className={styles.statValue}>{standing.streak}</div>
@@ -102,7 +102,7 @@ export default async function TeamDetailPage({ params }: PageProps) {
           </div>
           <div className={styles.statCard}>
             <div className={styles.statValue}>{standing.gamesBehind}</div>
-            <div className={styles.statLabel}>GB</div>
+            <div className={styles.statLabel} title="Jogos atrás do líder">Dif.</div>
           </div>
         </div>
       )}

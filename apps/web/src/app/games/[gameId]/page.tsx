@@ -38,7 +38,7 @@ function LiveScoreHeader({ detail }: { detail: GameDetail }) {
           </span>
         )}
         {summary.status === 'final' && (
-          <span className={styles.finalBadge}>FINAL</span>
+          <span className={styles.finalBadge}>ENCERRADO</span>
         )}
         {summary.status === 'scheduled' && (
           <span className={styles.scheduledBadge}>
@@ -149,21 +149,21 @@ function GameLeadersSection({ leaders }: { leaders: GameLeadersData }) {
   );
 }
 
-function TeamStatsSection({ teamStats }: { teamStats: GameTeamStatsComparison }) {
+function TeamStatsSection({ teamStats, homeColor }: { teamStats: GameTeamStatsComparison, homeColor: string }) {
   const stats = [
-    { label: 'FG%', home: teamStats.home.fieldGoalPct, away: teamStats.away.fieldGoalPct },
+    { label: 'AC%', home: teamStats.home.fieldGoalPct, away: teamStats.away.fieldGoalPct },
     { label: '3P%', home: teamStats.home.threePointPct, away: teamStats.away.threePointPct },
-    { label: 'FT%', home: teamStats.home.freeThrowPct, away: teamStats.away.freeThrowPct },
+    { label: 'LL%', home: teamStats.home.freeThrowPct, away: teamStats.away.freeThrowPct },
     { label: 'Rebotes', home: teamStats.home.rebounds, away: teamStats.away.rebounds },
     { label: 'Assistências', home: teamStats.home.assists, away: teamStats.away.assists },
     { label: 'Roubos', home: teamStats.home.steals, away: teamStats.away.steals },
     { label: 'Tocos', home: teamStats.home.blocks, away: teamStats.away.blocks },
-    { label: 'Turnovers', home: teamStats.home.turnovers, away: teamStats.away.turnovers },
+    { label: 'Erros', home: teamStats.home.turnovers, away: teamStats.away.turnovers },
   ];
 
   return (
-    <div className={styles.section}>
-      <h3 className={styles.sectionTitle}>Stats dos Times</h3>
+    <div className={styles.section} style={{ '--home-color': homeColor } as CSSProperties}>
+      <h3 className={styles.sectionTitle}>Comparativo dos Times</h3>
       <div className={styles.statsGrid}>
         {stats.map(({ label, home, away }) => {
           const total = home + away || 1;
@@ -199,10 +199,10 @@ function BoxScoreSection({ playerStats }: { playerStats: GamePlayerStatsGroup })
               <th className={styles.boxTh}>PTS</th>
               <th className={styles.boxTh}>REB</th>
               <th className={styles.boxTh}>AST</th>
-              <th className={styles.boxTh}>STL</th>
-              <th className={styles.boxTh}>BLK</th>
-              <th className={styles.boxTh}>FG</th>
-              <th className={styles.boxTh}>3PT</th>
+              <th className={styles.boxTh}>ROU</th>
+              <th className={styles.boxTh}>TOC</th>
+              <th className={styles.boxTh}>AC</th>
+              <th className={styles.boxTh}>3P</th>
               <th className={styles.boxTh}>+/-</th>
             </tr>
           </thead>
@@ -246,7 +246,7 @@ function PlayByPlaySection({ plays }: { plays: GamePlayByPlayEvent[] }) {
 
   return (
     <div className={styles.section}>
-      <h3 className={styles.sectionTitle}>Play-by-Play</h3>
+      <h3 className={styles.sectionTitle}>Lance a Lance</h3>
       <div className={styles.playsList}>
         {plays.slice(0, 30).map((play) => (
           <div
@@ -345,8 +345,8 @@ export default function GameDetailPage() {
   const tabs: { key: TabKey; label: string }[] = isLiveOrFinal
     ? [
         { key: 'resumo', label: 'Resumo' },
-        { key: 'boxscore', label: 'Box Score' },
-        { key: 'plays', label: 'Plays' },
+        { key: 'boxscore', label: 'Estatísticas' },
+        { key: 'plays', label: 'Lance a Lance' },
       ]
     : [];
 
@@ -382,7 +382,7 @@ export default function GameDetailPage() {
         {isLiveOrFinal && activeTab === 'resumo' && (
           <>
             {detail.leaders && <GameLeadersSection leaders={detail.leaders} />}
-            {detail.teamStats && <TeamStatsSection teamStats={detail.teamStats} />}
+            {detail.teamStats && <TeamStatsSection teamStats={detail.teamStats} homeColor={detail.summary.homeTeam.colors.primary} />}
           </>
         )}
 

@@ -83,7 +83,7 @@ export default async function PlayerDetailPage({ params }: PageProps) {
                   <span className={styles.badge}>{team.name}</span>
                 </Link>
               )}
-              <span className={styles.badge}>{player.country || 'USA'}</span>
+              <span className={styles.badge}>{player.country || 'EUA'}</span>
             </div>
           </div>
         </div>
@@ -120,9 +120,9 @@ export default async function PlayerDetailPage({ params }: PageProps) {
         {/* Shooting percentages with bar */}
         <div className={styles.shootingStats}>
           {[
-            { label: 'FG%', value: s.fgPct, desc: 'Aproveitamento geral: Porcentagem de acerto em todos os arremessos.' },
+            { label: 'AC%', value: s.fgPct, desc: 'Aproveitamento geral: Porcentagem de acerto em todos os arremessos.' },
             { label: '3P%', value: s.threePct, desc: '3 Pontos: Porcentagem de acerto nos arremessos de longa distância.' },
-            { label: 'FT%', value: s.ftPct, desc: 'Lance Livre: Porcentagem de acerto nos arremessos sem marcação (após falta).' },
+            { label: 'LL%', value: s.ftPct, desc: 'Lance Livre: Porcentagem de acerto nos arremessos sem marcação (após falta).' },
           ].map((stat) => (
             <div key={stat.label} className={styles.shootingCard}>
               <div className={styles.shootingLabelWrapper}>
@@ -179,7 +179,7 @@ export default async function PlayerDetailPage({ params }: PageProps) {
             <div className={styles.infoItem}>
               <span className={styles.infoLabel}>Experiência</span>
               <span className={styles.infoValue}>
-                {player.experience ? `${player.experience} anos` : 'Rookie'}
+                {player.experience ? `${player.experience} anos` : 'Novato'}
               </span>
             </div>
           </div>

@@ -41,7 +41,7 @@ export function GameCard({ game }: GameCardProps) {
         {/* Matchup */}
         <div className={styles.matchup}>
           {/* Home Team */}
-          <div className={styles.teamSide} style={{ '--team-glow': `${homeTeam.colors.primary}40` } as CSSProperties}>
+          <div className={styles.teamSide} style={{ '--team-glow': `${homeTeam.colors.primary}80` } as CSSProperties}>
             <img
               src={homeTeam.logo}
               alt={homeTeam.name}
@@ -85,13 +85,13 @@ export function GameCard({ game }: GameCardProps) {
                 <span className={styles.score}>
                   {game.homeScore} — {game.awayScore}
                 </span>
-                <span className={styles.finalLabel}>Final</span>
+                <span className={styles.finalLabel}>ENCERRADO</span>
               </>
             )}
           </div>
 
           {/* Away Team */}
-          <div className={styles.teamSide} style={{ '--team-glow': `${awayTeam.colors.primary}40` } as CSSProperties}>
+          <div className={styles.teamSide} style={{ '--team-glow': `${awayTeam.colors.primary}80` } as CSSProperties}>
             <img
               src={awayTeam.logo}
               alt={awayTeam.name}

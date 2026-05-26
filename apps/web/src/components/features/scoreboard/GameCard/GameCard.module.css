@@ -34,9 +34,9 @@
   background: linear-gradient(
     to right,
     var(--home-team-color) 0%,
-    color-mix(in srgb, var(--home-team-color) 40%, transparent) 20%,
-    color-mix(in srgb, var(--home-team-color) 12%, transparent) 38%,
-    transparent 52%
+    color-mix(in srgb, var(--home-team-color) 60%, transparent) 20%,
+    color-mix(in srgb, var(--home-team-color) 25%, transparent) 45%,
+    transparent 60%
   );
   pointer-events: none;
   z-index: 0;
@@ -50,9 +50,9 @@
   background: linear-gradient(
     to left,
     var(--away-team-color) 0%,
-    color-mix(in srgb, var(--away-team-color) 40%, transparent) 20%,
-    color-mix(in srgb, var(--away-team-color) 12%, transparent) 38%,
-    transparent 52%
+    color-mix(in srgb, var(--away-team-color) 60%, transparent) 20%,
+    color-mix(in srgb, var(--away-team-color) 25%, transparent) 45%,
+    transparent 60%
   );
   pointer-events: none;
   z-index: 0;
@@ -128,7 +128,7 @@
   width: 52px;
   height: 52px;
   object-fit: contain;
-  filter: drop-shadow(0 0 10px var(--team-glow, rgba(255,255,255,0.1)));
+  filter: drop-shadow(0 0 16px var(--team-glow, rgba(255,255,255,0.2)));
   transition: transform var(--nq-duration-normal) var(--nq-ease-default);
 }
 

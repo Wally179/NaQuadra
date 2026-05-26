@@ -29,8 +29,11 @@ export function useTeamColors(teamId: string | null | undefined): TeamColorConte
       cssVars: {
         '--team-primary': colors.primary,
         '--team-secondary': colors.secondary,
-        '--team-glow': `${colors.primary}40`,
+        '--team-glow': `${colors.primary}80`,
+        '--team-bg-subtle': `${colors.primary}1A`,
+        '--team-border': `${colors.primary}40`,
         '--team-gradient': `linear-gradient(135deg, ${colors.primary}33 0%, transparent 50%)`,
+        '--team-gradient-strong': `linear-gradient(135deg, ${colors.primary}80 0%, transparent 60%)`,
       } as CSSProperties,
     };
   }, [teamId]);

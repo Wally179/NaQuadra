@@ -55,10 +55,21 @@ export function translatePhase(phase: string): string {
     preseason: 'PRÉ-TEMPORADA',
     regular: 'TEMPORADA REGULAR',
     'play-in': 'PLAY-IN',
-    'first-round': 'PRIMEIRO ROUND',
+    'first-round': 'PRIMEIRA RODADA',
     'conference-semis': 'SEMIFINAL DE CONFERÊNCIA',
     'conference-finals': 'FINAL DE CONFERÊNCIA',
     finals: 'FINAIS DA NBA',
   };
   return phases[phase] || phase.toUpperCase();
+}
+
+/**
+ * Traduz a sequência de vitórias/derrotas.
+ * Ex: "W3" -> "V3", "L2" -> "D2"
+ */
+export function translateStreak(streak: string): string {
+  if (!streak) return streak;
+  if (streak.startsWith('W')) return streak.replace('W', 'V');
+  if (streak.startsWith('L')) return streak.replace('L', 'D');
+  return streak;
 }

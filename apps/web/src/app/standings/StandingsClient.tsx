@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { StandingsEntry } from '@naquadra/types';
 import { getTeam } from '@/data/teams';
+import { translateStreak } from '@/lib/formatters';
 import styles from './page.module.css';
 
 type ConferenceTab = 'east' | 'west';
@@ -20,10 +21,10 @@ export function StandingsClient({ eastStandings, westStandings, isLive }: Standi
   return (
     <>
       <div className={styles.pageHeader}>
-        <h1 className={styles.title}>Standings</h1>
+        <h1 className={styles.title}>Classificação</h1>
         <p className={styles.subtitle}>
           Classificação da NBA — Temporada 2025-26
-          {isLive && <span className={styles.liveBadge}>● LIVE</span>}
+          {isLive && <span className={styles.liveBadge}>● AO VIVO</span>}
         </p>
       </div>
 
@@ -109,8 +110,10 @@ function StandingsRow({ entry }: { entry: StandingsEntry }) {
     isPlayInCutoff ? styles.playInLine : '',
   ].filter(Boolean).join(' ');
 
+  const rowStyle = team ? { '--row-team-color': team.colors.primary } as React.CSSProperties : {};
+
   return (
-    <tr className={rowClass}>
+    <tr className={rowClass} style={rowStyle}>
       <td className={styles.seed}>{entry.seed}</td>
       <td>
         <div className={styles.teamCell}>
@@ -133,7 +136,7 @@ function StandingsRow({ entry }: { entry: StandingsEntry }) {
       <td className={`${styles.numCol} ${styles.pct}`}>{entry.pct.toFixed(3).replace('0.', '.')}</td>
       <td className={styles.numCol}>{entry.gamesBehind}</td>
       <td className={`${styles.numCol} ${isStreakWin ? styles.streakW : styles.streakL}`}>
-        {entry.streak}
+        {translateStreak(entry.streak)}
       </td>
       <td className={styles.numCol}>{entry.last10}</td>
       <td className={styles.numCol}>{entry.homeRecord}</td>
