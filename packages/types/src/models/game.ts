@@ -11,7 +11,8 @@ export type SeasonPhase =
   | 'first-round'
   | 'conference-semis'
   | 'conference-finals'
-  | 'finals';
+  | 'finals'
+  | 'playoffs';
 
 // ── Legacy type (kept for backward compat with ScoreboardBar) ──
 export interface NormalizedGame {
