@@ -44,8 +44,8 @@
 .sectionHeader {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: var(--nq-space-2);
+  align-items: center;
+  margin-bottom: var(--nq-space-5);
   padding: 0 var(--nq-space-4);
 }
 
@@ -64,20 +64,18 @@
 
 .sectionTitle {
   font-family: var(--nq-font-display);
-  font-size: var(--nq-text-sm);
+  font-size: var(--nq-text-2xl);
   font-weight: var(--nq-font-bold);
-  text-transform: uppercase;
-  letter-spacing: var(--nq-tracking-wide);
-  color: var(--nq-text-tertiary);
+  color: var(--nq-text-primary);
   margin-bottom: 0;
 }
 
 .sectionLink {
-  font-family: var(--nq-font-body);
   font-size: var(--nq-text-sm);
-  color: var(--nq-text-tertiary);
+  font-weight: var(--nq-font-medium);
+  color: var(--nq-text-secondary);
   text-decoration: none;
-  transition: color var(--nq-duration-fast);
+  transition: color var(--nq-duration-fast) var(--nq-ease-default);
 }
 
 .sectionLink:hover {
