@@ -55,11 +55,6 @@ export default async function HomePage() {
     // If error, games will remain empty
   }
 
-  // If we couldn't find at least 3 games in the next 7 days, don't show any.
-  if (games.length < 3) {
-    games = [];
-  }
-
   // Fetch real news from API
   let articles = await fetchNews({ revalidate: process.env.NODE_ENV === 'development' ? 0 : 3600, tags: ['news'] });
   if (!articles || articles.length === 0) {
