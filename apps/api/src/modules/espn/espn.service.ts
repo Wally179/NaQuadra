@@ -132,9 +132,22 @@ export interface NormalizedStandingsEntry {
 export class EspnService {
   private readonly logger = new Logger(EspnService.name);
   private readonly baseUrl: string;
+  private static readonly FETCH_TIMEOUT = 10_000; // 10 seconds
 
   constructor(private readonly config: ConfigService) {
     this.baseUrl = config.get<string>('espn.baseUrl')!;
+  }
+
+  /** Fetch with timeout to prevent hanging requests */
+  private async fetchWithTimeout(url: string, timeoutMs = EspnService.FETCH_TIMEOUT): Promise<Response> {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const res = await fetch(url, { signal: controller.signal });
+      return res;
+    } finally {
+      clearTimeout(timer);
+    }
   }
 
   // ── Scoreboard (today's games) ──
@@ -143,7 +156,7 @@ export class EspnService {
     const url = `${this.baseUrl}/scoreboard${params}`;
 
     try {
-      const res = await fetch(url);
+      const res = await this.fetchWithTimeout(url);
       if (!res.ok) throw new Error(`ESPN scoreboard responded ${res.status}`);
       const data = (await res.json()) as EspnScoreboardResponse;
 
@@ -154,23 +167,67 @@ export class EspnService {
     }
   }
 
-  // ── Single Event (fallback for old games) ──
+  // ── Single Event from Summary (works for any game, any date) ──
   async getNormalizedEvent(eventId: string): Promise<NormalizedScore | null> {
     const summary = await this.getEventSummary(eventId);
-    if (!summary || !summary.header) return null;
+    if (!summary) return null;
+
     try {
       const header = summary.header as any;
-      // Reconstruct as EspnEvent
-      const eventLike = {
-        id: header.id,
-        date: header.competitions?.[0]?.date || header.season?.year,
-        name: header.name,
-        status: header.competitions?.[0]?.status,
-        competitions: header.competitions,
-      } as EspnEvent;
-      return this.normalizeEvent(eventLike);
+      if (!header?.competitions?.[0]) return null;
+
+      const comp = header.competitions[0];
+      const competitors = comp.competitors as any[];
+      if (!competitors || competitors.length < 2) return null;
+
+      const home = competitors.find((c: any) => c.homeAway === 'home') || competitors[0];
+      const away = competitors.find((c: any) => c.homeAway === 'away') || competitors[1];
+
+      const statusObj = comp.status;
+      let status: 'scheduled' | 'live' | 'final' = 'scheduled';
+      if (statusObj?.type?.state === 'in') status = 'live';
+      else if (statusObj?.type?.completed) status = 'final';
+
+      // Summary header uses team.logos[].href instead of team.logo
+      const getTeamLogo = (team: any): string => {
+        if (team.logo) return team.logo;
+        if (team.logos?.[0]?.href) return team.logos[0].href;
+        return `https://a.espncdn.com/i/teamlogos/nba/500/${(team.abbreviation || '').toLowerCase()}.png`;
+      };
+
+      // Score: summary uses displayScore or score as string
+      const getScore = (competitor: any): number | null => {
+        if (status === 'scheduled') return null;
+        if (competitor.score != null) return parseInt(String(competitor.score), 10) || 0;
+        if (competitor.displayScore) return parseInt(competitor.displayScore, 10) || 0;
+        return null;
+      };
+
+      return {
+        externalId: String(header.id || eventId),
+        date: comp.date || header.gameDate || new Date().toISOString(),
+        startTime: comp.date || header.gameDate || new Date().toISOString(),
+        status,
+        homeTeamId: espnIdToSlug(String(home.team?.id || home.id || '')),
+        homeTeamName: home.team?.displayName || home.team?.name || '',
+        homeTeamAbbr: home.team?.abbreviation || '',
+        homeTeamLogo: getTeamLogo(home.team || {}),
+        homeScore: getScore(home),
+        homeRecord: (Array.isArray(home.record) ? home.record.find((r: any) => r.type === 'total')?.summary : home.record) || home.records?.[0]?.summary || '-',
+        awayTeamId: espnIdToSlug(String(away.team?.id || away.id || '')),
+        awayTeamName: away.team?.displayName || away.team?.name || '',
+        awayTeamAbbr: away.team?.abbreviation || '',
+        awayTeamLogo: getTeamLogo(away.team || {}),
+        awayScore: getScore(away),
+        awayRecord: (Array.isArray(away.record) ? away.record.find((r: any) => r.type === 'total')?.summary : away.record) || away.records?.[0]?.summary || '-',
+        quarter: status === 'live' ? `Q${statusObj?.period || 0}` : null,
+        clock: status === 'live' ? (statusObj?.displayClock || '') : null,
+        venue: comp.venue?.fullName || null,
+        broadcast: comp.broadcasts?.[0]?.names?.join(', ') || null,
+        seriesInfo: comp.series?.summary || null,
+      };
     } catch (error) {
-      this.logger.error(`Failed to normalize single event ${eventId}`, (error as Error).message);
+      this.logger.error(`Failed to normalize event ${eventId}`, (error as Error).message);
       return null;
     }
   }
@@ -180,7 +237,7 @@ export class EspnService {
     const url = `https://site.web.api.espn.com/apis/v2/sports/basketball/nba/standings?season=2026`;
 
     try {
-      const res = await fetch(url);
+      const res = await this.fetchWithTimeout(url);
       if (!res.ok) throw new Error(`ESPN standings responded ${res.status}`);
       const data = (await res.json()) as EspnStandingsResponse;
 
@@ -242,7 +299,7 @@ export class EspnService {
     const url = `https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/${teamExternalId}/roster`;
 
     try {
-      const res = await fetch(url);
+      const res = await this.fetchWithTimeout(url);
       if (!res.ok) throw new Error(`ESPN roster responded ${res.status}`);
       const data = (await res.json()) as EspnRosterResponse;
 
@@ -276,7 +333,7 @@ export class EspnService {
     const url = `http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/${playerId}`;
 
     try {
-      const res = await fetch(url);
+      const res = await this.fetchWithTimeout(url);
       if (!res.ok) return null;
       const a = (await res.json()) as Record<string, unknown>;
 
@@ -326,7 +383,7 @@ export class EspnService {
     // Fetch specifically Portuguese localized news with a higher limit to filter downstream
     const url = 'http://site.api.espn.com/apis/site/v2/sports/basketball/nba/news?limit=30&lang=pt&region=br';
     try {
-      const res = await fetch(url);
+      const res = await this.fetchWithTimeout(url);
       if (!res.ok) throw new Error(`ESPN news responded ${res.status}`);
       const data = (await res.json()) as any;
       if (!data.articles) return [];
@@ -378,7 +435,7 @@ export class EspnService {
     const performSearch = async (q: string) => {
       try {
         const url = `http://site.api.espn.com/apis/common/v3/search?region=us&lang=en&query=${encodeURIComponent(q)}&limit=25&type=player`;
-        const res = await fetch(url);
+        const res = await this.fetchWithTimeout(url);
         if (!res.ok) return null;
         const data = (await res.json()) as { items?: any[] };
         
@@ -415,7 +472,7 @@ export class EspnService {
     // Fetch full article list (unfiltered) and find by ID
     const url = 'http://site.api.espn.com/apis/site/v2/sports/basketball/nba/news?limit=50&lang=pt&region=br';
     try {
-      const res = await fetch(url);
+      const res = await this.fetchWithTimeout(url);
       if (!res.ok) throw new Error(`ESPN news responded ${res.status}`);
       const data = (await res.json()) as { articles?: Array<Record<string, unknown>> };
       if (!data.articles) return null;
@@ -478,13 +535,13 @@ export class EspnService {
       startTime: dateStr,
       status,
       homeTeamId: espnIdToSlug(home.team.id),
-      homeTeamName: home.team.displayName || home.team.name,
+      homeTeamName: home.team.displayName || (home.team as any).name || '',
       homeTeamAbbr: home.team.abbreviation,
       homeTeamLogo: home.team.logo,
       homeScore: status !== 'scheduled' ? parseInt(home.score || '0', 10) : null,
       homeRecord: home.records?.[0]?.summary || '-',
       awayTeamId: espnIdToSlug(away.team.id),
-      awayTeamName: away.team.displayName || away.team.name,
+      awayTeamName: away.team.displayName || (away.team as any).name || '',
       awayTeamAbbr: away.team.abbreviation,
       awayTeamLogo: away.team.logo,
       awayScore: status !== 'scheduled' ? parseInt(away.score || '0', 10) : null,
@@ -501,7 +558,7 @@ export class EspnService {
   async getEventSummary(eventId: string): Promise<Record<string, unknown> | null> {
     const url = `https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=${eventId}`;
     try {
-      const res = await fetch(url);
+      const res = await this.fetchWithTimeout(url);
       if (!res.ok) return null;
       return (await res.json()) as Record<string, unknown>;
     } catch (error) {
@@ -514,7 +571,7 @@ export class EspnService {
   async getPlayByPlay(eventId: string): Promise<Record<string, unknown> | null> {
     const url = `https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=${eventId}`;
     try {
-      const res = await fetch(url);
+      const res = await this.fetchWithTimeout(url);
       if (!res.ok) return null;
       const data = (await res.json()) as Record<string, unknown>;
       // The summary endpoint includes plays in the response

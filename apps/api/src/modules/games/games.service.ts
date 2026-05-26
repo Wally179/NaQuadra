@@ -66,17 +66,11 @@ export class GamesService {
 
   // ── Single game detail ──
   async getGameDetail(eventId: string): Promise<GameDetail | null> {
-    // Get base summary from scoreboard
-    const scoreboard = await this.espnService.getScoreboard();
-    let scoreItem = scoreboard.find((s) => s.externalId === eventId);
-
-    // If not found in today's scoreboard (e.g. an old game or future game), fetch directly
-    if (!scoreItem) {
-      scoreItem = await this.espnService.getNormalizedEvent(eventId) || undefined;
-    }
+    // Go directly to ESPN Summary endpoint — works for ANY game, any date
+    const scoreItem = await this.espnService.getNormalizedEvent(eventId);
 
     if (!scoreItem) {
-      this.logger.warn(`Game ${eventId} not found in scoreboard or summary`);
+      this.logger.warn(`Game ${eventId} not found via ESPN summary`);
       return null;
     }
 
@@ -84,7 +78,7 @@ export class GamesService {
     const isLive = summary.status === 'live';
     const isFinal = summary.status === 'final';
 
-    // Fetch enrichments in parallel
+    // Fetch enrichments in parallel (only for live/final games)
     const [teamStats, leaders, playerStats, periodScores, preview] = await Promise.all([
       (isLive || isFinal) ? this.gameStatsService.getTeamStats(eventId, isLive) : null,
       (isLive || isFinal) ? this.gameStatsService.getLeaders(eventId, isLive) : null,
