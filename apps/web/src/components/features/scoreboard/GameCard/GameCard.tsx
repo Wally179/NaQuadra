@@ -58,9 +58,12 @@ export function GameCard({ game }: GameCardProps) {
           <div className={styles.center}>
             {game.status === 'scheduled' && (
               <>
-                <time className={styles.time} dateTime={game.startTime}>
-                  {formatDateShort(game.startTime)} · {formatToBRT(game.startTime)}
-                </time>
+                <div className={styles.scheduledCenter}>
+                  <span className={styles.date}>{formatDateShort(game.startTime)}</span>
+                  <time className={styles.time} dateTime={game.startTime}>
+                    {formatToBRT(game.startTime)}
+                  </time>
+                </div>
                 {game.broadcast && (
                   <span className={styles.broadcast}>{game.broadcast}</span>
                 )}

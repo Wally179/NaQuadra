@@ -152,6 +152,7 @@
   color: var(--nq-text-secondary);
   font-weight: var(--nq-font-medium);
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
 }
 
 /* Center area (time / score) */
@@ -163,12 +164,30 @@
   min-width: 80px;
 }
 
+.scheduledCenter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.date {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-sm);
+  font-weight: var(--nq-font-bold);
+  color: var(--nq-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: var(--nq-tracking-wide);
+}
+
 .time {
   font-family: var(--nq-font-mono);
-  font-size: var(--nq-text-2xl);
+  font-size: var(--nq-text-4xl);
   font-weight: var(--nq-font-bold);
   color: var(--nq-text-primary);
   text-shadow: 0 0 24px rgba(255, 255, 255, 0.08);
+  line-height: 1;
+  margin-bottom: var(--nq-space-1);
 }
 
 .score {
