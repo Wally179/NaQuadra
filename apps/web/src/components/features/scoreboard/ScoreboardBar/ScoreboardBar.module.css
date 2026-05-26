@@ -57,8 +57,10 @@
 
 @media (min-width: 1024px) {
   .sectionHeader {
-    padding-left: calc((100vw - min(100vw, var(--nq-max-width))) / 2 + var(--nq-space-8));
-    padding-right: var(--nq-space-8);
+    max-width: var(--nq-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 var(--nq-space-8);
   }
 }
 
