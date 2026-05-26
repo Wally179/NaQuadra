@@ -149,7 +149,7 @@ function GameLeadersSection({ leaders }: { leaders: GameLeadersData }) {
   );
 }
 
-function TeamStatsSection({ teamStats, homeColor }: { teamStats: GameTeamStatsComparison, homeColor: string }) {
+function TeamStatsSection({ teamStats, homeColor, awayColor }: { teamStats: GameTeamStatsComparison, homeColor: string, awayColor: string }) {
   const stats = [
     { label: 'AC%', home: teamStats.home.fieldGoalPct, away: teamStats.away.fieldGoalPct },
     { label: '3P%', home: teamStats.home.threePointPct, away: teamStats.away.threePointPct },
@@ -162,7 +162,7 @@ function TeamStatsSection({ teamStats, homeColor }: { teamStats: GameTeamStatsCo
   ];
 
   return (
-    <div className={styles.section} style={{ '--home-color': homeColor } as CSSProperties}>
+    <div className={styles.section} style={{ '--home-color': homeColor, '--away-color': awayColor } as CSSProperties}>
       <h3 className={styles.sectionTitle}>Comparativo dos Times</h3>
       <div className={styles.statsGrid}>
         {stats.map(({ label, home, away }) => {
@@ -382,7 +382,7 @@ export default function GameDetailPage() {
         {isLiveOrFinal && activeTab === 'resumo' && (
           <>
             {detail.leaders && <GameLeadersSection leaders={detail.leaders} />}
-            {detail.teamStats && <TeamStatsSection teamStats={detail.teamStats} homeColor={detail.summary.homeTeam.colors.primary} />}
+            {detail.teamStats && <TeamStatsSection teamStats={detail.teamStats} homeColor={detail.summary.homeTeam.colors.primary} awayColor={detail.summary.awayTeam.colors.primary} />}
           </>
         )}
 
