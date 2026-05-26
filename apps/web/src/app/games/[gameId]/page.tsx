@@ -167,17 +167,17 @@ function TeamStatsSection({ teamStats, homeColor, awayColor }: { teamStats: Game
       <div className={styles.statsGrid}>
         {stats.map(({ label, home, away }) => {
           const total = home + away || 1;
-          const homePct = (home / total) * 100;
+          const awayPct = (away / total) * 100;
           return (
             <div key={label} className={styles.statRow}>
-              <span className={`${styles.statValue} ${home > away ? styles.statWin : ''}`}>{typeof home === 'number' && home % 1 !== 0 ? home.toFixed(1) : home}</span>
+              <span className={`${styles.statValue} ${away > home ? styles.statWin : ''}`}>{typeof away === 'number' && away % 1 !== 0 ? away.toFixed(1) : away}</span>
               <div className={styles.statBarContainer}>
                 <span className={styles.statLabel}>{label}</span>
                 <div className={styles.statBar}>
-                  <div className={styles.statBarHome} style={{ width: `${homePct}%` }} />
+                  <div className={styles.statBarAway} style={{ width: `${awayPct}%` }} />
                 </div>
               </div>
-              <span className={`${styles.statValue} ${away > home ? styles.statWin : ''}`}>{typeof away === 'number' && away % 1 !== 0 ? away.toFixed(1) : away}</span>
+              <span className={`${styles.statValue} ${home > away ? styles.statWin : ''}`}>{typeof home === 'number' && home % 1 !== 0 ? home.toFixed(1) : home}</span>
             </div>
           );
         })}
