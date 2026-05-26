@@ -73,3 +73,16 @@ export function translateStreak(streak: string): string {
   if (streak.startsWith('L')) return streak.replace('L', 'D');
   return streak;
 }
+
+/**
+ * Traduz informações de série.
+ * Ex: "Series tied 2-2" -> "Série empatada em 2-2"
+ */
+export function translateSeries(seriesInfo: string): string {
+  if (!seriesInfo) return seriesInfo;
+  return seriesInfo
+    .replace(/Series tied/i, 'Série empatada em')
+    .replace(/ leads /i, ' lidera por ')
+    .replace(/ lead /i, ' lideram por ')
+    .replace(/won series/i, 'venceu a série por');
+}

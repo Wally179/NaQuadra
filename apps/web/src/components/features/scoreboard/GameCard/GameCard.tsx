@@ -9,7 +9,7 @@
 import type { NormalizedGame } from '@naquadra/types';
 import type { CSSProperties } from 'react';
 import { getTeam } from '@/data/teams';
-import { formatToBRT, translatePhase } from '@/lib/formatters';
+import { formatToBRT, translatePhase, translateSeries } from '@/lib/formatters';
 import styles from './GameCard.module.css';
 
 interface GameCardProps {
@@ -32,10 +32,10 @@ export function GameCard({ game }: GameCardProps) {
       <div className={styles.content}>
         {/* Phase & Series Info */}
         <span className={styles.phase}>
-          {game.conference} – {translatePhase(game.phase)}
+          {game.conference ? `${game.conference} – ` : ''}{translatePhase(game.phase)}
         </span>
         {game.seriesInfo && (
-          <span className={styles.series}>{game.seriesInfo}</span>
+          <span className={styles.series}>{translateSeries(game.seriesInfo)}</span>
         )}
 
         {/* Matchup */}
