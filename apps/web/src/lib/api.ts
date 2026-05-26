@@ -84,9 +84,10 @@ export interface ScoreboardGame {
   seriesInfo: string | null;
 }
 
-export async function fetchScoreboard(): Promise<ScoreboardGame[]> {
+export async function fetchScoreboard(date?: string): Promise<ScoreboardGame[]> {
   try {
-    const res = await apiFetch<ApiListResponse<ScoreboardGame>>('/api/v1/games/scoreboard?format=flat', {
+    const query = date ? `?format=flat&date=${date}` : '?format=flat';
+    const res = await apiFetch<ApiListResponse<ScoreboardGame>>(`/api/v1/games/scoreboard${query}`, {
       revalidate: 30, // Scoreboard refreshes every 30s
       tags: ['scoreboard'],
     });

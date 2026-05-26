@@ -5,6 +5,7 @@ import { MOCK_GAMES } from '@/data/mock-games';
 import { MOCK_ARTICLES } from '@/data/mock-articles';
 import { ArrowRight, BookOpen } from 'lucide-react';
 import Link from 'next/link';
+import { addDays, format } from 'date-fns';
 import type { NormalizedGame } from '@naquadra/types';
 import styles from './page.module.css';
 
@@ -34,14 +35,29 @@ function mapToNormalizedGame(game: ScoreboardGame): NormalizedGame {
 
 export default async function HomePage() {
   // Fetch real scoreboard from API (server-side, with ISR revalidation)
-  let games: NormalizedGame[];
+  let games: NormalizedGame[] = [];
   try {
-    const apiGames = await fetchScoreboard();
-    games = apiGames.length > 0
-      ? apiGames.map(mapToNormalizedGame)
-      : MOCK_GAMES; // Fallback to mock if no games today
+    const today = new Date();
+    let currentDay = 1;
+    
+    // Fetch future games up to 7 days ahead until we have at least 3
+    while (currentDay <= 7 && games.length < 3) {
+      const targetDate = addDays(today, currentDay);
+      const dateStr = format(targetDate, 'yyyyMMdd');
+      
+      const apiGames = await fetchScoreboard(dateStr);
+      if (apiGames && apiGames.length > 0) {
+        games.push(...apiGames.map(mapToNormalizedGame));
+      }
+      currentDay++;
+    }
   } catch {
-    games = MOCK_GAMES;
+    // If error, games will remain empty
+  }
+
+  // If we couldn't find at least 3 games in the next 7 days, don't show any.
+  if (games.length < 3) {
+    games = [];
   }
 
   // Fetch real news from API

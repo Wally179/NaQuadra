@@ -1,6 +1,7 @@
 'use client';
 
 import type { NormalizedGame } from '@naquadra/types';
+import Link from 'next/link';
 import { GameCard } from '../GameCard/GameCard';
 import styles from './ScoreboardBar.module.css';
 
@@ -10,31 +11,25 @@ interface ScoreboardBarProps {
 
 export function ScoreboardBar({ games }: ScoreboardBarProps) {
   if (games.length === 0) {
-    return (
-      <section aria-label="Jogos do dia">
-        <p className={styles.sectionTitle}>🏀 Jogos de Hoje</p>
-        <div style={{ backgroundColor: 'var(--nq-bg-secondary)', padding: 'var(--nq-space-6)', borderRadius: 'var(--nq-radius-md)', textAlign: 'center', color: 'var(--nq-text-tertiary)', border: '1px dashed var(--nq-border-subtle)', margin: 'var(--nq-space-4) 0' }}>
-          Nenhum jogo da NBA programado para hoje. Aproveite a folga! 😴
-        </div>
-      </section>
-    );
+    return null;
   }
 
-  // Sort: live first, then scheduled, then final
+  // Sort by start time since they are future games
   const sorted = [...games].sort((a, b) => {
-    const order = { live: 0, scheduled: 1, final: 2 };
-    return order[a.status] - order[b.status];
+    return new Date(a.startTime).getTime() - new Date(b.startTime).getTime();
   });
 
   return (
-    <section aria-label="Jogos do dia">
-      <p className={styles.sectionTitle}>🏀 Jogos de Hoje</p>
-      <div className={styles.scoreboardBar}>
-        <div className={styles.track} aria-live="polite" aria-atomic="false">
-          {sorted.map((game) => (
-            <GameCard key={game.externalId} game={game} />
-          ))}
-        </div>
+    <section aria-label="Próximos jogos">
+      <p className={styles.sectionTitle}>🏀 Próximos Jogos</p>
+      <div className={styles.verticalList}>
+        {sorted.map((game) => (
+          <GameCard key={game.externalId} game={game} />
+        ))}
+        
+        <Link href="/games" className={styles.viewAllBtn}>
+          Veja todos os jogos →
+        </Link>
       </div>
     </section>
   );
