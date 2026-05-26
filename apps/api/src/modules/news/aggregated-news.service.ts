@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { EspnService } from '../espn/espn.service';
 import type { NormalizedArticle } from '@naquadra/types';
 
@@ -6,14 +7,20 @@ import type { NormalizedArticle } from '@naquadra/types';
 export class AggregatedNewsService {
   private readonly logger = new Logger(AggregatedNewsService.name);
   
-  private readonly NEWS_API_KEY = process.env.NEWS_API_KEY || 'daab232c8e2a41138b313e5a1cc2ff6f';
-  private readonly GNEWS_API_KEY = process.env.GNEWS_API_KEY || 'f76b327580510608f290e81e444589d0';
+  private readonly NEWS_API_KEY: string;
+  private readonly GNEWS_API_KEY: string;
   
   private cachedArticles: NormalizedArticle[] = [];
   private lastFetch: number = 0;
   private readonly CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
 
-  constructor(private readonly espnService: EspnService) {}
+  constructor(
+    private readonly espnService: EspnService,
+    private readonly config: ConfigService,
+  ) {
+    this.NEWS_API_KEY = this.config.get<string>('NEWS_API_KEY', '');
+    this.GNEWS_API_KEY = this.config.get<string>('GNEWS_API_KEY', '');
+  }
 
   async getNews(): Promise<NormalizedArticle[]> {
     const now = Date.now();

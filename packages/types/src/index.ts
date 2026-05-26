@@ -6,6 +6,7 @@
 export * from './models/team';
 export * from './models/player';
 export * from './models/game';
+export * from './models/game-insight';
 export * from './models/article';
 export * from './models/standings';
 export * from './models/user';

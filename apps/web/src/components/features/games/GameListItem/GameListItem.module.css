@@ -1,0 +1,251 @@
+.item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--nq-space-3);
+  padding: var(--nq-space-4) var(--nq-space-5);
+  background: var(--nq-bg-secondary);
+  border: 1px solid var(--nq-border-subtle);
+  border-radius: var(--nq-radius-lg);
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  transition: all var(--nq-duration-normal) var(--nq-ease-default);
+}
+
+.item:hover {
+  background: var(--nq-bg-tertiary);
+  border-color: var(--nq-border-default);
+  transform: translateY(-2px);
+  box-shadow: var(--nq-shadow-md);
+}
+
+.itemFavorite {
+  border-color: rgba(250, 204, 21, 0.25);
+  background: linear-gradient(135deg, var(--nq-bg-secondary), rgba(250, 204, 21, 0.03));
+}
+
+/* Gradient accents from team colors */
+.gradientLeft {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--away-color, var(--nq-border-default));
+  opacity: 0.6;
+  transition: opacity var(--nq-duration-fast) var(--nq-ease-default);
+}
+
+.gradientRight {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--home-color, var(--nq-border-default));
+  opacity: 0.6;
+  transition: opacity var(--nq-duration-fast) var(--nq-ease-default);
+}
+
+.item:hover .gradientLeft,
+.item:hover .gradientRight {
+  opacity: 1;
+}
+
+/* Status Bar */
+.statusBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.liveBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--nq-radius-full);
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--nq-system-live);
+  font-family: var(--nq-font-display);
+  font-size: 11px;
+  font-weight: var(--nq-font-bold);
+  letter-spacing: var(--nq-tracking-wide);
+  text-transform: uppercase;
+}
+
+.liveDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--nq-system-live);
+  animation: live-pulse 1.5s ease-in-out infinite;
+}
+
+.scheduledBadge,
+.finalBadge {
+  padding: 3px 10px;
+  border-radius: var(--nq-radius-full);
+  font-family: var(--nq-font-display);
+  font-size: 11px;
+  font-weight: var(--nq-font-semibold);
+  letter-spacing: var(--nq-tracking-wide);
+  text-transform: uppercase;
+}
+
+.scheduledBadge {
+  background: rgba(96, 165, 250, 0.1);
+  color: var(--nq-system-info);
+}
+
+.finalBadge {
+  background: var(--nq-bg-tertiary);
+  color: var(--nq-text-tertiary);
+}
+
+.favStar {
+  color: #FACC15;
+  font-size: var(--nq-text-sm);
+}
+
+/* Matchup */
+.matchup {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--nq-space-3);
+}
+
+.teamSide {
+  display: flex;
+  align-items: center;
+  gap: var(--nq-space-3);
+  flex: 1;
+  min-width: 0;
+}
+
+.teamSide:last-of-type {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.teamSide:last-of-type .teamInfo {
+  align-items: flex-end;
+}
+
+.logo {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.teamInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.teamAbbr {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-lg);
+  font-weight: var(--nq-font-bold);
+  color: var(--nq-text-primary);
+  line-height: 1.2;
+}
+
+.teamRecord {
+  font-size: var(--nq-text-xs);
+  color: var(--nq-text-tertiary);
+  font-weight: var(--nq-font-medium);
+}
+
+/* Center score / time */
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  min-width: 80px;
+}
+
+.gameTime {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-xl);
+  font-weight: var(--nq-font-bold);
+  color: var(--nq-text-primary);
+}
+
+.scoreBlock {
+  display: flex;
+  align-items: baseline;
+  gap: var(--nq-space-2);
+}
+
+.score {
+  font-family: var(--nq-font-mono);
+  font-size: var(--nq-text-2xl);
+  font-weight: var(--nq-font-bold);
+  color: var(--nq-text-secondary);
+  line-height: 1;
+}
+
+.scoreWin {
+  color: var(--nq-text-primary);
+}
+
+.scoreDivider {
+  font-size: var(--nq-text-sm);
+  color: var(--nq-text-tertiary);
+}
+
+.clockInfo {
+  font-family: var(--nq-font-mono);
+  font-size: var(--nq-text-xs);
+  color: var(--nq-system-live);
+  font-weight: var(--nq-font-medium);
+}
+
+/* Footer */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--nq-space-2);
+}
+
+.venue,
+.broadcast {
+  font-size: var(--nq-text-xs);
+  color: var(--nq-text-tertiary);
+}
+
+.broadcast {
+  white-space: nowrap;
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  .item {
+    padding: var(--nq-space-3) var(--nq-space-4);
+  }
+
+  .logo {
+    width: 36px;
+    height: 36px;
+  }
+
+  .teamAbbr {
+    font-size: var(--nq-text-base);
+  }
+
+  .score {
+    font-size: var(--nq-text-xl);
+  }
+
+  .gameTime {
+    font-size: var(--nq-text-lg);
+  }
+}

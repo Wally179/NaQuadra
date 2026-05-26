@@ -35,6 +35,7 @@ export function Header() {
         {/* Desktop Nav */}
         <nav className={styles.nav} aria-label="Navegação principal">
           <Link href="/" className={`${styles.navLink} ${pathname === '/' ? styles.navLinkActive : ''}`}>Início</Link>
+          <Link href="/games" className={`${styles.navLink} ${pathname.startsWith('/games') ? styles.navLinkActive : ''}`}>Jogos</Link>
           <Link href="/standings" className={`${styles.navLink} ${pathname === '/standings' ? styles.navLinkActive : ''}`}>Standings</Link>
           <Link href="/teams" className={`${styles.navLink} ${pathname === '/teams' ? styles.navLinkActive : ''}`}>Times</Link>
           <Link href="/news" className={`${styles.navLink} ${pathname === '/news' ? styles.navLinkActive : ''}`}>Notícias</Link>

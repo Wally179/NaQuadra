@@ -1,0 +1,53 @@
+.datePicker {
+  display: flex;
+  align-items: center;
+  gap: var(--nq-space-2);
+  justify-content: center;
+}
+
+.navBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--nq-radius-full);
+  background: var(--nq-bg-tertiary);
+  color: var(--nq-text-secondary);
+  transition: all var(--nq-duration-fast) var(--nq-ease-default);
+  cursor: pointer;
+  border: 1px solid var(--nq-border-subtle);
+}
+
+.navBtn:hover {
+  background: var(--nq-bg-elevated);
+  color: var(--nq-text-primary);
+  border-color: var(--nq-border-default);
+}
+
+.dateLabel {
+  padding: var(--nq-space-2) var(--nq-space-5);
+  border-radius: var(--nq-radius-full);
+  background: var(--nq-bg-tertiary);
+  color: var(--nq-text-primary);
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-sm);
+  font-weight: var(--nq-font-semibold);
+  letter-spacing: var(--nq-tracking-wide);
+  text-transform: capitalize;
+  border: 1px solid var(--nq-border-subtle);
+  transition: all var(--nq-duration-fast) var(--nq-ease-default);
+  cursor: pointer;
+  min-width: 120px;
+  text-align: center;
+}
+
+.dateLabel:hover {
+  border-color: var(--nq-border-default);
+}
+
+.dateLabelToday {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.15), rgba(167, 139, 250, 0.1));
+  border-color: rgba(96, 165, 250, 0.3);
+  color: var(--nq-system-info);
+}

@@ -86,7 +86,7 @@ export interface ScoreboardGame {
 
 export async function fetchScoreboard(): Promise<ScoreboardGame[]> {
   try {
-    const res = await apiFetch<ApiListResponse<ScoreboardGame>>('/api/v1/games/scoreboard', {
+    const res = await apiFetch<ApiListResponse<ScoreboardGame>>('/api/v1/games/scoreboard?format=flat', {
       revalidate: 30, // Scoreboard refreshes every 30s
       tags: ['scoreboard'],
     });
@@ -236,6 +236,81 @@ export async function fetchSearchPlayer(query: string, options?: FetchOptions): 
   }
 }
 
+// ── Games ──
+import type {
+  GameSummary,
+  GameDetail,
+  GamePlayerStatsGroup,
+  GamePlayByPlayEvent,
+  GameTeamStatsComparison,
+} from '@naquadra/types';
+
+export async function fetchGamesList(date?: string): Promise<GameSummary[]> {
+  try {
+    const query = date ? `?date=${date}` : '';
+    const res = await apiFetch<{ data: GameSummary[] }>(`/api/v1/games/scoreboard${query}`, {
+      revalidate: 30,
+      tags: ['games-scoreboard'],
+    });
+    return res?.data ?? [];
+  } catch (error) {
+    console.warn('[API] Games list fetch failed:', error);
+    return [];
+  }
+}
+
+export async function fetchGameDetail(gameId: string): Promise<GameDetail | null> {
+  try {
+    const res = await apiFetch<{ data: GameDetail }>(`/api/v1/games/${gameId}`, {
+      revalidate: 15,
+      tags: ['game-detail', `game-${gameId}`],
+    });
+    return res?.data ?? null;
+  } catch (error) {
+    console.warn(`[API] Game detail fetch failed for ${gameId}:`, error);
+    return null;
+  }
+}
+
+export async function fetchGameBoxScore(gameId: string): Promise<GamePlayerStatsGroup | null> {
+  try {
+    const res = await apiFetch<{ data: GamePlayerStatsGroup }>(`/api/v1/games/${gameId}/boxscore`, {
+      revalidate: 15,
+      tags: ['game-boxscore', `game-${gameId}`],
+    });
+    return res?.data ?? null;
+  } catch (error) {
+    console.warn(`[API] Box score fetch failed for ${gameId}:`, error);
+    return null;
+  }
+}
+
+export async function fetchGamePlays(gameId: string, limit = 50): Promise<GamePlayByPlayEvent[]> {
+  try {
+    const res = await apiFetch<{ data: GamePlayByPlayEvent[] }>(
+      `/api/v1/games/${gameId}/plays?limit=${limit}`,
+      { revalidate: 15, tags: ['game-plays', `game-${gameId}`] },
+    );
+    return res?.data ?? [];
+  } catch (error) {
+    console.warn(`[API] Plays fetch failed for ${gameId}:`, error);
+    return [];
+  }
+}
+
+export async function fetchGameTeamStats(gameId: string): Promise<GameTeamStatsComparison | null> {
+  try {
+    const res = await apiFetch<{ data: GameTeamStatsComparison }>(`/api/v1/games/${gameId}/team-stats`, {
+      revalidate: 15,
+      tags: ['game-teamstats', `game-${gameId}`],
+    });
+    return res?.data ?? null;
+  } catch (error) {
+    console.warn(`[API] Team stats fetch failed for ${gameId}:`, error);
+    return null;
+  }
+}
+
 // ── Health Check ──
 export async function checkApiHealth(): Promise<boolean> {
   try {
@@ -245,3 +320,4 @@ export async function checkApiHealth(): Promise<boolean> {
     return false;
   }
 }
+

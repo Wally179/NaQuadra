@@ -329,11 +329,13 @@ export const NBA_TEAMS: Record<string, TeamStaticData> = {
 
 /** Get team by ID */
 export function getTeam(teamId: string): TeamStaticData | undefined {
+  if (!teamId) return undefined;
   return NBA_TEAMS[teamId.toLowerCase()];
 }
 
 /** Get team colors by ID */
 export function getTeamColors(teamId: string): TeamColors | undefined {
+  if (!teamId) return undefined;
   return NBA_TEAMS[teamId.toLowerCase()]?.colors;
 }
 

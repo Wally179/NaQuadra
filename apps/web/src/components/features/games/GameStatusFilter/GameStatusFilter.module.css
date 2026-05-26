@@ -1,0 +1,54 @@
+.filterBar {
+  display: flex;
+  gap: var(--nq-space-2);
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: var(--nq-space-1) 0;
+}
+
+.filterBar::-webkit-scrollbar {
+  display: none;
+}
+
+.filterBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--nq-space-2);
+  padding: var(--nq-space-2) var(--nq-space-4);
+  border-radius: var(--nq-radius-full);
+  background: var(--nq-bg-tertiary);
+  color: var(--nq-text-secondary);
+  font-family: var(--nq-font-body);
+  font-size: var(--nq-text-sm);
+  font-weight: var(--nq-font-medium);
+  white-space: nowrap;
+  transition: all var(--nq-duration-fast) var(--nq-ease-default);
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.filterBtn:hover {
+  background: var(--nq-bg-elevated);
+  color: var(--nq-text-primary);
+}
+
+.filterBtnActive {
+  background: var(--nq-overlay-heavy);
+  color: var(--nq-text-primary);
+  border-color: var(--nq-border-strong);
+}
+
+.liveBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--nq-radius-full);
+  background: var(--nq-system-live);
+  color: white;
+  font-size: 11px;
+  font-weight: var(--nq-font-bold);
+  line-height: 1;
+}

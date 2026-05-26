@@ -154,6 +154,27 @@ export class EspnService {
     }
   }
 
+  // ── Single Event (fallback for old games) ──
+  async getNormalizedEvent(eventId: string): Promise<NormalizedScore | null> {
+    const summary = await this.getEventSummary(eventId);
+    if (!summary || !summary.header) return null;
+    try {
+      const header = summary.header as any;
+      // Reconstruct as EspnEvent
+      const eventLike = {
+        id: header.id,
+        date: header.competitions?.[0]?.date || header.season?.year,
+        name: header.name,
+        status: header.competitions?.[0]?.status,
+        competitions: header.competitions,
+      } as EspnEvent;
+      return this.normalizeEvent(eventLike);
+    } catch (error) {
+      this.logger.error(`Failed to normalize single event ${eventId}`, (error as Error).message);
+      return null;
+    }
+  }
+
   // ── Standings ──
   async getStandings(): Promise<NormalizedStandingsEntry[]> {
     const url = `https://site.web.api.espn.com/apis/v2/sports/basketball/nba/standings?season=2026`;
@@ -444,32 +465,70 @@ export class EspnService {
     const home = comp.competitors.find((c) => c.homeAway === 'home')!;
     const away = comp.competitors.find((c) => c.homeAway === 'away')!;
 
+    const statusObj = event.status || (comp as any).status;
+    const dateStr = event.date || (comp as any).date;
+
     let status: 'scheduled' | 'live' | 'final' = 'scheduled';
-    if (event.status.type.state === 'in') status = 'live';
-    else if (event.status.type.completed) status = 'final';
+    if (statusObj?.type?.state === 'in') status = 'live';
+    else if (statusObj?.type?.completed) status = 'final';
 
     return {
       externalId: event.id,
-      date: event.date,
-      startTime: event.date,
+      date: dateStr,
+      startTime: dateStr,
       status,
       homeTeamId: espnIdToSlug(home.team.id),
-      homeTeamName: home.team.displayName,
+      homeTeamName: home.team.displayName || home.team.name,
       homeTeamAbbr: home.team.abbreviation,
       homeTeamLogo: home.team.logo,
-      homeScore: status !== 'scheduled' ? parseInt(home.score, 10) : null,
+      homeScore: status !== 'scheduled' ? parseInt(home.score || '0', 10) : null,
       homeRecord: home.records?.[0]?.summary || '-',
       awayTeamId: espnIdToSlug(away.team.id),
-      awayTeamName: away.team.displayName,
+      awayTeamName: away.team.displayName || away.team.name,
       awayTeamAbbr: away.team.abbreviation,
       awayTeamLogo: away.team.logo,
-      awayScore: status !== 'scheduled' ? parseInt(away.score, 10) : null,
+      awayScore: status !== 'scheduled' ? parseInt(away.score || '0', 10) : null,
       awayRecord: away.records?.[0]?.summary || '-',
-      quarter: status === 'live' ? `Q${event.status.period}` : null,
-      clock: status === 'live' ? event.status.displayClock : null,
+      quarter: status === 'live' ? `Q${statusObj.period}` : null,
+      clock: status === 'live' ? statusObj.displayClock : null,
       venue: comp.venue?.fullName ?? null,
       broadcast: comp.broadcasts?.[0]?.names?.join(', ') ?? null,
       seriesInfo: comp.series?.summary ?? null,
     };
   }
+
+  // ── ESPN Core API: Event Summary ──
+  async getEventSummary(eventId: string): Promise<Record<string, unknown> | null> {
+    const url = `https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=${eventId}`;
+    try {
+      const res = await fetch(url);
+      if (!res.ok) return null;
+      return (await res.json()) as Record<string, unknown>;
+    } catch (error) {
+      this.logger.error(`Failed to fetch event summary ${eventId}`, (error as Error).message);
+      return null;
+    }
+  }
+
+  // ── ESPN Core API: Play-by-Play ──
+  async getPlayByPlay(eventId: string): Promise<Record<string, unknown> | null> {
+    const url = `https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=${eventId}`;
+    try {
+      const res = await fetch(url);
+      if (!res.ok) return null;
+      const data = (await res.json()) as Record<string, unknown>;
+      // The summary endpoint includes plays in the response
+      return data;
+    } catch (error) {
+      this.logger.error(`Failed to fetch plays for ${eventId}`, (error as Error).message);
+      return null;
+    }
+  }
+
+  // ── Find a single game by eventId from scoreboard ──
+  async getGameFromScoreboard(eventId: string, dateStr?: string): Promise<NormalizedScore | null> {
+    const games = await this.getScoreboard(dateStr);
+    return games.find((g) => g.externalId === eventId) ?? null;
+  }
 }
+

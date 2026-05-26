@@ -30,6 +30,7 @@ import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
 import authConfig from './config/auth.config';
 import espnConfig from './config/espn.config';
+import balldontlieConfig from './config/balldontlie.config';
 
 const logger = new Logger('AppModule');
 const SKIP_DB = process.env.SKIP_DB === 'true';
@@ -73,7 +74,7 @@ const databaseImports = SKIP_DB
     // ── Always loaded ──
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, databaseConfig, authConfig, espnConfig],
+      load: [appConfig, databaseConfig, authConfig, espnConfig, balldontlieConfig],
       envFilePath: ['.env.local', '.env', '.env.example'],
     }),
     ThrottlerModule.forRootAsync({
