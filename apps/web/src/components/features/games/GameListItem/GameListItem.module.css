@@ -198,6 +198,13 @@
   min-width: 80px;
 }
 
+.scheduledInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--nq-space-1);
+}
+
 .gameTime {
   font-family: var(--nq-font-display);
   font-size: var(--nq-text-xl);
@@ -209,6 +216,37 @@
   display: flex;
   align-items: baseline;
   gap: var(--nq-space-2);
+}
+
+.time {
+  font-family: var(--nq-font-mono);
+  font-size: var(--nq-text-lg);
+  font-weight: var(--nq-font-bold);
+  color: var(--nq-text-primary);
+  line-height: 1;
+}
+
+.conditionalBadge {
+  font-family: var(--nq-font-sans);
+  font-size: 9px;
+  font-weight: var(--nq-font-bold);
+  color: #fbbf24;
+  background-color: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  padding: 2px 4px;
+  border-radius: var(--nq-radius-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--nq-tracking-wider);
+  margin-top: var(--nq-space-1);
+}
+
+.finalLabel {
+  color: var(--nq-text-primary);
+}
+
+.scoreDivider {
+  font-size: var(--nq-text-sm);
+  color: var(--nq-text-tertiary);
 }
 
 .score {
@@ -223,9 +261,6 @@
   color: var(--nq-text-primary);
 }
 
-.scoreDivider {
-  font-size: var(--nq-text-sm);
-  color: var(--nq-text-tertiary);
 }
 
 .clockInfo {

@@ -191,6 +191,20 @@
   margin-bottom: var(--nq-space-1);
 }
 
+.conditionalBadge {
+  font-family: var(--nq-font-sans);
+  font-size: 10px;
+  font-weight: var(--nq-font-bold);
+  color: #fbbf24;
+  background-color: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  padding: 2px 6px;
+  border-radius: var(--nq-radius-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--nq-tracking-wider);
+  margin-top: var(--nq-space-1);
+}
+
 .score {
   font-family: var(--nq-font-mono);
   font-size: var(--nq-text-2xl);

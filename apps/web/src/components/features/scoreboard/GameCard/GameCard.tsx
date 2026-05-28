@@ -36,6 +36,8 @@ export function GameCard({ game }: GameCardProps) {
 
   const hasPhaseInSeries = phaseText !== null || translatedSeries.match(/Finais|Semifinais|Rodada|Play-In/i) !== null;
 
+  const isConditional = game.seriesInfo?.toLowerCase().includes('if necessary');
+
   return (
     <Link href={`/games/${game.externalId}`} className={styles.gameCard} style={cardStyles} aria-label={`${homeTeam.name} vs ${awayTeam.name}`}>
       <div className={styles.content}>
@@ -77,6 +79,9 @@ export function GameCard({ game }: GameCardProps) {
                   <time className={styles.time} dateTime={game.startTime}>
                     {formatToBRT(game.startTime)}
                   </time>
+                  {isConditional && (
+                    <span className={styles.conditionalBadge}>*SE NECESSÁRIO</span>
+                  )}
                 </div>
                 {game.broadcast && (
                   <span className={styles.broadcast}>{game.broadcast}</span>

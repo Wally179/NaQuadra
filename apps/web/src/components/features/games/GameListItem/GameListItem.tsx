@@ -26,6 +26,8 @@ export function GameListItem({ game, isFavorite }: GameListItemProps) {
     '--away-color': awayTeam.colors.primary,
   } as CSSProperties;
 
+  const isConditional = game.seriesInfo?.toLowerCase().includes('if necessary');
+
   return (
     <Link
       href={`/games/${game.id}`}
@@ -88,9 +90,14 @@ export function GameListItem({ game, isFavorite }: GameListItemProps) {
         {/* Center: Score / Time */}
         <div className={styles.center}>
           {status === 'scheduled' ? (
-            <time className={styles.gameTime} dateTime={game.startTime}>
-              {formatTime(game.startTime)}
-            </time>
+            <div className={styles.scheduledInfo}>
+              <time className={styles.gameTime} dateTime={game.startTime}>
+                {formatTime(game.startTime)}
+              </time>
+              {isConditional && (
+                <span className={styles.conditionalBadge}>*SE NECESSÁRIO</span>
+              )}
+            </div>
           ) : (
             <div className={styles.scoreBlock}>
               <span className={`${styles.score} ${game.awayScore !== null && game.homeScore !== null && game.awayScore > game.homeScore ? styles.scoreWin : ''}`}>
