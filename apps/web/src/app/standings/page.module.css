@@ -39,7 +39,7 @@
   margin-left: var(--nq-space-2);
   font-size: var(--nq-text-xs);
   font-weight: var(--nq-font-bold);
-  color: var(--nq-system-success);
+  color: var(--nq-system-live);
   animation: pulse 2s ease-in-out infinite;
 }
 
@@ -120,7 +120,6 @@
 
 .table tbody tr {
   transition: background var(--nq-duration-fast) var(--nq-ease-default);
-  cursor: pointer;
 }
 
 .table tbody tr:hover {
@@ -152,6 +151,12 @@
 }
 
 /* Team cell */
+.teamCellLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
 .teamCell {
   display: flex;
   align-items: center;

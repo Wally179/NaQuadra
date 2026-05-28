@@ -4,7 +4,7 @@
 // The signature visual component of Na Quadra.
 // Team colors "invade" the dark center from both sides.
 
-'use client';
+import Link from 'next/link';
 
 import type { NormalizedGame } from '@naquadra/types';
 import type { CSSProperties } from 'react';
@@ -28,7 +28,7 @@ export function GameCard({ game }: GameCardProps) {
   } as CSSProperties;
 
   return (
-    <article className={styles.gameCard} style={cardStyles} aria-label={`${homeTeam.name} vs ${awayTeam.name}`}>
+    <Link href={`/games/${game.externalId}`} className={styles.gameCard} style={cardStyles} aria-label={`${homeTeam.name} vs ${awayTeam.name}`}>
       <div className={styles.content}>
         {/* Phase & Series Info */}
         <span className={styles.phase}>
@@ -108,12 +108,7 @@ export function GameCard({ game }: GameCardProps) {
           </div>
         </div>
 
-        {/* Actions */}
-        <div className={styles.actions}>
-          <button className={styles.action} type="button">Detalhes</button>
-          <button className={styles.action} type="button">Onde assistir</button>
-        </div>
       </div>
-    </article>
+    </Link>
   );
 }

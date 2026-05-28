@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
+import { Database, Code, Server, AppWindow } from 'lucide-react';
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
@@ -78,7 +80,7 @@ export default function AboutPage() {
       {/* Tech Stack */}
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>
-          <span className={styles.sectionEmoji}>🛠️</span>
+          <AppWindow className={styles.sectionIcon} />
           Stack Tecnológico
         </h2>
         <div className={styles.techGrid}>
@@ -95,8 +97,8 @@ export default function AboutPage() {
       {/* Architecture Diagram */}
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>
-          <span className={styles.sectionEmoji}>🗺️</span>
-          Arquitetura
+          <Code className={styles.sectionIcon} />
+          Arquitetura Frontend
         </h2>
         <div className={styles.archDiagram}>
           <pre className={styles.archCode}>{`
@@ -135,7 +137,7 @@ export default function AboutPage() {
       {/* Features */}
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>
-          <span className={styles.sectionEmoji}>⚡</span>
+          <Database className={styles.sectionIcon} />
           Funcionalidades Técnicas
         </h2>
         <div className={styles.featuresList}>
@@ -158,7 +160,10 @@ export default function AboutPage() {
 
       {/* CTA */}
       <div className={styles.cta}>
-        <h2 className={styles.ctaTitle}>👋 Quer saber mais?</h2>
+        <h2 className={styles.ctaTitle}>
+          <Server className={styles.sectionIcon} />
+          Backend e Integração (BFF)
+        </h2>
         <p className={styles.ctaText}>
           Este projeto é um portfólio vivo. O código-fonte está disponível no GitHub,
           incluindo CI/CD, testes, infraestrutura AWS e arquitetura de produção.

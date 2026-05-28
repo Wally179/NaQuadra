@@ -1,0 +1,51 @@
+.authGate {
+  max-width: 420px;
+  margin: var(--nq-space-12) auto;
+  text-align: center;
+  padding: var(--nq-space-10) var(--nq-space-8);
+  background: var(--nq-bg-secondary);
+  border: 1px solid var(--nq-border-subtle);
+  border-radius: var(--nq-radius-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--nq-space-4);
+  align-items: center;
+}
+
+.authGateIcon {
+  color: var(--nq-system-warning);
+  margin-bottom: var(--nq-space-2);
+}
+
+.authGateTitle {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-2xl);
+  font-weight: var(--nq-font-bold);
+  color: var(--nq-text-primary);
+}
+
+.authGateText {
+  font-size: var(--nq-text-sm);
+  color: var(--nq-text-secondary);
+  line-height: var(--nq-leading-relaxed);
+}
+
+.loginBtn {
+  padding: var(--nq-space-3) var(--nq-space-8);
+  background: var(--nq-text-primary);
+  color: var(--nq-bg-primary);
+  border: none;
+  border-radius: var(--nq-radius-md);
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-base);
+  font-weight: var(--nq-font-bold);
+  cursor: pointer;
+  transition: all var(--nq-duration-fast) var(--nq-ease-default);
+  text-decoration: none;
+  display: inline-block;
+}
+
+.loginBtn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}

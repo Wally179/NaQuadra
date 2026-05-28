@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { StandingsEntry } from '@naquadra/types';
+import Link from 'next/link';
 import { getTeam } from '@/data/teams';
 import { translateStreak } from '@/lib/formatters';
 import styles from './page.module.css';
@@ -17,6 +18,10 @@ interface StandingsClientProps {
 export function StandingsClient({ eastStandings, westStandings, isLive }: StandingsClientProps) {
   const [conference, setConference] = useState<ConferenceTab>('east');
   const standings = conference === 'east' ? eastStandings : westStandings;
+
+  const hasLast10 = standings.some(e => e.last10 && e.last10 !== '-');
+  const hasHomeRecord = standings.some(e => e.homeRecord && e.homeRecord !== '-');
+  const hasAwayRecord = standings.some(e => e.awayRecord && e.awayRecord !== '-');
 
   return (
     <>
@@ -70,14 +75,20 @@ export function StandingsClient({ eastStandings, westStandings, isLive }: Standi
               <th className={styles.numCol}>%</th>
               <th className={styles.numCol}>GB</th>
               <th className={styles.numCol}>SEQ</th>
-              <th className={styles.numCol}>Últ 10</th>
-              <th className={styles.numCol}>CASA</th>
-              <th className={styles.numCol}>FORA</th>
+              {hasLast10 && <th className={styles.numCol}>Últ 10</th>}
+              {hasHomeRecord && <th className={styles.numCol}>CASA</th>}
+              {hasAwayRecord && <th className={styles.numCol}>FORA</th>}
             </tr>
           </thead>
           <tbody>
             {standings.map((entry) => (
-              <StandingsRow key={entry.teamId} entry={entry} />
+              <StandingsRow 
+                key={entry.teamId} 
+                entry={entry} 
+                hasLast10={hasLast10}
+                hasHomeRecord={hasHomeRecord}
+                hasAwayRecord={hasAwayRecord}
+              />
             ))}
           </tbody>
         </table>
@@ -97,7 +108,17 @@ export function StandingsClient({ eastStandings, westStandings, isLive }: Standi
   );
 }
 
-function StandingsRow({ entry }: { entry: StandingsEntry }) {
+function StandingsRow({ 
+  entry, 
+  hasLast10, 
+  hasHomeRecord, 
+  hasAwayRecord 
+}: { 
+  entry: StandingsEntry;
+  hasLast10: boolean;
+  hasHomeRecord: boolean;
+  hasAwayRecord: boolean;
+}) {
   const team = getTeam(entry.teamId);
   const isStreakWin = entry.streak.startsWith('W');
 
@@ -116,20 +137,22 @@ function StandingsRow({ entry }: { entry: StandingsEntry }) {
     <tr className={rowClass} style={rowStyle}>
       <td className={styles.seed}>{entry.seed}</td>
       <td>
-        <div className={styles.teamCell}>
-          {team && (
-            <img
-              src={team.logo}
-              alt={entry.teamName}
-              className={styles.teamLogo}
-              width={28}
-              height={28}
-              loading="lazy"
-            />
-          )}
-          <span className={styles.teamName}>{entry.teamName}</span>
-          <span className={styles.teamAbbr}>{entry.teamAbbreviation}</span>
-        </div>
+        <Link href={`/teams/${entry.teamId}`} className={styles.teamCellLink}>
+          <div className={styles.teamCell}>
+            {team && (
+              <img
+                src={team.logo}
+                alt={entry.teamName}
+                className={styles.teamLogo}
+                width={28}
+                height={28}
+                loading="lazy"
+              />
+            )}
+            <span className={styles.teamName}>{entry.teamName}</span>
+            <span className={styles.teamAbbr}>{entry.teamAbbreviation}</span>
+          </div>
+        </Link>
       </td>
       <td className={`${styles.numCol} ${styles.record}`}>{entry.wins}</td>
       <td className={`${styles.numCol} ${styles.record}`}>{entry.losses}</td>
@@ -138,9 +161,9 @@ function StandingsRow({ entry }: { entry: StandingsEntry }) {
       <td className={`${styles.numCol} ${isStreakWin ? styles.streakW : styles.streakL}`}>
         {translateStreak(entry.streak)}
       </td>
-      <td className={styles.numCol}>{entry.last10}</td>
-      <td className={styles.numCol}>{entry.homeRecord}</td>
-      <td className={styles.numCol}>{entry.awayRecord}</td>
+      {hasLast10 && <td className={styles.numCol}>{entry.last10}</td>}
+      {hasHomeRecord && <td className={styles.numCol}>{entry.homeRecord}</td>}
+      {hasAwayRecord && <td className={styles.numCol}>{entry.awayRecord}</td>}
     </tr>
   );
 }

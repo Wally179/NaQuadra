@@ -3,6 +3,7 @@ import { Inter, Plus_Jakarta_Sans, DM_Mono } from 'next/font/google';
 import './globals.css';
 import { Header } from '@/components/layout/Header/Header';
 import { MobileNav } from '@/components/layout/MobileNav/MobileNav';
+import { Footer } from '@/components/layout/Footer/Footer';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -61,6 +62,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main className="nq-main">
           {children}
         </main>
+        <Footer />
         <MobileNav />
       </body>
     </html>

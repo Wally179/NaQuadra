@@ -5,7 +5,7 @@
   position: relative;
   text-decoration: none;
   background: linear-gradient(135deg, var(--card-color-primary, #5b2c6f) 0%, var(--card-color-secondary, #3e1f4b) 100%);
-  border-radius: 12px 48px 12px 48px;
+  border-radius: var(--nq-radius-xl);
   border: 1px solid rgba(255, 255, 255, 0.3);
   padding: var(--nq-space-6) var(--nq-space-8);
   padding-top: 70px;

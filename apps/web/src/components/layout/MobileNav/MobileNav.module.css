@@ -37,11 +37,22 @@
   transition: color var(--nq-duration-fast) var(--nq-ease-default);
   -webkit-tap-highlight-color: transparent;
   min-width: 56px;
+  position: relative;
 }
 
 .navItem:hover,
 .navItemActive {
-  color: var(--nq-text-primary);
+  color: var(--nq-brand-primary);
+}
+
+.navItemActive::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--nq-brand-primary);
 }
 
 .navLabel {

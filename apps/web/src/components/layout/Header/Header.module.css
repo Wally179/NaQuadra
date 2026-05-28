@@ -147,6 +147,18 @@
 .searchForm {
   display: flex;
   align-items: center;
+  animation: searchExpand 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes searchExpand {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 140px;
+    opacity: 1;
+  }
 }
 
 .searchInput {
@@ -158,7 +170,7 @@
   font-size: var(--nq-text-sm);
   outline: none;
   width: 180px;
-  transition: all var(--nq-duration-normal) var(--nq-ease-default);
+  transition: all var(--nq-duration-normal) var(--nq-ease-default), width var(--nq-duration-normal) var(--nq-ease-default), opacity var(--nq-duration-normal) var(--nq-ease-default);
 }
 
 .searchInput:focus {

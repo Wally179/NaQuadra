@@ -6,6 +6,7 @@ import { GameListItem } from '@/components/features/games/GameListItem/GameListI
 import { GameDatePicker, getToday } from '@/components/features/games/GameDatePicker/GameDatePicker';
 import { GameStatusFilter } from '@/components/features/games/GameStatusFilter/GameStatusFilter';
 import type { GameSummary } from '@naquadra/types';
+import { CalendarOff } from 'lucide-react';
 import styles from './page.module.css';
 
 export default function GamesPage() {
@@ -60,7 +61,7 @@ export default function GamesPage() {
       <div className={styles.container}>
         {/* Header */}
         <div className={styles.header}>
-          <h1 className={styles.title}>🏀 Jogos da NBA</h1>
+          <h1 className={styles.pageTitle}>Jogos da NBA</h1>
           <p className={styles.subtitle}>Acompanhe todos os jogos em tempo real</p>
         </div>
 
@@ -81,7 +82,7 @@ export default function GamesPage() {
           </div>
         ) : filteredGames.length === 0 ? (
           <div className={styles.emptyState}>
-            <span className={styles.emptyIcon}>🏖️</span>
+            <CalendarOff size={48} className={styles.emptyIcon} />
             <p className={styles.emptyText}>
               {allGames.length === 0
                 ? 'Sem jogos hoje. Confira outro dia!'

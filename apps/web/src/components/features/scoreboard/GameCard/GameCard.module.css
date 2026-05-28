@@ -19,11 +19,12 @@
   padding: var(--nq-space-5) var(--nq-space-6);
   scroll-snap-align: center;
   flex-shrink: 0;
-  transition: transform var(--nq-duration-fast) var(--nq-ease-default);
+  transition: transform var(--nq-duration-normal) var(--nq-ease-out), box-shadow var(--nq-duration-normal) var(--nq-ease-out);
 }
 
 .gameCard:hover {
-  transform: scale(1.01);
+  transform: translateY(-4px);
+  box-shadow: var(--nq-shadow-xl);
 }
 
 /* Gradiente do time da casa (esquerda) */
@@ -234,34 +235,7 @@
   animation: live-pulse 1.5s ease-in-out infinite;
 }
 
-/* Bottom actions */
-.actions {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: var(--nq-space-2);
-  padding-top: var(--nq-space-2);
-  border-top: 1px solid var(--nq-border-subtle);
-}
 
-.action {
-  font-family: var(--nq-font-body);
-  font-size: var(--nq-text-xs);
-  font-weight: var(--nq-font-medium);
-  color: var(--nq-text-primary);
-  cursor: pointer;
-  padding: 4px 12px;
-  border-radius: var(--nq-radius-full);
-  transition: all var(--nq-duration-fast) var(--nq-ease-default);
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(4px);
-}
-
-.action:hover {
-  background: rgba(0, 0, 0, 0.7);
-  border-color: rgba(255, 255, 255, 0.3);
-}
 
 /* Broadcast badge */
 .broadcast {

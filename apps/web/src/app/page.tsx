@@ -117,13 +117,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* === FOOTER === */}
-      <footer className={styles.footer}>
-        <p className={styles.footerText}>
-          <span className={styles.footerBrand}>🏀 Na Quadra</span>
-          {' '} — Entenda a NBA. Acompanhe seus times. Viva a quadra.
-        </p>
-      </footer>
     </>
   );
 }
