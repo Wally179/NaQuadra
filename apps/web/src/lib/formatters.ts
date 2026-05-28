@@ -91,7 +91,7 @@ export function translateSeries(seriesInfo: string): string {
     .replace(/NBA Finals/i, 'Finais da NBA')
     .replace(/Play-In Tournament/i, 'Play-In')
     .replace(/Series tied/i, 'Série empatada em')
-    .replace(/ leads /i, ' lidera por ')
-    .replace(/ lead /i, ' lideram por ')
+    .replace(/ leads series /i, ' lidera a série por ')
+    .replace(/ lead series /i, ' lideram a série por ')
     .replace(/won series/i, 'venceu a série por');
 }

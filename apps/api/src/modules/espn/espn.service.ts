@@ -234,28 +234,35 @@ export class EspnService {
         return null;
       };
 
-      return {
-        externalId: String(header.id || eventId),
-        date: comp.date || header.gameDate || new Date().toISOString(),
-        startTime: comp.date || header.gameDate || new Date().toISOString(),
-        status,
-        homeTeamId: espnIdToSlug(String(home.team?.id || home.id || '')),
-        homeTeamName: home.team?.displayName || home.team?.name || '',
-        homeTeamAbbr: home.team?.abbreviation || '',
-        homeTeamLogo: getTeamLogo(home.team || {}),
-        homeScore: getScore(home),
-        homeRecord: (Array.isArray(home.record) ? home.record.find((r: any) => r.type === 'total')?.summary : home.record) || home.records?.[0]?.summary || '-',
-        awayTeamId: espnIdToSlug(String(away.team?.id || away.id || '')),
-        awayTeamName: away.team?.displayName || away.team?.name || '',
-        awayTeamAbbr: away.team?.abbreviation || '',
-        awayTeamLogo: getTeamLogo(away.team || {}),
-        awayScore: getScore(away),
-        awayRecord: (Array.isArray(away.record) ? away.record.find((r: any) => r.type === 'total')?.summary : away.record) || away.records?.[0]?.summary || '-',
-        quarter: status === 'live' ? `Q${statusObj?.period || 0}` : null,
-        clock: status === 'live' ? (statusObj?.displayClock || '') : null,
-        venue: comp.venue?.fullName || null,
-        broadcast: comp.broadcasts?.[0]?.names?.join(', ') || null,
-        seriesInfo: comp.series?.summary || null,
+        const compNotes = comp.notes?.[0]?.headline;
+        const eventNotes = header.league?.notes?.[0]?.headline || header.notes?.[0]?.headline;
+        const note = compNotes || eventNotes;
+        const seriesSum = comp.series?.summary;
+        const combinedSeries = note && seriesSum ? `${note} – ${seriesSum}` : seriesSum || note || null;
+
+        return {
+          // ... previous fields
+          externalId: String(header.id || eventId),
+          date: comp.date || header.gameDate || new Date().toISOString(),
+          startTime: comp.date || header.gameDate || new Date().toISOString(),
+          status,
+          homeTeamId: espnIdToSlug(String(home.team?.id || home.id || '')),
+          homeTeamName: home.team?.displayName || home.team?.name || '',
+          homeTeamAbbr: home.team?.abbreviation || '',
+          homeTeamLogo: getTeamLogo(home.team || {}),
+          homeScore: getScore(home),
+          homeRecord: (Array.isArray(home.record) ? home.record.find((r: any) => r.type === 'total')?.summary : home.record) || home.records?.[0]?.summary || '-',
+          awayTeamId: espnIdToSlug(String(away.team?.id || away.id || '')),
+          awayTeamName: away.team?.displayName || away.team?.name || '',
+          awayTeamAbbr: away.team?.abbreviation || '',
+          awayTeamLogo: getTeamLogo(away.team || {}),
+          awayScore: getScore(away),
+          awayRecord: (Array.isArray(away.record) ? away.record.find((r: any) => r.type === 'total')?.summary : away.record) || away.records?.[0]?.summary || '-',
+          quarter: status === 'live' ? `Q${statusObj?.period || 0}` : null,
+          clock: status === 'live' ? (statusObj?.displayClock || '') : null,
+          venue: comp.venue?.fullName || null,
+          broadcast: comp.broadcasts?.[0]?.names?.join(', ') || null,
+          seriesInfo: combinedSeries,
       };
     } catch (error) {
       this.logger.error(`Failed to normalize event ${eventId}`, (error as Error).message);
@@ -560,6 +567,12 @@ export class EspnService {
     if (statusObj?.type?.state === 'in') status = 'live';
     else if (statusObj?.type?.completed) status = 'final';
 
+    const compNotes = (comp as any).notes?.[0]?.headline;
+    const eventNotes = (event as any).notes?.[0]?.headline;
+    const note = compNotes || eventNotes;
+    const seriesSum = comp.series?.summary;
+    const combinedSeries = note && seriesSum ? `${note} – ${seriesSum}` : seriesSum || note || null;
+
     return {
       externalId: event.id,
       date: dateStr,
@@ -581,7 +594,7 @@ export class EspnService {
       clock: status === 'live' ? statusObj.displayClock : null,
       venue: comp.venue?.fullName ?? null,
       broadcast: comp.broadcasts?.[0]?.names?.join(', ') ?? null,
-      seriesInfo: comp.series?.summary ?? null,
+      seriesInfo: combinedSeries,
     };
   }
 
