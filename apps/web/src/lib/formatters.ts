@@ -84,14 +84,21 @@ export function translateSeries(seriesInfo: string): string {
   return seriesInfo
     .replace(/Eastern Conference Finals/i, 'Finais do Leste')
     .replace(/Western Conference Finals/i, 'Finais do Oeste')
+    .replace(/East Finals/i, 'Finais do Leste')
+    .replace(/West Finals/i, 'Finais do Oeste')
     .replace(/Eastern Conference Semifinals/i, 'Semifinais do Leste')
     .replace(/Western Conference Semifinals/i, 'Semifinais do Oeste')
+    .replace(/East Semifinals/i, 'Semifinais do Leste')
+    .replace(/West Semifinals/i, 'Semifinais do Oeste')
     .replace(/Eastern Conference First Round/i, '1ª Rodada do Leste')
     .replace(/Western Conference First Round/i, '1ª Rodada do Oeste')
+    .replace(/East 1st Round/i, '1ª Rodada do Leste')
+    .replace(/West 1st Round/i, '1ª Rodada do Oeste')
     .replace(/NBA Finals/i, 'Finais da NBA')
     .replace(/Play-In Tournament/i, 'Play-In')
     .replace(/Series tied/i, 'Série empatada em')
     .replace(/ leads series /i, ' lidera a série por ')
     .replace(/ lead series /i, ' lideram a série por ')
-    .replace(/won series/i, 'venceu a série por');
+    .replace(/won series/i, 'venceu a série por')
+    .replace(/Game/g, 'Jogo');
 }

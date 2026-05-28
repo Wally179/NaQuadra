@@ -31,9 +31,11 @@ export function GameCard({ game }: GameCardProps) {
     <Link href={`/games/${game.externalId}`} className={styles.gameCard} style={cardStyles} aria-label={`${homeTeam.name} vs ${awayTeam.name}`}>
       <div className={styles.content}>
         {/* Phase & Series Info */}
-        <span className={styles.phase}>
-          {game.conference ? `${game.conference} – ` : ''}{translatePhase(game.phase)}
-        </span>
+        {!game.seriesInfo && (
+          <span className={styles.phase}>
+            {game.conference ? `${game.conference} – ` : ''}{translatePhase(game.phase)}
+          </span>
+        )}
         {game.seriesInfo && (
           <span className={styles.series}>{translateSeries(game.seriesInfo)}</span>
         )}

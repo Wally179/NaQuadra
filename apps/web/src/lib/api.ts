@@ -88,7 +88,7 @@ export async function fetchScoreboard(date?: string): Promise<ScoreboardGame[]> 
   try {
     const query = date ? `?format=flat&date=${date}` : '?format=flat';
     const res = await apiFetch<ApiListResponse<ScoreboardGame>>(`/api/v1/games/scoreboard${query}`, {
-      revalidate: 30, // Scoreboard refreshes every 30s
+      revalidate: 0, // Force fresh fetch
       tags: ['scoreboard'],
     });
     return res.data;
@@ -250,7 +250,7 @@ export async function fetchGamesList(date?: string): Promise<GameSummary[]> {
   try {
     const query = date ? `?date=${date}` : '';
     const res = await apiFetch<{ data: GameSummary[] }>(`/api/v1/games/scoreboard${query}`, {
-      revalidate: 30,
+      revalidate: 0,
       tags: ['games-scoreboard'],
     });
     return res?.data ?? [];

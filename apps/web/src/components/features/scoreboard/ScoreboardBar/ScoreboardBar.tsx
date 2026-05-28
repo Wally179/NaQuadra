@@ -22,7 +22,7 @@ export function ScoreboardBar({ games }: ScoreboardBarProps) {
   return (
     <section aria-label="Próximos jogos">
       <div className={styles.sectionHeader}>
-        <h2 className={styles.sectionTitle}>🏀 Próximos Jogos</h2>
+        <h2 className={styles.sectionTitle}>Próximos Jogos</h2>
         <Link href="/games" className={styles.sectionLink}>
           Ver todos →
         </Link>
