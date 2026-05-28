@@ -27,9 +27,14 @@ export function GameCard({ game }: GameCardProps) {
     '--away-team-color': awayTeam.colors.primary,
   } as CSSProperties;
 
-  // Check if seriesInfo already contains a phase name to avoid redundancy
-  const translatedSeries = game.seriesInfo ? translateSeries(game.seriesInfo) : '';
-  const hasPhaseInSeries = translatedSeries.match(/Finais|Semifinais|Rodada|Play-In/i) !== null;
+  const translatedSeries = game.seriesInfo ? translateSeries(game.seriesInfo).replace(/\s*-\s*$/, '').trim() : '';
+  
+  // The backend concatenates with an en-dash ' – '
+  const parts = translatedSeries.split('–');
+  const phaseText = parts.length > 1 ? parts[0].trim() : null;
+  const seriesText = parts.length > 1 ? parts[1].trim() : parts[0];
+
+  const hasPhaseInSeries = phaseText !== null || translatedSeries.match(/Finais|Semifinais|Rodada|Play-In/i) !== null;
 
   return (
     <Link href={`/games/${game.externalId}`} className={styles.gameCard} style={cardStyles} aria-label={`${homeTeam.name} vs ${awayTeam.name}`}>
@@ -40,8 +45,11 @@ export function GameCard({ game }: GameCardProps) {
             {game.conference ? `${game.conference} – ` : ''}{translatePhase(game.phase)}
           </span>
         )}
-        {game.seriesInfo && (
-          <span className={styles.series}>{translatedSeries}</span>
+        {phaseText && (
+          <span className={styles.phase}>{phaseText}</span>
+        )}
+        {seriesText && (
+          <span className={styles.series}>{seriesText}</span>
         )}
 
         {/* Matchup */}

@@ -50,11 +50,20 @@ export function GameListItem({ game, isFavorite }: GameListItemProps) {
       </div>
 
       {/* Series Info */}
-      {game.seriesInfo && (
-        <div className={styles.seriesInfo}>
-          {translateSeries(game.seriesInfo)}
-        </div>
-      )}
+      {(() => {
+        if (!game.seriesInfo) return null;
+        const translated = translateSeries(game.seriesInfo);
+        const parts = translated.split('–');
+        const phaseText = parts.length > 1 ? parts[0].trim() : null;
+        const seriesText = parts.length > 1 ? parts[1].trim() : parts[0];
+
+        return (
+          <div className={styles.seriesInfoContainer}>
+            {phaseText && <div className={styles.seriesPhase}>{phaseText}</div>}
+            <div className={styles.seriesInfo}>{seriesText}</div>
+          </div>
+        );
+      })()}
 
       {/* Matchup */}
       <div className={styles.matchup}>

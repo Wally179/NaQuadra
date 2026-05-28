@@ -109,6 +109,23 @@
   font-size: var(--nq-text-sm);
 }
 
+.seriesInfoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: var(--nq-space-2);
+}
+
+.seriesPhase {
+  font-size: var(--nq-text-2xs);
+  font-weight: var(--nq-font-bold);
+  color: var(--nq-text-primary);
+  text-transform: uppercase;
+  letter-spacing: var(--nq-tracking-wider);
+  margin-bottom: var(--nq-space-1);
+  text-align: center;
+}
+
 .seriesInfo {
   font-family: var(--nq-font-mono);
   font-size: 11px;
@@ -117,7 +134,6 @@
   text-transform: uppercase;
   letter-spacing: var(--nq-tracking-wide);
   text-align: center;
-  margin-bottom: var(--nq-space-2);
 }
 
 /* Matchup */

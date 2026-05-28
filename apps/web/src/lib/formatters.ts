@@ -99,6 +99,8 @@ export function translateSeries(seriesInfo: string): string {
     .replace(/Series tied/i, 'Série empatada em')
     .replace(/ leads series /i, ' lidera a série por ')
     .replace(/ lead series /i, ' lideram a série por ')
-    .replace(/won series/i, 'venceu a série por')
-    .replace(/Game/g, 'Jogo');
+    .replace(/ won series/i, ' venceu a série por')
+    .replace(/Game/g, 'Jogo')
+    .replace(/If Necessary/ig, '')
+    .trim();
 }
