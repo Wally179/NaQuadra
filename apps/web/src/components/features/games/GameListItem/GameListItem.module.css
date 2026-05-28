@@ -261,8 +261,6 @@
   color: var(--nq-text-primary);
 }
 
-}
-
 .clockInfo {
   font-family: var(--nq-font-mono);
   font-size: var(--nq-text-xs);
