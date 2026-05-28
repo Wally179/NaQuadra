@@ -38,7 +38,7 @@ export default async function HomePage() {
   let games: NormalizedGame[] = [];
   try {
     const today = new Date();
-    let currentDay = 1;
+    let currentDay = 0;
     
     // Fetch future games up to 14 days ahead until we have at least 6
     while (currentDay <= 14 && games.length < 6) {
