@@ -27,17 +27,21 @@ export function GameCard({ game }: GameCardProps) {
     '--away-team-color': awayTeam.colors.primary,
   } as CSSProperties;
 
+  // Check if seriesInfo already contains a phase name to avoid redundancy
+  const translatedSeries = game.seriesInfo ? translateSeries(game.seriesInfo) : '';
+  const hasPhaseInSeries = translatedSeries.match(/Finais|Semifinais|Rodada|Play-In/i) !== null;
+
   return (
     <Link href={`/games/${game.externalId}`} className={styles.gameCard} style={cardStyles} aria-label={`${homeTeam.name} vs ${awayTeam.name}`}>
       <div className={styles.content}>
         {/* Phase & Series Info */}
-        {!game.seriesInfo && (
+        {!hasPhaseInSeries && (
           <span className={styles.phase}>
             {game.conference ? `${game.conference} – ` : ''}{translatePhase(game.phase)}
           </span>
         )}
         {game.seriesInfo && (
-          <span className={styles.series}>{translateSeries(game.seriesInfo)}</span>
+          <span className={styles.series}>{translatedSeries}</span>
         )}
 
         {/* Matchup */}
