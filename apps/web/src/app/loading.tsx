@@ -30,7 +30,7 @@ export default function GlobalLoading() {
         textTransform: 'uppercase',
         letterSpacing: 'var(--nq-tracking-wide)'
       }}>
-        Carregando...
+        Aquecendo...
       </p>
     </div>
   );

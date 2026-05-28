@@ -102,7 +102,7 @@ export default function LoginPage() {
           </div>
 
           <button type="submit" className={styles.submitBtn}>
-            {tab === 'login' ? 'Entrar na Quadra' : 'Criar minha conta'}
+            {tab === 'login' ? 'Entrar' : 'Criar conta grátis'}
           </button>
         </form>
 

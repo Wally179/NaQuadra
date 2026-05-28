@@ -84,7 +84,7 @@ export default function GamesPage() {
             <span className={styles.emptyIcon}>🏖️</span>
             <p className={styles.emptyText}>
               {allGames.length === 0
-                ? 'Nenhum jogo programado para este dia.'
+                ? 'Sem jogos hoje. Confira outro dia!'
                 : 'Nenhum jogo encontrado com este filtro.'}
             </p>
           </div>

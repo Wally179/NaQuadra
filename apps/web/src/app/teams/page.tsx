@@ -16,7 +16,7 @@ export default function TeamsPage() {
 
   return (
     <div className={styles.page}>
-      <h1 className={styles.title}>Times da NBA</h1>
+      <h1 className={styles.title}>Times</h1>
       <p className={styles.subtitle}>Todas as 30 franquias da liga</p>
 
       {/* Eastern Conference */}

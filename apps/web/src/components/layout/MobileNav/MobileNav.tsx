@@ -20,7 +20,7 @@ export function MobileNav() {
       </Link>
       <Link href="/standings" className={`${styles.navItem} ${pathname === '/standings' ? styles.navItemActive : ''}`}>
         <BarChart3 size={22} />
-        <span className={styles.navLabel}>Standings</span>
+        <span className={styles.navLabel}>Classificação</span>
       </Link>
       <Link href="/search" className={`${styles.navItem} ${pathname === '/search' ? styles.navItemActive : ''}`}>
         <Search size={22} />

@@ -25,6 +25,15 @@ const CATEGORY_STYLES: Record<string, string> = {
   culture: styles.catCulture,
 };
 
+const CATEGORY_LABELS: Record<string, string> = {
+  competition: 'Competição',
+  positions: 'Posições',
+  stats: 'Estatísticas',
+  plays: 'Jogadas',
+  rules: 'Regras',
+  culture: 'Cultura',
+};
+
 const DIFFICULTY_STYLES: Record<string, string> = {
   beginner: styles.diffBeginner,
   intermediate: styles.diffIntermediate,
@@ -124,7 +133,7 @@ export default function GlossaryPage() {
               <div className={styles.entryHeader}>
                 <h3 className={styles.entryTerm}>{entry.term}</h3>
                 <span className={`${styles.entryCategory} ${CATEGORY_STYLES[entry.category] || ''}`}>
-                  {entry.category}
+                  {CATEGORY_LABELS[entry.category] || entry.category}
                 </span>
                 <span className={`${styles.entryDifficulty} ${DIFFICULTY_STYLES[entry.difficulty] || ''}`}>
                   {DIFFICULTY_LABELS[entry.difficulty]}
