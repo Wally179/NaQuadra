@@ -154,5 +154,5 @@
 .footerBrand {
   font-family: var(--nq-font-display);
   font-weight: var(--nq-font-bold);
-  color: var(--nq-text-secondary);
+  color: var(--nq-brand-primary);
 }

@@ -61,7 +61,7 @@
 }
 
 .logoAccent {
-  color: var(--nq-system-warning);
+  color: var(--nq-brand-primary);
 }
 
 /* Desktop navigation */
@@ -140,7 +140,7 @@
 }
 
 .loginButton:hover {
-  background: var(--nq-primary-hover);
+  background: var(--nq-brand-accent);
   transform: translateY(-1px);
 }
 
@@ -162,8 +162,8 @@
 }
 
 .searchInput:focus {
-  border-color: var(--nq-primary);
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  border-color: var(--nq-brand-primary);
+  box-shadow: 0 0 0 2px rgba(245, 166, 35, 0.2);
 }
 
 /* Base Responsive */

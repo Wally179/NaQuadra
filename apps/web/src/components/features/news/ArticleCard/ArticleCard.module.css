@@ -59,7 +59,7 @@
   top: var(--nq-space-3);
   left: var(--nq-space-3);
   font-family: var(--nq-font-display);
-  font-size: 0.625rem;
+  font-size: var(--nq-text-2xs);
   font-weight: var(--nq-font-bold);
   text-transform: uppercase;
   letter-spacing: var(--nq-tracking-wide);

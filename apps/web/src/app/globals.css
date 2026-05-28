@@ -5,8 +5,11 @@
    a cor do time é a camada contextual.
    ============================================================ */
 
-/* === GOOGLE FONTS === */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+/* === FONTS ===
+   Loaded via next/font in layout.tsx for optimal performance.
+   CSS variables --nq-font-display, --nq-font-body, --nq-font-mono
+   are injected automatically by Next.js.
+   ============================================================ */
 
 /* === ROOT DESIGN TOKENS === */
 :root {
@@ -28,6 +31,11 @@
   --nq-border-default: #2D2D35;
   --nq-border-strong: #3D3D45;
 
+  /* --- Brand Colors --- */
+  --nq-brand-primary: #F5A623;
+  --nq-brand-accent: #FF8A00;
+  --nq-bg-brand: #F5A623;
+
   /* --- System Colors (não mudam por time) --- */
   --nq-system-success: #2DD4A0;
   --nq-system-warning: #F5A623;
@@ -41,20 +49,21 @@
   --nq-overlay-medium: rgba(255, 255, 255, 0.08);
   --nq-overlay-heavy: rgba(255, 255, 255, 0.12);
 
-  /* --- Typography --- */
-  --nq-font-display: 'Outfit', sans-serif;
+  /* --- Typography (fonts loaded via next/font in layout.tsx) --- */
+  --nq-font-display: 'Plus Jakarta Sans', sans-serif;
   --nq-font-body: 'Inter', sans-serif;
-  --nq-font-mono: 'JetBrains Mono', monospace;
+  --nq-font-mono: 'DM Mono', monospace;
 
+  --nq-text-2xs: 0.6875rem;
   --nq-text-xs: 0.75rem;
   --nq-text-sm: 0.875rem;
   --nq-text-base: 1rem;
   --nq-text-lg: 1.125rem;
   --nq-text-xl: 1.25rem;
   --nq-text-2xl: 1.5rem;
-  --nq-text-3xl: 1.875rem;
-  --nq-text-4xl: 2.25rem;
-  --nq-text-5xl: 3rem;
+  --nq-text-3xl: 2rem;
+  --nq-text-4xl: 2.5rem;
+  --nq-text-5xl: 3.5rem;
 
   --nq-font-regular: 400;
   --nq-font-medium: 500;
@@ -62,13 +71,17 @@
   --nq-font-bold: 700;
   --nq-font-extrabold: 800;
 
+  --nq-leading-none: 1;
   --nq-leading-tight: 1.15;
+  --nq-leading-snug: 1.3;
   --nq-leading-normal: 1.5;
   --nq-leading-relaxed: 1.7;
 
-  --nq-tracking-tight: -0.02em;
+  --nq-tracking-tighter: -0.03em;
+  --nq-tracking-tight: -0.015em;
   --nq-tracking-normal: 0;
-  --nq-tracking-wide: 0.05em;
+  --nq-tracking-wide: 0.04em;
+  --nq-tracking-wider: 0.08em;
 
   /* --- Spacing --- */
   --nq-space-0: 0;
@@ -319,4 +332,15 @@ input, textarea, select {
 
 .fade-in {
   animation: fadeIn var(--nq-duration-enter) var(--nq-ease-out) forwards;
+}
+
+/* === MAIN CONTENT === */
+.nq-main {
+  padding-bottom: var(--nq-mobile-nav-height);
+}
+
+@media (min-width: 768px) {
+  .nq-main {
+    padding-bottom: 0;
+  }
 }

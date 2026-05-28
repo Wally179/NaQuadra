@@ -46,7 +46,7 @@
 
 .navLabel {
   font-family: var(--nq-font-body);
-  font-size: 0.625rem;
+  font-size: var(--nq-text-2xs);
   font-weight: var(--nq-font-medium);
   letter-spacing: var(--nq-tracking-wide);
 }

@@ -36,7 +36,7 @@
   color: var(--nq-text-primary);
 }
 
-.logoAccent { color: var(--nq-system-warning); }
+.logoAccent { color: var(--nq-brand-primary); }
 
 .logoSubtitle {
   font-size: var(--nq-text-sm);

@@ -147,7 +147,7 @@
 
 .teamCardDivision {
   font-family: var(--nq-font-mono);
-  font-size: 0.625rem;
+  font-size: var(--nq-text-2xs);
   color: var(--nq-text-disabled);
   letter-spacing: var(--nq-tracking-wide);
   text-transform: uppercase;

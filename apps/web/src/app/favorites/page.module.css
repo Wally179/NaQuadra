@@ -190,7 +190,7 @@
   display: inline-flex;
   align-items: center;
   font-family: var(--nq-font-mono);
-  font-size: 0.625rem;
+  font-size: var(--nq-text-2xs);
   font-weight: var(--nq-font-bold);
   text-transform: uppercase;
   letter-spacing: var(--nq-tracking-wide);

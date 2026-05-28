@@ -1,9 +1,10 @@
 'use client';
 
-import { Search, User } from 'lucide-react';
+import { Search } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useState } from 'react';
+import { Logo } from '@/components/ui/Logo/Logo';
 import styles from './Header.module.css';
 
 export function Header() {
@@ -26,7 +27,7 @@ export function Header() {
       <div className={styles.headerInner}>
         {/* Logo */}
         <Link href="/" className={styles.logo}>
-          <span className={styles.logoIcon}>🏀</span>
+          <Logo size={26} />
           <span className={styles.logoText}>
             Na<span className={styles.logoAccent}>Quadra</span>
           </span>
@@ -51,7 +52,7 @@ export function Header() {
                 type="text" 
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Pesquisar (ex: LeBron)..."
+                placeholder="Buscar jogador, time ou notícia..."
                 className={styles.searchInput}
                 autoFocus
                 onBlur={() => !query && setSearchOpen(false)}

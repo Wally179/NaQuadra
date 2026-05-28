@@ -162,7 +162,7 @@
 
 .tag {
   font-family: var(--nq-font-mono);
-  font-size: 0.625rem;
+  font-size: var(--nq-text-2xs);
   font-weight: var(--nq-font-medium);
   padding: 2px 6px;
   background: var(--nq-overlay-medium);

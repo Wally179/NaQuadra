@@ -145,7 +145,7 @@
 
 .entryCategory {
   font-family: var(--nq-font-mono);
-  font-size: 0.625rem;
+  font-size: var(--nq-text-2xs);
   font-weight: var(--nq-font-bold);
   padding: 3px 8px;
   border-radius: var(--nq-radius-full);
@@ -163,7 +163,7 @@
 .catCulture { color: var(--nq-system-edu); background: rgba(167, 139, 250, 0.1); }
 
 .entryDifficulty {
-  font-size: 0.625rem;
+  font-size: var(--nq-text-2xs);
   color: var(--nq-text-disabled);
   font-weight: var(--nq-font-medium);
 }

@@ -1,7 +1,28 @@
 import type { Metadata } from 'next';
+import { Inter, Plus_Jakarta_Sans, DM_Mono } from 'next/font/google';
 import './globals.css';
 import { Header } from '@/components/layout/Header/Header';
 import { MobileNav } from '@/components/layout/MobileNav/MobileNav';
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--nq-font-body',
+  display: 'swap',
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--nq-font-display',
+  display: 'swap',
+  weight: ['400', '500', '600', '700', '800'],
+});
+
+const dmMono = DM_Mono({
+  subsets: ['latin'],
+  variable: '--nq-font-mono',
+  display: 'swap',
+  weight: ['400', '500'],
+});
 
 export const metadata: Metadata = {
   title: {
@@ -24,17 +45,20 @@ export const metadata: Metadata = {
     title: 'Na Quadra',
     description: 'Entenda a NBA. Acompanhe seus times. Viva a quadra.',
   },
+  other: {
+    'theme-color': '#0A0A0C',
+  },
   icons: {
-    icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🏀</text></svg>',
+    icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="%23F5A623"/><path d="M16 2a14 14 0 0 0 0 28M16 2a14 14 0 0 1 0 28M2 16h28M16 2c-3.5 4-5.5 9-5.5 14s2 10 5.5 14M16 2c3.5 4 5.5 9 5.5 14s-2 10-5.5 14" stroke="%230A0A0C" stroke-width="1.5" fill="none"/></svg>',
   },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
-      <body>
+      <body className={`${inter.variable} ${plusJakartaSans.variable} ${dmMono.variable}`}>
         <Header />
-        <main style={{ paddingBottom: 'var(--nq-mobile-nav-height)' }}>
+        <main className="nq-main">
           {children}
         </main>
         <MobileNav />

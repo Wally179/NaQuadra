@@ -39,13 +39,13 @@
   font-family: var(--nq-font-display);
   font-weight: var(--nq-font-bold);
   text-transform: uppercase;
-  color: var(--nq-primary);
+  color: var(--nq-brand-primary);
   letter-spacing: var(--nq-tracking-wide);
 }
 
 .title {
   font-family: var(--nq-font-display);
-  font-size: 2.5rem;
+  font-size: var(--nq-text-4xl);
   font-weight: var(--nq-font-bold);
   color: var(--nq-text-primary);
   line-height: var(--nq-leading-tight);
@@ -146,7 +146,7 @@
 }
 
 .viewAll {
-  color: var(--nq-primary);
+  color: var(--nq-brand-primary);
   text-decoration: none;
   font-weight: var(--nq-font-medium);
 }

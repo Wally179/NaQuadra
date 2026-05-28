@@ -78,7 +78,7 @@
 
 .title {
   font-family: var(--nq-font-display);
-  font-size: 1.75rem;
+  font-size: var(--nq-text-2xl);
   font-weight: 600;
   color: #ffffff;
   letter-spacing: -0.02em;
@@ -86,7 +86,7 @@
 }
 
 .subtitle {
-  font-size: 0.95rem;
+  font-size: var(--nq-text-sm);
   color: rgba(255, 255, 255, 0.85);
   font-weight: 400;
 }
@@ -96,6 +96,6 @@
   justify-content: space-between;
   width: 100%;
   margin-top: var(--nq-space-5);
-  font-size: 0.95rem;
+  font-size: var(--nq-text-sm);
   color: rgba(255, 255, 255, 0.9);
 }
