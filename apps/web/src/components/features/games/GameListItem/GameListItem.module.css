@@ -109,6 +109,17 @@
   font-size: var(--nq-text-sm);
 }
 
+.seriesInfo {
+  font-family: var(--nq-font-mono);
+  font-size: 11px;
+  font-weight: var(--nq-font-semibold);
+  color: var(--nq-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: var(--nq-tracking-wide);
+  text-align: center;
+  margin-bottom: var(--nq-space-2);
+}
+
 /* Matchup */
 .matchup {
   display: flex;

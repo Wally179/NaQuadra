@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { GameSummary } from '@naquadra/types';
 import type { CSSProperties } from 'react';
+import { translateSeries } from '@/lib/formatters';
 import styles from './GameListItem.module.css';
 
 interface GameListItemProps {
@@ -48,18 +49,27 @@ export function GameListItem({ game, isFavorite }: GameListItemProps) {
         {isFavorite && <span className={styles.favStar}>★</span>}
       </div>
 
+      {/* Series Info */}
+      {game.seriesInfo && (
+        <div className={styles.seriesInfo}>
+          {translateSeries(game.seriesInfo)}
+        </div>
+      )}
+
       {/* Matchup */}
       <div className={styles.matchup}>
         {/* Away Team */}
         <div className={styles.teamSide}>
-          <img
-            src={awayTeam.logo}
-            alt={awayTeam.name}
-            className={styles.logo}
-            width={44}
-            height={44}
-            loading="lazy"
-          />
+          {awayTeam.abbreviation && !awayTeam.abbreviation.includes('/') && awayTeam.abbreviation !== 'TBD' && (
+            <img
+              src={awayTeam.logo}
+              alt={awayTeam.name}
+              className={styles.logo}
+              width={44}
+              height={44}
+              loading="lazy"
+            />
+          )}
           <div className={styles.teamInfo}>
             <span className={styles.teamAbbr}>{awayTeam.abbreviation}</span>
             <span className={styles.teamRecord}>{awayTeam.record}</span>
@@ -92,14 +102,16 @@ export function GameListItem({ game, isFavorite }: GameListItemProps) {
 
         {/* Home Team */}
         <div className={styles.teamSide}>
-          <img
-            src={homeTeam.logo}
-            alt={homeTeam.name}
-            className={styles.logo}
-            width={44}
-            height={44}
-            loading="lazy"
-          />
+          {homeTeam.abbreviation && !homeTeam.abbreviation.includes('/') && homeTeam.abbreviation !== 'TBD' && (
+            <img
+              src={homeTeam.logo}
+              alt={homeTeam.name}
+              className={styles.logo}
+              width={44}
+              height={44}
+              loading="lazy"
+            />
+          )}
           <div className={styles.teamInfo}>
             <span className={styles.teamAbbr}>{homeTeam.abbreviation}</span>
             <span className={styles.teamRecord}>{homeTeam.record}</span>

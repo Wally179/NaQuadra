@@ -82,6 +82,14 @@ export function translateStreak(streak: string): string {
 export function translateSeries(seriesInfo: string): string {
   if (!seriesInfo) return seriesInfo;
   return seriesInfo
+    .replace(/Eastern Conference Finals/i, 'Finais do Leste')
+    .replace(/Western Conference Finals/i, 'Finais do Oeste')
+    .replace(/Eastern Conference Semifinals/i, 'Semifinais do Leste')
+    .replace(/Western Conference Semifinals/i, 'Semifinais do Oeste')
+    .replace(/Eastern Conference First Round/i, '1ª Rodada do Leste')
+    .replace(/Western Conference First Round/i, '1ª Rodada do Oeste')
+    .replace(/NBA Finals/i, 'Finais da NBA')
+    .replace(/Play-In Tournament/i, 'Play-In')
     .replace(/Series tied/i, 'Série empatada em')
     .replace(/ leads /i, ' lidera por ')
     .replace(/ lead /i, ' lideram por ')
