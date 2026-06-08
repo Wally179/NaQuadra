@@ -1,28 +1,53 @@
-export default function TeamLoading() {
+// ============================================================
+// Na Quadra — Teams Page Loading (Skeleton)
+// Uses reusable Skeleton components.
+// ============================================================
+
+import { Skeleton } from '@/components/ui/Skeleton/Skeleton';
+
+export default function TeamsLoading() {
   return (
     <div style={{ maxWidth: 'var(--nq-container-lg)', margin: '0 auto', padding: 'var(--nq-space-8) var(--nq-space-4)' }}>
-      {/* Team Header Skeleton */}
-      <div style={{ display: 'flex', gap: 'var(--nq-space-6)', alignItems: 'center', marginBottom: 'var(--nq-space-8)' }}>
-        <div style={{ height: '100px', width: '100px', backgroundColor: 'var(--nq-bg-secondary)', borderRadius: 'var(--nq-radius-md)', animation: 'pulse 1.5s infinite' }} />
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--nq-space-2)' }}>
-          <div style={{ height: '40px', width: '300px', backgroundColor: 'var(--nq-bg-secondary)', borderRadius: 'var(--nq-radius-md)', animation: 'pulse 1.5s infinite' }} />
-          <div style={{ height: '20px', width: '200px', backgroundColor: 'var(--nq-bg-secondary)', borderRadius: 'var(--nq-radius-md)', animation: 'pulse 1.5s infinite' }} />
+      {/* Title */}
+      <Skeleton width={120} height={40} style={{ marginBottom: 'var(--nq-space-2)' }} />
+      <Skeleton width={220} height={18} style={{ marginBottom: 'var(--nq-space-8)' }} />
+
+      {/* Conference sections */}
+      {Array.from({ length: 2 }).map((_, c) => (
+        <div key={c} style={{ marginBottom: 'var(--nq-space-8)' }}>
+          {/* Conference title */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--nq-space-3)', marginBottom: 'var(--nq-space-5)' }}>
+            <Skeleton width={180} height={24} borderRadius="var(--nq-radius-sm)" />
+            <Skeleton width={60} height={18} borderRadius="var(--nq-radius-full)" />
+          </div>
+
+          {/* Teams grid */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+            gap: 'var(--nq-space-3)',
+          }}>
+            {Array.from({ length: 15 }).map((_, i) => (
+              <div key={i} style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--nq-space-3)',
+                padding: 'var(--nq-space-3) var(--nq-space-4)',
+                backgroundColor: 'var(--nq-bg-secondary)',
+                borderRadius: 'var(--nq-radius-lg)',
+                border: '1px solid var(--nq-border-subtle)',
+              }}>
+                <Skeleton width={44} height={44} borderRadius="var(--nq-radius-md)" />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--nq-space-1)' }}>
+                  <Skeleton width={120} height={16} borderRadius="var(--nq-radius-sm)" />
+                  <Skeleton width={80} height={12} borderRadius="var(--nq-radius-sm)" />
+                  <Skeleton width={60} height={10} borderRadius="var(--nq-radius-sm)" />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-      
-      {/* Content Skeleton */}
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 'var(--nq-space-8)' }}>
-        <div style={{ height: '400px', backgroundColor: 'var(--nq-bg-elevated)', borderRadius: 'var(--nq-radius-lg)', animation: 'pulse 1.5s infinite' }} />
-        <div style={{ height: '400px', backgroundColor: 'var(--nq-bg-elevated)', borderRadius: 'var(--nq-radius-lg)', animation: 'pulse 1.5s infinite' }} />
-      </div>
-      
-      <style>{`
-        @keyframes pulse {
-          0% { opacity: 1; }
-          50% { opacity: 0.5; }
-          100% { opacity: 1; }
-        }
-      `}</style>
+      ))}
     </div>
   );
 }

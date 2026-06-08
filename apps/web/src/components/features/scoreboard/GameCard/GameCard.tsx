@@ -3,6 +3,7 @@
 // ============================================================
 // The signature visual component of Na Quadra.
 // Team colors "invade" the dark center from both sides.
+// NOTE: This is a Server Component — no client-side JS shipped.
 
 import Link from 'next/link';
 

@@ -88,7 +88,7 @@ export async function fetchScoreboard(date?: string): Promise<ScoreboardGame[]> 
   try {
     const query = date ? `?format=flat&date=${date}` : '?format=flat';
     const res = await apiFetch<ApiListResponse<ScoreboardGame>>(`/api/v1/games/scoreboard${query}`, {
-      revalidate: 0, // Force fresh fetch
+      revalidate: 30, // Cache for 30s — much better than force-fresh on every request
       tags: ['scoreboard'],
     });
     return res.data;

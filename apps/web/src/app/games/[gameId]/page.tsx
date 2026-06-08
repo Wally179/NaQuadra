@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
@@ -112,7 +112,7 @@ function LiveScoreHeader({ detail }: { detail: GameDetail }) {
   );
 }
 
-function GameLeadersSection({ leaders }: { leaders: GameLeadersData }) {
+const GameLeadersSection = memo(function GameLeadersSection({ leaders }: { leaders: GameLeadersData }) {
   const categories = [
     { key: 'points' as const, label: 'Pontos' },
     { key: 'rebounds' as const, label: 'Rebotes' },
@@ -147,9 +147,9 @@ function GameLeadersSection({ leaders }: { leaders: GameLeadersData }) {
       </div>
     </div>
   );
-}
+});
 
-function TeamStatsSection({ teamStats, homeColor, awayColor }: { teamStats: GameTeamStatsComparison, homeColor: string, awayColor: string }) {
+const TeamStatsSection = memo(function TeamStatsSection({ teamStats, homeColor, awayColor }: { teamStats: GameTeamStatsComparison, homeColor: string, awayColor: string }) {
   const stats = [
     { label: 'AC%', home: teamStats.home.fieldGoalPct, away: teamStats.away.fieldGoalPct },
     { label: '3P%', home: teamStats.home.threePointPct, away: teamStats.away.threePointPct },
@@ -184,9 +184,9 @@ function TeamStatsSection({ teamStats, homeColor, awayColor }: { teamStats: Game
       </div>
     </div>
   );
-}
+});
 
-function BoxScoreSection({ playerStats }: { playerStats: GamePlayerStatsGroup }) {
+const BoxScoreSection = memo(function BoxScoreSection({ playerStats }: { playerStats: GamePlayerStatsGroup }) {
   const renderTable = (group: { teamName: string; starters: any[]; bench: any[] }) => (
     <div className={styles.boxScoreTeam}>
       <h4 className={styles.boxScoreTeamName}>{group.teamName}</h4>
@@ -239,9 +239,9 @@ function BoxScoreSection({ playerStats }: { playerStats: GamePlayerStatsGroup })
       {renderTable(playerStats.home)}
     </div>
   );
-}
+});
 
-function PlayByPlaySection({ plays }: { plays: GamePlayByPlayEvent[] }) {
+const PlayByPlaySection = memo(function PlayByPlaySection({ plays }: { plays: GamePlayByPlayEvent[] }) {
   if (plays.length === 0) return null;
 
   return (
@@ -268,7 +268,7 @@ function PlayByPlaySection({ plays }: { plays: GamePlayByPlayEvent[] }) {
       </div>
     </div>
   );
-}
+});
 
 // ── Main Page Component ──
 
@@ -317,8 +317,48 @@ export default function GameDetailPage() {
     return (
       <div className={styles.page}>
         <div className={styles.container}>
+          {/* High-fidelity score header skeleton */}
+          <div className="skeleton" style={{ height: 14, width: 60, borderRadius: 6, marginBottom: 16 }} />
+          <div style={{
+            backgroundColor: 'var(--nq-bg-secondary)',
+            borderRadius: 14,
+            padding: 'var(--nq-space-6)',
+            marginBottom: 'var(--nq-space-4)',
+          }}>
+            {/* Status */}
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 'var(--nq-space-4)' }}>
+              <div className="skeleton" style={{ height: 20, width: 100, borderRadius: 9999 }} />
+            </div>
+            {/* Score strip */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 'var(--nq-space-4)' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+                <div className="skeleton" style={{ width: 56, height: 56, borderRadius: 10 }} />
+                <div className="skeleton" style={{ width: 40, height: 14, borderRadius: 4 }} />
+                <div className="skeleton" style={{ width: 30, height: 10, borderRadius: 4 }} />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
+                <div className="skeleton" style={{ width: 40, height: 36, borderRadius: 6 }} />
+                <div className="skeleton" style={{ width: 16, height: 20, borderRadius: 4 }} />
+                <div className="skeleton" style={{ width: 40, height: 36, borderRadius: 6 }} />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+                <div className="skeleton" style={{ width: 56, height: 56, borderRadius: 10 }} />
+                <div className="skeleton" style={{ width: 40, height: 14, borderRadius: 4 }} />
+                <div className="skeleton" style={{ width: 30, height: 10, borderRadius: 4 }} />
+              </div>
+            </div>
+          </div>
+
+          {/* Tabs skeleton */}
+          <div style={{ display: 'flex', gap: 'var(--nq-space-3)', marginBottom: 'var(--nq-space-4)' }}>
+            {[80, 100, 100].map((w, i) => (
+              <div key={i} className="skeleton" style={{ height: 36, width: w, borderRadius: 9999 }} />
+            ))}
+          </div>
+
+          {/* Content sections skeleton */}
+          <div className="skeleton" style={{ height: 120, borderRadius: 14, marginBottom: 12 }} />
           <div className="skeleton" style={{ height: 200, borderRadius: 14 }} />
-          <div className="skeleton" style={{ height: 300, borderRadius: 14, marginTop: 16 }} />
         </div>
       </div>
     );

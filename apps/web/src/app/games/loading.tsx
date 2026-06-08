@@ -1,19 +1,31 @@
+// ============================================================
+// Na Quadra — Games Page Loading (Skeleton)
+// Uses reusable Skeleton components.
+// ============================================================
+
+import { Skeleton } from '@/components/ui/Skeleton/Skeleton';
+import { GameListItemSkeleton } from '@/components/features/games/GameListItem/GameListItemSkeleton';
 import styles from './page.module.css';
 
 export default function GamesLoading() {
   return (
     <div className={styles.page}>
       <div className={styles.container}>
+        {/* Header */}
         <div className={styles.header}>
-          <div className="skeleton" style={{ width: 200, height: 36, margin: '0 auto' }} />
-          <div className="skeleton" style={{ width: 280, height: 18, margin: '12px auto 0' }} />
+          <Skeleton width={200} height={36} style={{ margin: '0 auto' }} />
+          <Skeleton width={280} height={18} style={{ margin: '12px auto 0' }} />
         </div>
+
+        {/* Controls: date picker */}
         <div className={styles.controls}>
-          <div className="skeleton" style={{ width: 200, height: 36, margin: '0 auto', borderRadius: '9999px' }} />
+          <Skeleton width={200} height={36} borderRadius="var(--nq-radius-full)" style={{ margin: '0 auto' }} />
         </div>
+
+        {/* Games list with high-fidelity skeletons */}
         <div className={styles.gamesList}>
-          {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="skeleton" style={{ height: 140, borderRadius: 14 }} />
+          {Array.from({ length: 4 }).map((_, i) => (
+            <GameListItemSkeleton key={i} />
           ))}
         </div>
       </div>

@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { fetchGamesList } from '@/lib/api';
 import { GameListItem } from '@/components/features/games/GameListItem/GameListItem';
+import { GameListItemSkeleton } from '@/components/features/games/GameListItem/GameListItemSkeleton';
 import { GameDatePicker, getToday } from '@/components/features/games/GameDatePicker/GameDatePicker';
 import { GameStatusFilter } from '@/components/features/games/GameStatusFilter/GameStatusFilter';
 import type { GameSummary } from '@naquadra/types';
@@ -77,7 +78,7 @@ export default function GamesPage() {
         {loading ? (
           <div className={styles.gamesList}>
             {[1, 2, 3].map((i) => (
-              <div key={i} className={`${styles.skeleton} skeleton`} />
+              <GameListItemSkeleton key={i} />
             ))}
           </div>
         ) : filteredGames.length === 0 ? (

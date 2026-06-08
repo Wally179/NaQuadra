@@ -1,5 +1,3 @@
-'use client';
-
 import type { Article } from '@/lib/api';
 import { formatRelativeTime } from '@/lib/formatters';
 import Link from 'next/link';

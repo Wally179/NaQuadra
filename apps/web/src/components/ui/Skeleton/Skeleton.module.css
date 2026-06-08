@@ -1,0 +1,41 @@
+/* ============================================================
+   Na Quadra — Skeleton Components
+   Reusable loading placeholders with shimmer animation.
+   Uses the global shimmer keyframe from globals.css.
+   ============================================================ */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--nq-bg-tertiary) 25%,
+    var(--nq-bg-elevated) 50%,
+    var(--nq-bg-tertiary) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--nq-radius-md);
+}
+
+.circle {
+  border-radius: 50%;
+}
+
+.text {
+  border-radius: var(--nq-radius-sm);
+}
+
+/* Shimmer animation (self-contained, avoids dependency on globals) */
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Skeleton container with fade-in for smooth transitions */
+.container {
+  animation: skeletonFadeIn var(--nq-duration-fast) var(--nq-ease-out) forwards;
+}
+
+@keyframes skeletonFadeIn {
+  from { opacity: 0.6; }
+  to { opacity: 1; }
+}

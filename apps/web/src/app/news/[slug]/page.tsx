@@ -1,6 +1,9 @@
+import { Suspense } from 'react';
 import { fetchNewsArticle, fetchNews } from '@/lib/api';
 import { notFound } from 'next/navigation';
 import { ArticleCard } from '@/components/features/news/ArticleCard/ArticleCard';
+import { ArticleCardSkeleton } from '@/components/features/news/ArticleCard/ArticleCardSkeleton';
+import { Skeleton } from '@/components/ui/Skeleton/Skeleton';
 import styles from './NewsArticlePage.module.css';
 import Link from 'next/link';
 import type { Metadata } from 'next';
@@ -31,6 +34,45 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
+// ── Related News Section (streamed via Suspense) ──
+async function RelatedNewsSection({ currentArticleId }: { currentArticleId: string }) {
+  const allNews = await fetchNews({ revalidate: 3600 });
+  const relatedNews = allNews.filter((n) => n.id !== currentArticleId).slice(0, 3);
+
+  if (relatedNews.length === 0) return null;
+
+  return (
+    <section className={styles.relatedSection}>
+      <div className={styles.relatedHeader}>
+        <h2>Notícias Relacionadas</h2>
+        <Link href="/news" className={styles.viewAll}>Ver todas</Link>
+      </div>
+      <div className={styles.relatedGrid}>
+        {relatedNews.map((n) => (
+          <ArticleCard key={n.id} article={n} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ── Related News Skeleton ──
+function RelatedNewsSkeleton() {
+  return (
+    <section className={styles.relatedSection} aria-hidden="true">
+      <div className={styles.relatedHeader}>
+        <Skeleton width={200} height={24} />
+        <Skeleton width={80} height={16} />
+      </div>
+      <div className={styles.relatedGrid}>
+        {Array.from({ length: 3 }).map((_, i) => (
+          <ArticleCardSkeleton key={i} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export default async function NewsArticlePage({ params }: PageProps) {
   const { slug } = await params;
   const article = await fetchNewsArticle(slug);
@@ -39,12 +81,9 @@ export default async function NewsArticlePage({ params }: PageProps) {
     notFound();
   }
 
-  // Fetch some related news (falling back to generic news for now)
-  const allNews = await fetchNews({ revalidate: 3600 });
-  const relatedNews = allNews.filter((n) => n.id !== article.id).slice(0, 3);
-
   return (
     <main className={styles.main}>
+      {/* Article content renders immediately */}
       <article className={styles.articleContainer}>
         <header className={styles.header}>
           <div className={styles.meta}>
@@ -76,19 +115,10 @@ export default async function NewsArticlePage({ params }: PageProps) {
         </div>
       </article>
 
-      {relatedNews.length > 0 && (
-        <section className={styles.relatedSection}>
-          <div className={styles.relatedHeader}>
-            <h2>Notícias Relacionadas</h2>
-            <Link href="/news" className={styles.viewAll}>Ver todas</Link>
-          </div>
-          <div className={styles.relatedGrid}>
-            {relatedNews.map((n) => (
-              <ArticleCard key={n.id} article={n} />
-            ))}
-          </div>
-        </section>
-      )}
+      {/* Related news streams independently */}
+      <Suspense fallback={<RelatedNewsSkeleton />}>
+        <RelatedNewsSection currentArticleId={article.id} />
+      </Suspense>
     </main>
   );
 }

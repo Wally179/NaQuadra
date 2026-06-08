@@ -1,30 +1,68 @@
+// ============================================================
+// Na Quadra — Standings Loading (Skeleton)
+// Uses reusable Skeleton components for consistent UX.
+// ============================================================
+
+import { Skeleton, SkeletonText } from '@/components/ui/Skeleton/Skeleton';
+
 export default function StandingsLoading() {
   return (
     <div style={{ maxWidth: 'var(--nq-container-md)', margin: '0 auto', padding: 'var(--nq-space-8) var(--nq-space-4)' }}>
-      {/* Header Skeleton */}
-      <div style={{ height: '40px', width: '200px', backgroundColor: 'var(--nq-bg-secondary)', borderRadius: 'var(--nq-radius-md)', marginBottom: 'var(--nq-space-2)', animation: 'pulse 1.5s infinite' }} />
-      <div style={{ height: '20px', width: '300px', backgroundColor: 'var(--nq-bg-secondary)', borderRadius: 'var(--nq-radius-md)', marginBottom: 'var(--nq-space-8)', animation: 'pulse 1.5s infinite' }} />
+      {/* Header */}
+      <Skeleton width={200} height={40} style={{ marginBottom: 'var(--nq-space-2)' }} />
+      <Skeleton width={300} height={20} style={{ marginBottom: 'var(--nq-space-8)' }} />
       
-      {/* Tabs Skeleton */}
+      {/* Conference Tabs */}
       <div style={{ display: 'flex', gap: 'var(--nq-space-4)', marginBottom: 'var(--nq-space-6)' }}>
-        <div style={{ height: '36px', width: '120px', backgroundColor: 'var(--nq-bg-secondary)', borderRadius: 'var(--nq-radius-md)', animation: 'pulse 1.5s infinite' }} />
-        <div style={{ height: '36px', width: '120px', backgroundColor: 'var(--nq-bg-secondary)', borderRadius: 'var(--nq-radius-md)', animation: 'pulse 1.5s infinite' }} />
+        <Skeleton width={150} height={36} borderRadius="var(--nq-radius-md)" />
+        <Skeleton width={150} height={36} borderRadius="var(--nq-radius-md)" />
       </div>
 
-      {/* Table Skeleton */}
+      {/* Table Header */}
+      <div style={{ 
+        display: 'flex', 
+        gap: 'var(--nq-space-4)', 
+        padding: 'var(--nq-space-3) var(--nq-space-4)',
+        borderBottom: '1px solid var(--nq-border-subtle)',
+        marginBottom: '1px',
+      }}>
+        <Skeleton width={24} height={14} borderRadius="var(--nq-radius-sm)" />
+        <Skeleton width={140} height={14} borderRadius="var(--nq-radius-sm)" />
+        <div style={{ marginLeft: 'auto', display: 'flex', gap: 'var(--nq-space-6)' }}>
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} width={28} height={14} borderRadius="var(--nq-radius-sm)" />
+          ))}
+        </div>
+      </div>
+
+      {/* Table Rows */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', backgroundColor: 'var(--nq-border-subtle)', borderRadius: 'var(--nq-radius-lg)', overflow: 'hidden' }}>
-        {[...Array(10)].map((_, i) => (
-          <div key={i} style={{ height: '60px', backgroundColor: 'var(--nq-bg-elevated)', animation: 'pulse 1.5s infinite' }} />
+        {Array.from({ length: 15 }).map((_, i) => (
+          <div key={i} style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--nq-space-4)',
+            padding: 'var(--nq-space-3) var(--nq-space-4)',
+            backgroundColor: 'var(--nq-bg-elevated)',
+            height: '52px',
+          }}>
+            <Skeleton width={20} height={16} borderRadius="var(--nq-radius-sm)" />
+            <Skeleton width={28} height={28} borderRadius="50%" />
+            <Skeleton width={120} height={16} borderRadius="var(--nq-radius-sm)" />
+            <div style={{ marginLeft: 'auto', display: 'flex', gap: 'var(--nq-space-6)' }}>
+              {Array.from({ length: 5 }).map((_, j) => (
+                <Skeleton key={j} width={28} height={14} borderRadius="var(--nq-radius-sm)" />
+              ))}
+            </div>
+          </div>
         ))}
       </div>
-      
-      <style>{`
-        @keyframes pulse {
-          0% { opacity: 1; }
-          50% { opacity: 0.5; }
-          100% { opacity: 1; }
-        }
-      `}</style>
+
+      {/* Legend */}
+      <div style={{ display: 'flex', gap: 'var(--nq-space-6)', marginTop: 'var(--nq-space-4)' }}>
+        <Skeleton width={200} height={12} borderRadius="var(--nq-radius-sm)" />
+        <Skeleton width={120} height={12} borderRadius="var(--nq-radius-sm)" />
+      </div>
     </div>
   );
 }

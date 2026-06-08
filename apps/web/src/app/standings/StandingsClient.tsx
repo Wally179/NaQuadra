@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import type { StandingsEntry } from '@naquadra/types';
 import Link from 'next/link';
 import { getTeam } from '@/data/teams';
@@ -108,7 +108,7 @@ export function StandingsClient({ eastStandings, westStandings, isLive }: Standi
   );
 }
 
-function StandingsRow({ 
+const StandingsRow = memo(function StandingsRow({ 
   entry, 
   hasLast10, 
   hasHomeRecord, 
@@ -166,4 +166,4 @@ function StandingsRow({
       {hasAwayRecord && <td className={styles.numCol}>{entry.awayRecord}</td>}
     </tr>
   );
-}
+});
