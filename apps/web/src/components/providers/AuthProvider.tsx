@@ -7,7 +7,7 @@ import type { UserProfile } from '@naquadra/types';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
-  const { isAuthenticated, setUser, clearAuth } = useAuthStore();
+  const { isAuthenticated, setUser } = useAuthStore();
 
   useEffect(() => {
     setMounted(true);

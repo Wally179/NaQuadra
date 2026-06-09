@@ -7,7 +7,7 @@ import Link from 'next/link';
 import styles from '../page.module.css';
 
 export function PersonalizedContent() {
-  const { isAuthenticated, user, onboardingCompleted } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
 
   if (!isAuthenticated || !user) return null;
 
@@ -49,7 +49,7 @@ export function PersonalizedContent() {
             <div>
               <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', opacity: 0.8 }}>Seu Time</span>
               <h2 style={{ fontSize: '32px', margin: '4px 0 8px 0', fontWeight: 800 }}>{favoriteTeam.name}</h2>
-              <Link href={`/teams/${favoriteTeam.slug}`} style={{ color: '#fff', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '14px', fontWeight: 500 }}>
+              <Link href={`/teams/${favoriteTeam.id}`} style={{ color: '#fff', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '14px', fontWeight: 500 }}>
                 Ver página do time <ArrowRight size={14} />
               </Link>
             </div>

@@ -7,15 +7,15 @@ import { ArticleCard } from '@/components/features/news/ArticleCard/ArticleCard'
 import { NewsSectionSkeleton } from './NewsSectionSkeleton';
 import Link from 'next/link';
 import styles from '../page.module.css';
-import type { Article } from '@naquadra/types';
+import type { NormalizedArticle } from '@naquadra/types';
 
 interface NewsSectionProps {
-  initialArticles: Article[];
+  initialArticles: NormalizedArticle[];
 }
 
 export function NewsSectionClient({ initialArticles }: NewsSectionProps) {
   const { isAuthenticated, user } = useAuthStore();
-  const [articles, setArticles] = useState<Article[]>(initialArticles);
+  const [articles, setArticles] = useState<NormalizedArticle[]>(initialArticles);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export function NewsSectionClient({ initialArticles }: NewsSectionProps) {
       
       setIsLoading(true);
       try {
-        const res = await authFetch<{ data: Article[] }>('/news/personalized');
+        const res = await authFetch<{ data: NormalizedArticle[] }>('/news/personalized');
         if (res.data && res.data.length > 0) {
           setArticles(res.data);
         }

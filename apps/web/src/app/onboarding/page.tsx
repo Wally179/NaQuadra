@@ -8,7 +8,7 @@ import { TeamSelector } from '@/components/features/profile/TeamSelector/TeamSel
 import { PlayerSearch } from '@/components/features/profile/PlayerSearch/PlayerSearch';
 import { useToastStore } from '@/lib/stores/toast-store';
 import { Loader2, ChevronRight, ChevronLeft } from 'lucide-react';
-import type { OnboardingDto } from '@naquadra/types';
+import type { NbaPreferencesDto } from '@naquadra/types';
 import styles from './page.module.css';
 
 export default function OnboardingPage() {
@@ -29,7 +29,7 @@ export default function OnboardingPage() {
   const handleComplete = async () => {
     setIsLoading(true);
     try {
-      const payload: OnboardingDto = { favoriteTeamId, followedTeamIds, favoritePlayerIds };
+      const payload: NbaPreferencesDto = { favoriteTeamId, followedTeamIds, favoritePlayerIds };
       const res = await authFetch<{ data: any }>('/user-preferences/onboarding', {
         method: 'POST',
         body: JSON.stringify(payload)
@@ -48,7 +48,7 @@ export default function OnboardingPage() {
     // Save empty preferences just to mark onboarding as complete
     setIsLoading(true);
     try {
-      const payload: OnboardingDto = {};
+      const payload: NbaPreferencesDto = {};
       const res = await authFetch<{ data: any }>('/user-preferences/onboarding', {
         method: 'POST',
         body: JSON.stringify(payload)

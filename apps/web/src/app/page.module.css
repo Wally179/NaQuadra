@@ -6,6 +6,25 @@
   padding: var(--nq-space-6) 0 0;
 }
 
+/* Personalized content */
+.personalizedSection {
+  padding: 0 var(--nq-space-4);
+  max-width: var(--nq-max-width);
+  margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .personalizedSection {
+    padding: 0 var(--nq-space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .personalizedSection {
+    padding: 0 var(--nq-space-8);
+  }
+}
+
 /* News grid */
 .newsSection {
   padding: var(--nq-space-8) var(--nq-space-4);

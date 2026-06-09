@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useAuthStore } from '@/lib/stores/auth-store';
 import { useToastStore } from '@/lib/stores/toast-store';
-import { authFetch, ApiError } from '@/lib/api-auth';
+import { authFetch } from '@/lib/api-auth';
 import { Loader2 } from 'lucide-react';
 import styles from './page.module.css';
 import type { RegisterRequest, LoginRequest, AuthTokens } from '@naquadra/types';

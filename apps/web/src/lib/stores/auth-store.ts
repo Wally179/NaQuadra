@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { UserProfile, UpdateProfileDto } from '@naquadra/types';
+import type { UserProfile } from '@naquadra/types';
 
 interface AuthState {
   user: UserProfile | null;
