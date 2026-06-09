@@ -64,28 +64,7 @@ export function ScoreboardBar({ games }: ScoreboardBarProps) {
   };
 
   const handleScroll = () => {
-    if (!scrollRef.current) return;
-    const container = scrollRef.current;
-    const scrollLeft = container.scrollLeft;
-    const children = Array.from(container.children) as HTMLElement[];
-    
-    if (children.length === 0) return;
-
-    const firstChildOffset = children[0].offsetLeft;
-
-    let closestIndex = 0;
-    let minDistance = Infinity;
-
-    children.forEach((child, index) => {
-      const targetScrollLeft = child.offsetLeft - firstChildOffset;
-      const distance = Math.abs(targetScrollLeft - scrollLeft);
-      if (distance < minDistance) {
-        minDistance = distance;
-        closestIndex = index;
-      }
-    });
-
-    setActiveIndex(closestIndex);
+    // Scroll behavior no longer controls the active dot per user request
   };
 
   const scrollTo = (index: number) => {
@@ -120,8 +99,10 @@ export function ScoreboardBar({ games }: ScoreboardBarProps) {
         onClickCapture={onClickCapture}
         onScroll={handleScroll}
       >
-        {sorted.map((game) => (
-          <GameCard key={game.externalId} game={game} />
+        {sorted.map((game, index) => (
+          <div key={game.externalId} onMouseEnter={() => setActiveIndex(index)}>
+            <GameCard game={game} />
+          </div>
         ))}
       </div>
 
@@ -132,6 +113,7 @@ export function ScoreboardBar({ games }: ScoreboardBarProps) {
               key={index}
               className={`${styles.dot} ${index === activeIndex ? styles.activeDot : ''}`}
               onClick={() => scrollTo(index)}
+              onMouseEnter={() => setActiveIndex(index)}
               aria-label={`Ir para jogo ${index + 1}`}
             />
           ))}
