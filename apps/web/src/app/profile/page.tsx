@@ -11,7 +11,7 @@ import { PlayerSearch } from '@/components/features/profile/PlayerSearch/PlayerS
 import { NotificationToggle } from '@/components/features/profile/NotificationToggle/NotificationToggle';
 import { AuthGate } from '@/components/ui/AuthGate/AuthGate';
 import type { NbaPreferencesDto, UpdateProfileDto } from '@naquadra/types';
-import { PersonalizedContent } from '../_sections/PersonalizedContent';
+import { PersonalizedTeam, PersonalizedPlayers } from '../_sections/PersonalizedContent';
 import { getAllTeams } from '@/data/teams';
 import { getContrastYIQ } from '@/lib/colors';
 import styles from './page.module.css';
@@ -217,7 +217,7 @@ export default function ProfilePage() {
       description="Faça login para gerenciar suas preferências e personalizar sua experiência na NBA."
     >
       <div className={styles.page} style={themeStyles}>
-        <PersonalizedContent />
+        <PersonalizedTeam />
         <div className={styles.container}>
           <div className={styles.sidebar}>
             <div className={styles.profileCard}>
@@ -376,6 +376,7 @@ export default function ProfilePage() {
             )}
           </div>
         </div>
+        <PersonalizedPlayers />
       </div>
     </AuthGate>
   );
