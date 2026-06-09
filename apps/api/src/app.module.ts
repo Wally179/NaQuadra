@@ -50,7 +50,7 @@ const databaseImports = SKIP_DB
           type: 'postgres' as const,
           url: config.get<string>('database.postgres.url'),
           entities: [__dirname + '/modules/**/*.entity{.ts,.js}'],
-          synchronize: process.env.NODE_ENV === 'development', // Useful for Neon dev branches
+          synchronize: true, // TODO: Replace with migrations before scaling. Needed for new auth entities.
           ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined,
           logging: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
           retryAttempts: 3,
