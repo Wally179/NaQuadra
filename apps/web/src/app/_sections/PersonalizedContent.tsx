@@ -63,8 +63,31 @@ export function PersonalizedTeam() {
   );
 }
 
+import { useState, useEffect } from 'react';
+import { fetchPlayerDetail, PlayerDetail } from '@/lib/api';
+
 export function PersonalizedPlayers() {
   const { isAuthenticated, user } = useAuthStore();
+  const [players, setPlayers] = useState<PlayerDetail[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user?.favoritePlayerIds?.length) {
+      setPlayers([]);
+      setLoading(false);
+      return;
+    }
+
+    async function load() {
+      setLoading(true);
+      const details = await Promise.all(
+        user!.favoritePlayerIds!.map(id => fetchPlayerDetail(id))
+      );
+      setPlayers(details.filter(Boolean) as PlayerDetail[]);
+      setLoading(false);
+    }
+    load();
+  }, [user?.favoritePlayerIds]);
 
   if (!isAuthenticated || !user) return null;
 
@@ -77,18 +100,33 @@ export function PersonalizedPlayers() {
         <h2 style={{ fontSize: '20px', margin: 0, color: 'var(--nq-text-primary)' }}>Seus Jogadores</h2>
       </div>
       <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '8px' }}>
-        {user.favoritePlayerIds.map(playerId => (
-          <div key={playerId} style={{ minWidth: '200px', backgroundColor: 'var(--nq-bg-secondary)', border: '1px solid var(--nq-border-subtle)', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'var(--nq-bg-tertiary)', overflow: 'hidden' }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={`https://a.espncdn.com/i/headshots/nba/players/full/${playerId}.png`} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.currentTarget.src = 'https://a.espncdn.com/i/headshots/nba/players/full/fallback.png' }} />
+        {loading ? (
+          user.favoritePlayerIds.map(playerId => (
+            <div key={playerId} style={{ minWidth: '200px', backgroundColor: 'var(--nq-bg-secondary)', border: '1px solid var(--nq-border-subtle)', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'var(--nq-bg-tertiary)', overflow: 'hidden', flexShrink: 0 }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={`https://a.espncdn.com/i/headshots/nba/players/full/${playerId}.png`} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.currentTarget.src = 'https://a.espncdn.com/i/headshots/nba/players/full/fallback.png' }} />
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ height: '12px', width: '80%', backgroundColor: 'var(--nq-bg-tertiary)', borderRadius: '4px', margin: '0 0 6px 0' }}></div>
+                <div style={{ height: '10px', width: '50%', backgroundColor: 'var(--nq-bg-tertiary)', borderRadius: '4px', margin: '0' }}></div>
+              </div>
             </div>
-            <div style={{ flex: 1 }}>
-              <div style={{ height: '12px', width: '80%', backgroundColor: 'var(--nq-bg-tertiary)', borderRadius: '4px', margin: '0 0 6px 0' }}></div>
-              <div style={{ height: '10px', width: '50%', backgroundColor: 'var(--nq-bg-tertiary)', borderRadius: '4px', margin: '0' }}></div>
+          ))
+        ) : (
+          players.map(player => (
+            <div key={player.externalId} style={{ minWidth: '200px', backgroundColor: 'var(--nq-bg-secondary)', border: '1px solid var(--nq-border-subtle)', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'var(--nq-bg-tertiary)', overflow: 'hidden', flexShrink: 0 }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={player.headshot} alt={player.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.currentTarget.src = 'https://a.espncdn.com/i/headshots/nba/players/full/fallback.png' }} />
+              </div>
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--nq-text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{player.name}</span>
+                <span style={{ fontSize: '12px', color: 'var(--nq-text-secondary)', fontWeight: 500 }}>{player.teamAbbr} - #{player.jersey}</span>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </section>
   );
