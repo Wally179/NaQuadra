@@ -67,15 +67,18 @@ export function ScoreboardBar({ games }: ScoreboardBarProps) {
     if (!scrollRef.current) return;
     const container = scrollRef.current;
     const scrollLeft = container.scrollLeft;
-    const scrollCenter = scrollLeft + container.clientWidth / 2;
     const children = Array.from(container.children) as HTMLElement[];
     
+    if (children.length === 0) return;
+
+    const firstChildOffset = children[0].offsetLeft;
+
     let closestIndex = 0;
     let minDistance = Infinity;
 
     children.forEach((child, index) => {
-      const childCenter = child.offsetLeft + child.clientWidth / 2;
-      const distance = Math.abs(childCenter - scrollCenter);
+      const targetScrollLeft = child.offsetLeft - firstChildOffset;
+      const distance = Math.abs(targetScrollLeft - scrollLeft);
       if (distance < minDistance) {
         minDistance = distance;
         closestIndex = index;

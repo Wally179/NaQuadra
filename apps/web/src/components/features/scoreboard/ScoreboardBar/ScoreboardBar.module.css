@@ -21,21 +21,17 @@
   display: none;
 }
 
-.cardsGrid::before,
-.cardsGrid::after {
-  content: "";
-  display: block;
-  flex: 0 0 0px;
-  scroll-snap-align: start;
-}
-
-.cardsGrid::after {
-  scroll-snap-align: end;
-}
-
 .cardsGrid > * {
   flex: 0 0 calc(100vw - 2 * var(--nq-space-4) - 32px);
   scroll-snap-align: start;
+}
+
+.cardsGrid > *:first-child {
+  margin-left: var(--nq-space-4);
+}
+
+.cardsGrid > *:last-child {
+  margin-right: var(--nq-space-4);
 }
 
 @media (min-width: 640px) {
@@ -43,9 +39,13 @@
     /* Tablet: 2 cards na tela */
     flex: 0 0 calc((100vw - 2 * var(--nq-space-6) - var(--nq-space-4)) / 2);
   }
-  .cardsGrid::before,
-  .cardsGrid::after {
-    flex: 0 0 calc(var(--nq-space-6) - var(--nq-space-4));
+  
+  .cardsGrid > *:first-child {
+    margin-left: var(--nq-space-6);
+  }
+
+  .cardsGrid > *:last-child {
+    margin-right: var(--nq-space-6);
   }
 }
 
@@ -54,16 +54,19 @@
     max-width: var(--nq-max-width);
     margin-left: auto;
     margin-right: auto;
-    padding-left: var(--nq-space-8);
-    padding-right: var(--nq-space-8);
   }
-  .cardsGrid::before,
-  .cardsGrid::after {
-    display: none;
+  
+  .cardsGrid > *:first-child {
+    margin-left: var(--nq-space-8);
   }
+
+  .cardsGrid > *:last-child {
+    margin-right: var(--nq-space-8);
+  }
+  
   .cardsGrid > * {
     /* Desktop: 3 cards cravados no container max-width */
-    flex: 0 0 calc((100% - 2 * var(--nq-space-4)) / 3);
+    flex: 0 0 calc((100% - 2 * var(--nq-space-8) - 2 * var(--nq-space-4)) / 3);
   }
 }
 
