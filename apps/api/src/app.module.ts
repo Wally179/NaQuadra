@@ -24,6 +24,8 @@ import { TeamsModule } from './modules/teams/teams.module';
 import { ArticlesModule } from './modules/articles/articles.module';
 import { GlossaryModule } from './modules/glossary/glossary.module';
 import { FavoritesModule } from './modules/favorites/favorites.module';
+import { UserPreferencesModule } from './modules/user-preferences/user-preferences.module';
+import { PersonalizationModule } from './modules/personalization/personalization.module';
 
 // Config
 import appConfig from './config/app.config';
@@ -67,6 +69,8 @@ const databaseImports = SKIP_DB
       ArticlesModule,
       GlossaryModule,
       FavoritesModule,
+      UserPreferencesModule,
+      PersonalizationModule,
     ];
 
 @Module({

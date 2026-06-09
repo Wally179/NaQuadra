@@ -1,33 +1,56 @@
 // ============================================================
 // Na Quadra — News Controller (ESPN Integration)
 // ============================================================
-import { Controller, Get, Param, NotFoundException } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { AggregatedNewsService } from './aggregated-news.service';
+import { UserPreferencesService } from '../user-preferences/user-preferences.service';
+import { PersonalizationService } from '../personalization/personalization.service';
+import { JwtAuthGuard, CurrentUser } from '../auth/guards/auth.guards';
 
-@ApiTags('news')
+@ApiTags('articles')
 @Controller('news')
 export class NewsController {
-  constructor(private readonly newsService: AggregatedNewsService) {}
+  constructor(
+    private readonly newsService: AggregatedNewsService,
+    private readonly userPreferencesService: UserPreferencesService,
+    private readonly personalizationService: PersonalizationService,
+  ) {}
 
   @Get()
-  @ApiOperation({ summary: 'Últimas notícias agregadas (ESPN, NewsAPI, GNews)' })
-  @ApiResponse({ status: 200, description: 'Lista de notícias mais recentes' })
+  @ApiOperation({ summary: 'Listar todas as notícias recentes (feed global)' })
+  @ApiResponse({ status: 200, description: 'Feed de notícias global' })
   async getNews() {
-    const articles = await this.newsService.getNews();
+    const data = await this.newsService.getNews();
+    return { data };
+  }
 
-    return { data: articles, meta: { total: articles.length } };
+  @Get('personalized')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Listar notícias recentes personalizadas para o usuário' })
+  @ApiResponse({ status: 200, description: 'Feed de notícias ordenado por relevância' })
+  async getPersonalizedNews(@CurrentUser('id') userId: string) {
+    const prefsData = await this.userPreferencesService.getPreferences(userId);
+    const prefs = {
+      favoriteTeamId: prefsData.nba.favoriteTeamId,
+      followedTeamIds: prefsData.nba.followedTeamIds,
+      favoritePlayerIds: prefsData.nba.favoritePlayerIds,
+    };
+    const articles = await this.newsService.getNews();
+    const data = this.personalizationService.sortNewsByRelevance(articles, prefs);
+    return { data };
   }
 
   @Get(':slug')
-  @ApiOperation({ summary: 'Detalhes de uma notícia por slug' })
-  @ApiResponse({ status: 200, description: 'Dados da notícia' })
+  @ApiOperation({ summary: 'Obter artigo detalhado por slug' })
+  @ApiResponse({ status: 200, description: 'Detalhes da notícia' })
   @ApiResponse({ status: 404, description: 'Notícia não encontrada' })
   async getNewsArticle(@Param('slug') slug: string) {
-    const article = await this.newsService.getNewsArticleBySlug(slug);
-    if (!article) {
-      throw new NotFoundException(`Notícia '${slug}' não encontrada`);
+    const data = await this.newsService.getNewsArticleBySlug(slug);
+    if (!data) {
+      return { data: null, error: 'Article not found' };
     }
-    return { data: article };
+    return { data };
   }
 }

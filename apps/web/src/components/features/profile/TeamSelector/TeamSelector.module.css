@@ -1,0 +1,114 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.search {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background-color: var(--nq-bg-tertiary);
+  border: 1px solid var(--nq-border-default);
+  color: var(--nq-text-primary);
+  font-family: var(--nq-font-body);
+}
+
+.search:focus {
+  outline: none;
+  border-color: var(--nq-system-info);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* Custom scrollbar */
+.grid::-webkit-scrollbar {
+  width: 6px;
+}
+
+.grid::-webkit-scrollbar-track {
+  background: var(--nq-bg-secondary);
+  border-radius: 4px;
+}
+
+.grid::-webkit-scrollbar-thumb {
+  background: var(--nq-border-subtle);
+  border-radius: 4px;
+}
+
+.teamCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 8px;
+  background-color: var(--nq-bg-secondary);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.teamCard:hover {
+  background-color: var(--nq-bg-tertiary);
+  transform: translateY(-2px);
+}
+
+.logoWrapper {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 8px;
+}
+
+.logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.name {
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--nq-text-secondary);
+  line-height: 1.2;
+}
+
+/* Selected states */
+.selected {
+  background-color: var(--nq-bg-elevated);
+}
+
+.selected .name {
+  color: var(--nq-text-primary);
+}
+
+.badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: var(--nq-system-success);
+  color: #fff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}

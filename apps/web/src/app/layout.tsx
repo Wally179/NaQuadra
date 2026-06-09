@@ -4,6 +4,8 @@ import './globals.css';
 import { Header } from '@/components/layout/Header/Header';
 import { MobileNav } from '@/components/layout/MobileNav/MobileNav';
 import { Footer } from '@/components/layout/Footer/Footer';
+import { AuthProvider } from '@/components/providers/AuthProvider';
+import { ToastContainer } from '@/components/ui/Toast/ToastContainer';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -58,12 +60,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-BR">
       <body className={`${inter.variable} ${plusJakartaSans.variable} ${dmMono.variable}`}>
-        <Header />
-        <main className="nq-main">
-          {children}
-        </main>
-        <Footer />
-        <MobileNav />
+        <AuthProvider>
+          <Header />
+          <main className="nq-main">
+            {children}
+          </main>
+          <Footer />
+          <MobileNav />
+          <ToastContainer />
+        </AuthProvider>
       </body>
     </html>
   );

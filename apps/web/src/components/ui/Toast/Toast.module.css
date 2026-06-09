@@ -1,0 +1,121 @@
+.container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background-color: var(--nq-color-surface);
+  border: 1px solid var(--nq-color-border);
+  padding: 16px;
+  border-radius: 12px;
+  min-width: 300px;
+  max-width: 400px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  animation: slideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.closing {
+  animation: slideOut 0.3s ease-in forwards;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%) scale(0.9);
+  }
+}
+
+.iconWrapper {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.iconSuccess { color: #10b981; }
+.iconError { color: #ef4444; }
+.iconInfo { color: #3b82f6; }
+.iconWarning { color: #f59e0b; }
+
+.content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.title {
+  font-family: var(--nq-font-display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--nq-color-text);
+  line-height: 1.4;
+}
+
+.message {
+  font-family: var(--nq-font-body);
+  font-size: 13px;
+  color: var(--nq-color-text-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.closeBtn {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: var(--nq-color-text-muted);
+  cursor: pointer;
+  padding: 4px;
+  margin: -4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.closeBtn:hover {
+  color: var(--nq-color-text);
+  background-color: var(--nq-color-surface-hover);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .container {
+    bottom: 80px; /* Above mobile nav */
+    right: 16px;
+    left: 16px;
+  }
+  
+  .toast {
+    min-width: 0;
+    width: 100%;
+  }
+}

@@ -3,11 +3,14 @@
 // ============================================================
 import { Module } from '@nestjs/common';
 import { EspnModule } from '../espn/espn.module';
+import { AuthModule } from '../auth/auth.module';
+import { UserPreferencesModule } from '../user-preferences/user-preferences.module';
+import { PersonalizationModule } from '../personalization/personalization.module';
 import { NewsController } from './news.controller';
 import { AggregatedNewsService } from './aggregated-news.service';
 
 @Module({
-  imports: [EspnModule],
+  imports: [EspnModule, AuthModule, UserPreferencesModule, PersonalizationModule],
   controllers: [NewsController],
   providers: [AggregatedNewsService],
   exports: [AggregatedNewsService],

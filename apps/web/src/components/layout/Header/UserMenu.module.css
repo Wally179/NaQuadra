@@ -1,0 +1,130 @@
+.container {
+  position: relative;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--nq-bg-secondary);
+  border: 1px solid var(--nq-border-default);
+  padding: 4px 12px 4px 4px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.trigger:hover {
+  background: var(--nq-bg-tertiary);
+}
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--nq-brand-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  overflow: hidden;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--nq-text-primary);
+}
+
+.icon {
+  color: var(--nq-text-tertiary);
+  transition: transform 0.2s;
+}
+
+.icon.open {
+  transform: rotate(180deg);
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 240px;
+  background-color: var(--nq-bg-secondary);
+  border: 1px solid var(--nq-border-subtle);
+  border-radius: 12px;
+  box-shadow: var(--nq-shadow-lg);
+  padding: 8px;
+  z-index: 50;
+  animation: slideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.header {
+  padding: 8px 12px;
+}
+
+.fullName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--nq-text-primary);
+  margin: 0 0 2px 0;
+}
+
+.email {
+  font-size: 12px;
+  color: var(--nq-text-secondary);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.divider {
+  height: 1px;
+  background-color: var(--nq-border-subtle);
+  margin: 4px 0;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  background: none;
+  font-size: 14px;
+  color: var(--nq-text-secondary);
+  cursor: pointer;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.item:hover {
+  background-color: var(--nq-bg-tertiary);
+  color: var(--nq-text-primary);
+}
+
+.logout {
+  color: var(--nq-system-error);
+}
+
+.logout:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--nq-system-error);
+}

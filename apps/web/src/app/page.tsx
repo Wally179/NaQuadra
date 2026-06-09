@@ -7,6 +7,8 @@ import { ArrowRight, BookOpen } from 'lucide-react';
 import Link from 'next/link';
 import styles from './page.module.css';
 
+import { PersonalizedContent } from './_sections/PersonalizedContent';
+
 // ============================================================
 // Na Quadra — Home Page (Progressive Loading)
 // ============================================================
@@ -17,6 +19,8 @@ import styles from './page.module.css';
 export default function HomePage() {
   return (
     <>
+      <PersonalizedContent />
+
       {/* === SCOREBOARD BAR === */}
       {/* Streams independently — shows skeleton while fetching games */}
       <section className={styles.heroSection}>

@@ -32,11 +32,32 @@ export class UserEntity {
   @Column({ type: 'varchar', length: 500, nullable: true })
   avatarUrl!: string | null;
 
+  @Column({ type: 'text', nullable: true })
+  avatarBase64!: string | null;
+
   @Column({ type: 'boolean', default: true })
   discoveryMode!: boolean;
 
+  @Column({ type: 'boolean', default: false })
+  onboardingCompleted!: boolean;
+
+  @Column({ type: 'varchar', length: 10, nullable: true })
+  favoriteTeamId!: string | null;
+
+  @Column({ type: 'simple-array', nullable: true })
+  followedTeamIds!: string[] | null;
+
+  @Column({ type: 'simple-array', nullable: true })
+  favoritePlayerIds!: string[] | null;
+
   @Column({ type: 'varchar', length: 255, nullable: true })
   refreshTokenHash!: string | null;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  passwordResetToken!: string | null;
+
+  @Column({ type: 'timestamp', nullable: true })
+  passwordResetExpires!: Date | null;
 
   @CreateDateColumn()
   createdAt!: Date;

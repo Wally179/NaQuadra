@@ -14,7 +14,8 @@ import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 import { UserEntity } from './entities/user.entity';
-import { RegisterDto, LoginDto } from './dto/auth.dto';
+import { RegisterDto, LoginDto, UpdateProfileDto, UpdatePasswordDto, ForgotPasswordDto, ResetPasswordDto } from './dto/auth.dto';
+import * as crypto from 'crypto';
 
 export interface TokenPair {
   accessToken: string;
@@ -127,9 +128,89 @@ export class AuthService {
       email: user.email,
       role: user.role,
       avatarUrl: user.avatarUrl,
+      avatarBase64: user.avatarBase64,
       discoveryMode: user.discoveryMode,
+      onboardingCompleted: user.onboardingCompleted,
       createdAt: user.createdAt.toISOString(),
     };
+  }
+
+  // ── Profile Updates ──
+  async updateProfile(userId: string, dto: UpdateProfileDto) {
+    const user = await this.userRepo.findOne({ where: { id: userId } });
+    if (!user) throw new UnauthorizedException('Usuário não encontrado');
+
+    if (dto.name) user.name = dto.name;
+    if (dto.avatarUrl !== undefined) user.avatarUrl = dto.avatarUrl;
+    if (dto.avatarBase64 !== undefined) user.avatarBase64 = dto.avatarBase64;
+
+    await this.userRepo.save(user);
+    return this.getProfile(userId);
+  }
+
+  // ── Password Update ──
+  async updatePassword(userId: string, dto: UpdatePasswordDto) {
+    const user = await this.userRepo.findOne({
+      where: { id: userId },
+      select: ['id', 'passwordHash'],
+    });
+    if (!user) throw new UnauthorizedException('Usuário não encontrado');
+
+    const passwordValid = await bcrypt.compare(dto.currentPassword, user.passwordHash);
+    if (!passwordValid) {
+      throw new UnauthorizedException('Senha atual incorreta');
+    }
+
+    user.passwordHash = await bcrypt.hash(dto.newPassword, 12);
+    await this.userRepo.save(user);
+  }
+
+  // ── Forgot Password ──
+  async requestPasswordReset(dto: ForgotPasswordDto) {
+    const user = await this.userRepo.findOne({ where: { email: dto.email } });
+    if (!user) {
+      // Return success anyway to prevent email enumeration
+      return;
+    }
+
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetTokenHash = await bcrypt.hash(resetToken, 10);
+
+    user.passwordResetToken = resetTokenHash;
+    const expires = new Date();
+    expires.setHours(expires.getHours() + 1); // 1 hour expiration
+    user.passwordResetExpires = expires;
+
+    await this.userRepo.save(user);
+
+    // In a real app, send email here.
+    this.logger.log(`Password reset token for ${user.email}: ${resetToken}`);
+    return { message: 'Se o e-mail existir, um link de recuperação foi enviado.' };
+  }
+
+  // ── Reset Password ──
+  async resetPassword(dto: ResetPasswordDto) {
+    const user = await this.userRepo.findOne({ where: { email: dto.email } });
+    
+    if (!user || !user.passwordResetToken || !user.passwordResetExpires) {
+      throw new UnauthorizedException('Token inválido ou expirado.');
+    }
+
+    if (new Date() > user.passwordResetExpires) {
+      throw new UnauthorizedException('Token expirado.');
+    }
+
+    const tokenValid = await bcrypt.compare(dto.token, user.passwordResetToken);
+    if (!tokenValid) {
+      throw new UnauthorizedException('Token inválido.');
+    }
+
+    user.passwordHash = await bcrypt.hash(dto.newPassword, 12);
+    user.passwordResetToken = null;
+    user.passwordResetExpires = null;
+
+    await this.userRepo.save(user);
+    return { message: 'Senha redefinida com sucesso.' };
   }
 
   // ── Internal: Token Generation ──

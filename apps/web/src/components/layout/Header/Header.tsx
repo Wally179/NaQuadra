@@ -3,15 +3,23 @@
 import { Search } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Logo } from '@/components/ui/Logo/Logo';
+import { useAuthStore } from '@/lib/stores/auth-store';
+import { UserMenu } from './UserMenu';
 import styles from './Header.module.css';
 
 export function Header() {
   const router = useRouter();
   const pathname = usePathname();
+  const { isAuthenticated } = useAuthStore();
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,11 +72,17 @@ export function Header() {
             </button>
           )}
 
-          <Link href="/login" style={{ textDecoration: 'none' }}>
-            <button className={styles.loginButton} type="button">
-              Entrar
-            </button>
-          </Link>
+          {mounted && (
+            isAuthenticated ? (
+              <UserMenu />
+            ) : (
+              <Link href="/login" style={{ textDecoration: 'none' }}>
+                <button className={styles.loginButton} type="button">
+                  Entrar
+                </button>
+              </Link>
+            )
+          )}
         </div>
       </div>
     </header>

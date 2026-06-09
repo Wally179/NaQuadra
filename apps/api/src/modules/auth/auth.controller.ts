@@ -12,9 +12,9 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { LoginDto, RegisterDto, RefreshTokenDto } from './dto/auth.dto';
-import { JwtAuthGuard } from './guards/auth.guards';
-import { CurrentUser } from './guards/auth.guards';
+import { LoginDto, RegisterDto, RefreshTokenDto, UpdateProfileDto, UpdatePasswordDto, ForgotPasswordDto, ResetPasswordDto } from './dto/auth.dto';
+import { JwtAuthGuard, CurrentUser } from './guards/auth.guards';
+import { Patch } from '@nestjs/common';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -67,5 +67,40 @@ export class AuthController {
   async me(@CurrentUser('id') userId: string) {
     const profile = await this.authService.getProfile(userId);
     return { data: profile };
+  }
+
+  @Patch('profile')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Atualizar perfil do usuário' })
+  async updateProfile(@CurrentUser('id') userId: string, @Body() dto: UpdateProfileDto) {
+    const profile = await this.authService.updateProfile(userId, dto);
+    return { data: profile };
+  }
+
+  @Patch('password')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Alterar senha' })
+  async updatePassword(@CurrentUser('id') userId: string, @Body() dto: UpdatePasswordDto) {
+    await this.authService.updatePassword(userId, dto);
+    return { message: 'Senha atualizada com sucesso' };
+  }
+
+  @Post('forgot-password')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Solicitar redefinição de senha' })
+  async forgotPassword(@Body() dto: ForgotPasswordDto) {
+    const result = await this.authService.requestPasswordReset(dto);
+    return { data: result };
+  }
+
+  @Post('reset-password')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Redefinir senha com token' })
+  async resetPassword(@Body() dto: ResetPasswordDto) {
+    const result = await this.authService.resetPassword(dto);
+    return { data: result };
   }
 }

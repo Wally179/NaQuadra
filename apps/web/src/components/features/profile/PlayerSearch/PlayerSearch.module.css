@@ -1,0 +1,163 @@
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--nq-bg-elevated);
+  border: 1px solid var(--nq-border-default);
+  padding: 4px 8px 4px 4px;
+  border-radius: 20px;
+}
+
+.chipAvatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--nq-bg-tertiary);
+}
+
+.chipAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.chipName {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--nq-text-primary);
+}
+
+.chipRemove {
+  background: none;
+  border: none;
+  color: var(--nq-text-tertiary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  padding: 2px;
+  transition: all 0.2s;
+}
+
+.chipRemove:hover {
+  background-color: var(--nq-bg-hover);
+  color: var(--nq-system-error);
+}
+
+.searchWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  color: var(--nq-text-tertiary);
+}
+
+.input {
+  width: 100%;
+  padding: 12px 16px 12px 40px;
+  border-radius: 8px;
+  background-color: var(--nq-bg-tertiary);
+  border: 1px solid var(--nq-border-default);
+  color: var(--nq-text-primary);
+  font-family: var(--nq-font-body);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--nq-system-info);
+}
+
+.spinner {
+  position: absolute;
+  right: 12px;
+  color: var(--nq-system-info);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background-color: var(--nq-bg-secondary);
+  border: 1px solid var(--nq-border-default);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.resultItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.resultItem:hover {
+  background-color: var(--nq-bg-hover);
+}
+
+.resultAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--nq-bg-tertiary);
+}
+
+.resultAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.resultInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.resultName {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--nq-text-primary);
+}
+
+.resultTeam {
+  font-size: 12px;
+  color: var(--nq-text-tertiary);
+}
+
+.empty {
+  padding: 16px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--nq-text-tertiary);
+}

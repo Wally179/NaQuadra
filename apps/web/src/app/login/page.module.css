@@ -84,6 +84,22 @@
   color: var(--nq-text-secondary);
 }
 
+.labelRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.forgotLink {
+  font-size: var(--nq-text-xs);
+  color: var(--nq-system-info);
+  text-decoration: none;
+}
+
+.forgotLink:hover {
+  text-decoration: underline;
+}
+
 .input {
   width: 100%;
   padding: var(--nq-space-3) var(--nq-space-4);
@@ -118,6 +134,23 @@
   cursor: pointer;
   transition: all var(--nq-duration-fast) var(--nq-ease-default);
   margin-top: var(--nq-space-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.submitBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .submitBtn:hover {
