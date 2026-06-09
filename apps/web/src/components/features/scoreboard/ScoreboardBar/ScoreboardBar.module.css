@@ -50,15 +50,20 @@
 }
 
 @media (min-width: 1024px) {
+  .cardsGrid {
+    max-width: var(--nq-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--nq-space-8);
+    padding-right: var(--nq-space-8);
+  }
+  .cardsGrid::before,
+  .cardsGrid::after {
+    display: none;
+  }
   .cardsGrid > * {
     /* Desktop: 3 cards cravados no container max-width */
-    flex: 0 0 calc((min(100vw, var(--nq-max-width)) - 2 * var(--nq-space-8) - 2 * var(--nq-space-4)) / 3);
-  }
-  .cardsGrid::before {
-    flex: 0 0 calc(((100vw - min(100vw, var(--nq-max-width))) / 2 + var(--nq-space-8)) - var(--nq-space-4));
-  }
-  .cardsGrid::after {
-    flex: 0 0 calc(var(--nq-space-8) - var(--nq-space-4));
+    flex: 0 0 calc((100% - 2 * var(--nq-space-4)) / 3);
   }
 }
 
@@ -105,5 +110,33 @@
   color: var(--nq-text-primary);
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--nq-space-3);
+  margin-top: var(--nq-space-4);
+  padding-bottom: var(--nq-space-4);
+}
 
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--nq-text-secondary);
+  opacity: 0.3;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all var(--nq-duration-fast) var(--nq-ease-default);
+}
 
+.dot:hover {
+  opacity: 0.6;
+}
+
+.activeDot {
+  background-color: var(--nq-text-primary);
+  opacity: 1;
+  transform: scale(1.2);
+}
