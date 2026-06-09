@@ -3,12 +3,10 @@
    ============================================================ */
 
 .cardsGrid {
-  display: grid;
-  grid-auto-flow: column;
-  /* Celular: 1 card ocupando quase toda a tela, mostrando um pedaço do próximo */
-  grid-auto-columns: calc(100vw - 2 * var(--nq-space-4) - 32px);
+  display: flex;
   gap: var(--nq-space-4);
-  padding: var(--nq-space-4);
+  padding-top: var(--nq-space-4);
+  padding-bottom: var(--nq-space-4);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
@@ -23,26 +21,44 @@
   display: none;
 }
 
+.cardsGrid::before,
+.cardsGrid::after {
+  content: "";
+  display: block;
+  flex: 0 0 0px;
+  scroll-snap-align: start;
+}
+
+.cardsGrid::after {
+  scroll-snap-align: end;
+}
+
 .cardsGrid > * {
+  flex: 0 0 calc(100vw - 2 * var(--nq-space-4) - 32px);
   scroll-snap-align: start;
 }
 
 @media (min-width: 640px) {
-  .cardsGrid {
+  .cardsGrid > * {
     /* Tablet: 2 cards na tela */
-    grid-auto-columns: calc((100vw - 2 * var(--nq-space-6) - var(--nq-space-4)) / 2);
-    padding: var(--nq-space-4) var(--nq-space-6);
+    flex: 0 0 calc((100vw - 2 * var(--nq-space-6) - var(--nq-space-4)) / 2);
+  }
+  .cardsGrid::before,
+  .cardsGrid::after {
+    flex: 0 0 calc(var(--nq-space-6) - var(--nq-space-4));
   }
 }
 
 @media (min-width: 1024px) {
-  .cardsGrid {
+  .cardsGrid > * {
     /* Desktop: 3 cards cravados no container max-width */
-    grid-auto-columns: calc((min(100vw, var(--nq-max-width)) - 2 * var(--nq-space-8) - 2 * var(--nq-space-4)) / 3);
-    padding-top: var(--nq-space-4);
-    padding-bottom: var(--nq-space-4);
-    padding-left: calc((100vw - min(100vw, var(--nq-max-width))) / 2 + var(--nq-space-8));
-    padding-right: var(--nq-space-8);
+    flex: 0 0 calc((min(100vw, var(--nq-max-width)) - 2 * var(--nq-space-8) - 2 * var(--nq-space-4)) / 3);
+  }
+  .cardsGrid::before {
+    flex: 0 0 calc(((100vw - min(100vw, var(--nq-max-width))) / 2 + var(--nq-space-8)) - var(--nq-space-4));
+  }
+  .cardsGrid::after {
+    flex: 0 0 calc(var(--nq-space-8) - var(--nq-space-4));
   }
 }
 
