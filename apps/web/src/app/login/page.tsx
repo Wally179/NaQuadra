@@ -66,7 +66,7 @@ export default function LoginPage() {
 
   const handleRegister = async () => {
     try {
-      const payload: RegisterRequest = { name, email, password, confirmPassword };
+      const payload = { name, email, password };
       const res = await authFetch<{ data: AuthTokens }>('/auth/register', {
         method: 'POST',
         body: JSON.stringify(payload)
