@@ -1,7 +1,82 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
+}
+
+.drawerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background-color: var(--nq-bg-tertiary);
+  border: 1px solid var(--nq-border-default);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.drawerHeader:hover {
+  border-color: var(--nq-border-hover);
+}
+
+.selectedPreview {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.previewChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.previewChip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 4px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.previewLogo {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  background-color: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  padding: 2px;
+}
+
+.placeholder {
+  color: var(--nq-text-tertiary);
+  font-size: 14px;
+}
+
+.toggleBtn {
+  background: none;
+  border: none;
+  color: var(--nq-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.drawerContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .search {

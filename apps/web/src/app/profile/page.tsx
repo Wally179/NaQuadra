@@ -84,10 +84,28 @@ export default function ProfilePage() {
         ctx?.drawImage(img, 0, 0, width, height);
         const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
         setAvatarBase64(dataUrl);
+        autoSaveAvatar(dataUrl);
       };
       img.src = event.target?.result as string;
     };
     reader.readAsDataURL(file);
+  };
+
+  const autoSaveAvatar = async (base64: string) => {
+    setIsLoading(true);
+    try {
+      const payload: UpdateProfileDto = { name, avatarBase64: base64 };
+      const res = await authFetch<{ data: any }>('/auth/profile', {
+        method: 'PATCH',
+        body: JSON.stringify(payload)
+      });
+      setUser({ ...user!, ...res.data });
+      addToast({ type: 'success', title: 'Foto atualizada com sucesso' });
+    } catch (error) {
+      addToast({ type: 'error', title: 'Erro ao salvar foto', message: (error as Error).message });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const saveProfile = async () => {

@@ -18,16 +18,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (isAuthenticated) {
         try {
           const res = await authFetch<{ data: UserProfile }>('/auth/me');
-          setUser(res.data);
           
-          // Also fetch preferences
+          let combinedUser = { ...res.data };
+          // Fetch preferences and combine them before setting user
           try {
             const prefsRes = await authFetch<{ data: any }>('/user-preferences');
-            const combinedUser = { ...res.data, ...prefsRes.data.nba, notificationPreferences: prefsRes.data.notifications, contentPreferences: prefsRes.data.content };
-            setUser(combinedUser);
+            if (prefsRes?.data) {
+              combinedUser = { ...combinedUser, ...prefsRes.data.nba, notificationPreferences: prefsRes.data.notifications, contentPreferences: prefsRes.data.content };
+            }
           } catch (e) {
             console.error('Failed to load preferences', e);
           }
+          
+          setUser(combinedUser);
         } catch (error) {
           console.error('Failed to load profile', error);
           // authFetch already handles 401 and clears auth if refresh fails
