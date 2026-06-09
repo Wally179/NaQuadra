@@ -96,9 +96,9 @@
 
 .profileRole {
   font-size: 13px;
-  font-weight: 500;
-  color: var(--nq-brand-primary);
-  background-color: rgba(245, 166, 35, 0.1);
+  font-weight: 600;
+  color: var(--theme-accent-text, var(--nq-bg-primary));
+  background-color: var(--theme-accent, var(--nq-brand-primary));
   padding: 4px 12px;
   border-radius: 20px;
 }

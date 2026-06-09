@@ -36,7 +36,7 @@
   position: relative;
   width: 44px;
   height: 24px;
-  background-color: var(--nq-bg-elevated);
+  background-color: var(--nq-bg-tertiary);
   border: 1px solid var(--nq-border-default);
   border-radius: 999px;
   cursor: pointer;

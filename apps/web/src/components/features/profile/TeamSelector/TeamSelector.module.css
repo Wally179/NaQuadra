@@ -91,11 +91,11 @@
 
 /* Selected states */
 .selected {
-  background-color: var(--nq-bg-elevated);
+  /* Handled inline using team's primary color */
 }
 
 .selected .name {
-  color: var(--nq-text-primary);
+  /* Handled inline for dynamic contrast */
 }
 
 .badge {

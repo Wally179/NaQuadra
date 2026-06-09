@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Check } from 'lucide-react';
 import { getAllTeams } from '@/data/teams';
+import { getContrastYIQ } from '@/lib/colors';
 import styles from './TeamSelector.module.css';
 
 interface TeamSelectorProps {
@@ -59,8 +60,10 @@ export function TeamSelector({ value, onChange, multiple = false }: TeamSelector
               key={team.id}
               className={`${styles.teamCard} ${selected ? styles.selected : ''}`}
               style={{
+                backgroundColor: selected ? team.colors.primary : undefined,
                 borderColor: selected ? team.colors.primary : 'transparent',
                 boxShadow: selected ? `0 0 10px ${team.colors.primary}40` : 'none',
+                color: selected ? getContrastYIQ(team.colors.primary) : undefined,
               }}
               onClick={() => handleSelect(team.id)}
             >
@@ -73,7 +76,9 @@ export function TeamSelector({ value, onChange, multiple = false }: TeamSelector
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={team.logo} alt={team.name} className={styles.logo} loading="lazy" />
               </div>
-              <span className={styles.name}>{team.name}</span>
+              <span className={styles.name} style={{ color: selected ? getContrastYIQ(team.colors.primary) : undefined }}>
+                {team.name}
+              </span>
             </div>
           );
         })}

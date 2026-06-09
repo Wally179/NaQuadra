@@ -38,13 +38,13 @@
 .chipName {
   font-size: 13px;
   font-weight: 500;
-  color: var(--nq-text-primary);
+  color: var(--theme-accent-text, var(--nq-text-primary));
 }
 
 .chipRemove {
   background: none;
   border: none;
-  color: var(--nq-text-tertiary);
+  color: var(--theme-accent-text, var(--nq-text-tertiary));
   cursor: pointer;
   display: flex;
   align-items: center;

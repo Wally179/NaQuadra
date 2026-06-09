@@ -2,6 +2,7 @@
 
 import { useAuthStore } from '@/lib/stores/auth-store';
 import { getAllTeams } from '@/data/teams';
+import { getContrastYIQ } from '@/lib/colors';
 import { ArrowRight, Star } from 'lucide-react';
 import Link from 'next/link';
 import styles from '../page.module.css';
@@ -32,24 +33,28 @@ export function PersonalizedContent() {
     );
   }
 
+  const textColor = favoriteTeam ? getContrastYIQ(favoriteTeam.colors.primary) : '#fff';
+  const isLightText = textColor === 'white';
+  const logoBgColor = isLightText ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.05)';
+
   return (
     <>
       {favoriteTeam && (
-        <section className={styles.personalizedSection} style={{ backgroundColor: favoriteTeam.colors.primary, borderRadius: '16px', padding: '32px', marginBottom: '32px', color: '#fff', position: 'relative', overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', top: '-20px', right: '-20px', opacity: 0.1, pointerEvents: 'none' }}>
+        <section className={styles.personalizedSection} style={{ backgroundColor: favoriteTeam.colors.primary, borderRadius: '16px', padding: '32px', marginBottom: '32px', color: textColor, position: 'relative', overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', top: '-20px', right: '-20px', opacity: isLightText ? 0.1 : 0.05, pointerEvents: 'none' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={favoriteTeam.logo} alt="" style={{ width: '300px', height: '300px' }} />
+            <img src={favoriteTeam.logo} alt="" style={{ width: '300px', height: '300px', filter: isLightText ? 'none' : 'invert(1)' }} />
           </div>
           
           <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', gap: '24px' }}>
-            <div style={{ width: '80px', height: '80px', backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: '50%', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: '80px', height: '80px', backgroundColor: logoBgColor, borderRadius: '50%', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={favoriteTeam.logo} alt={favoriteTeam.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </div>
             <div>
               <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', opacity: 0.8 }}>Seu Time</span>
               <h2 style={{ fontSize: '32px', margin: '4px 0 8px 0', fontWeight: 800 }}>{favoriteTeam.name}</h2>
-              <Link href={`/teams/${favoriteTeam.id}`} style={{ color: '#fff', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '14px', fontWeight: 500 }}>
+              <Link href={`/teams/${favoriteTeam.id}`} style={{ color: textColor, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '14px', fontWeight: 500 }}>
                 Ver página do time <ArrowRight size={14} />
               </Link>
             </div>
