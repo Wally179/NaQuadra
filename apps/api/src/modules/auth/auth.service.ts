@@ -131,6 +131,9 @@ export class AuthService {
       avatarBase64: user.avatarBase64,
       discoveryMode: user.discoveryMode,
       onboardingCompleted: user.onboardingCompleted,
+      favoriteTeamId: user.favoriteTeamId,
+      followedTeamIds: user.followedTeamIds || [],
+      favoritePlayerIds: user.favoritePlayerIds || [],
       createdAt: user.createdAt.toISOString(),
     };
   }

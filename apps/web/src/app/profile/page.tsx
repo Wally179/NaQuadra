@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Camera, LogOut, Loader2, Save } from 'lucide-react';
 import { useAuthStore } from '@/lib/stores/auth-store';
@@ -46,6 +46,29 @@ export default function ProfilePage() {
     gameFinal: user?.notificationPreferences?.gameFinal ?? true,
     personalizedNews: user?.notificationPreferences?.personalizedNews ?? true,
   });
+
+  // Sync form states when user data loads from backend (e.g., after AuthProvider fetches)
+  useEffect(() => {
+    if (!user) return;
+    setName(user.name || '');
+    setAvatarBase64(user.avatarBase64 || null);
+    setFavoriteTeamId(user.favoriteTeamId || null);
+    setFollowedTeamIds(user.followedTeamIds || []);
+    setFavoritePlayerIds(user.favoritePlayerIds || []);
+    if (user.notificationPreferences) {
+      setNotifPrefs({
+        favoriteTeamNews: user.notificationPreferences.favoriteTeamNews ?? true,
+        injuries: user.notificationPreferences.injuries ?? true,
+        trades: user.notificationPreferences.trades ?? true,
+        signings: user.notificationPreferences.signings ?? true,
+        preGame60min: user.notificationPreferences.preGame60min ?? false,
+        preGame30min: user.notificationPreferences.preGame30min ?? true,
+        gameStarted: user.notificationPreferences.gameStarted ?? true,
+        gameFinal: user.notificationPreferences.gameFinal ?? true,
+        personalizedNews: user.notificationPreferences.personalizedNews ?? true,
+      });
+    }
+  }, [user]);
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -133,7 +156,13 @@ export default function ProfilePage() {
         method: 'PATCH',
         body: JSON.stringify(payload)
       });
-      setUser({ ...user!, ...res.data.nba });
+      // Merge correctly: preserve existing user data + update nba + keep notifications/content
+      setUser({ 
+        ...user!, 
+        ...res.data.nba, 
+        notificationPreferences: res.data.notifications || user!.notificationPreferences,
+        contentPreferences: res.data.content || user!.contentPreferences,
+      });
       addToast({ type: 'success', title: 'Preferências salvas' });
     } catch (error) {
       addToast({ type: 'error', title: 'Erro ao salvar', message: (error as Error).message });
@@ -149,7 +178,12 @@ export default function ProfilePage() {
         method: 'PATCH',
         body: JSON.stringify(notifPrefs)
       });
-      setUser({ ...user!, notificationPreferences: res.data.notifications });
+      setUser({ 
+        ...user!, 
+        ...res.data.nba,
+        notificationPreferences: res.data.notifications,
+        contentPreferences: res.data.content || user!.contentPreferences,
+      });
       addToast({ type: 'success', title: 'Notificações salvas' });
     } catch (error) {
       addToast({ type: 'error', title: 'Erro ao salvar', message: (error as Error).message });
