@@ -11,6 +11,9 @@ import { PlayerSearch } from '@/components/features/profile/PlayerSearch/PlayerS
 import { NotificationToggle } from '@/components/features/profile/NotificationToggle/NotificationToggle';
 import { AuthGate } from '@/components/ui/AuthGate/AuthGate';
 import type { NbaPreferencesDto, UpdateProfileDto } from '@naquadra/types';
+import { PersonalizedContent } from '../_sections/PersonalizedContent';
+import { getAllTeams } from '@/data/teams';
+import { getContrastYIQ } from '@/lib/colors';
 import styles from './page.module.css';
 
 export default function ProfilePage() {
@@ -143,13 +146,26 @@ export default function ProfilePage() {
     addToast({ type: 'info', title: 'Você saiu da conta' });
   };
 
+  // Determine team theme colors
+  const favoriteTeam = user?.favoriteTeamId ? getAllTeams().find(t => t.id === user.favoriteTeamId) : null;
+  const teamPrimaryColor = favoriteTeam?.colors?.primary || '';
+  const teamTextColor = teamPrimaryColor ? getContrastYIQ(teamPrimaryColor) : '';
+  
+  const themeStyles = teamPrimaryColor ? {
+    '--nq-brand-primary': teamPrimaryColor,
+    '--nq-bg-elevated': teamPrimaryColor,
+    '--theme-accent': teamPrimaryColor,
+    '--theme-accent-text': teamTextColor === 'white' ? '#ffffff' : '#000000',
+  } as React.CSSProperties : {};
+
   // If not authenticated, render AuthGate logic handled inside page return
   return (
     <AuthGate 
       title="Seu Perfil" 
       description="Faça login para gerenciar suas preferências e personalizar sua experiência na NBA."
     >
-      <div className={styles.page}>
+      <div className={styles.page} style={themeStyles}>
+        <PersonalizedContent />
         <div className={styles.container}>
           <div className={styles.sidebar}>
             <div className={styles.profileCard}>

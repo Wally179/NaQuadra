@@ -63,7 +63,7 @@
   font-family: var(--nq-font-display);
   font-size: 36px;
   font-weight: 700;
-  color: #fff;
+  color: var(--theme-accent-text, #fff);
 }
 
 .avatarOverlay {
@@ -129,7 +129,7 @@
 
 .activeTab {
   background-color: var(--nq-bg-elevated);
-  color: var(--nq-text-primary);
+  color: var(--theme-accent-text, var(--nq-text-primary));
   font-weight: 600;
 }
 
@@ -265,8 +265,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: var(--nq-text-primary);
-  color: var(--nq-bg-primary);
+  background-color: var(--theme-accent, var(--nq-text-primary));
+  color: var(--theme-accent-text, var(--nq-bg-primary));
   border: none;
   padding: 12px 24px;
   border-radius: 8px;
