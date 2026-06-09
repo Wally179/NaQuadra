@@ -12,6 +12,11 @@
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
+  cursor: grab;
+}
+
+.cardsGrid:active {
+  cursor: grabbing;
 }
 
 .cardsGrid::-webkit-scrollbar {
