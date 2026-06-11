@@ -24,9 +24,9 @@ export class AggregatedNewsService {
 
   async getNews(): Promise<NormalizedArticle[]> {
     const now = Date.now();
-    // if (this.cachedArticles.length > 0 && (now - this.lastFetch) < this.CACHE_TTL_MS) {
-    //   return this.cachedArticles;
-    // }
+    if (this.cachedArticles.length > 0 && (now - this.lastFetch) < this.CACHE_TTL_MS) {
+      return this.cachedArticles;
+    }
 
     const [espnResult, newsApiResult, gnewsResult] = await Promise.allSettled([
       this.espnService.getNews() as unknown as Promise<NormalizedArticle[]>,
@@ -96,6 +96,13 @@ export class AggregatedNewsService {
     const cached = this.cachedArticles.find(a => a.slug === slug);
     if (cached) return cached;
 
+    // If cache missed, try repopulating the cache if it's empty (e.g. server restart)
+    if (this.cachedArticles.length === 0) {
+      await this.getNews();
+      const cachedAfterFetch = this.cachedArticles.find(a => a.slug === slug);
+      if (cachedAfterFetch) return cachedAfterFetch;
+    }
+
     // If it's an ESPN article (usually numerical ID or specific slug), try ESPN
     // If it's from GNews or NewsAPI, we might not be able to fetch it individually easily
     // But since it wasn't in cache, we'll try ESPN just in case.
@@ -153,9 +160,9 @@ export class AggregatedNewsService {
   }
 
   private mapNewsApiArticleToArticle(raw: any): NormalizedArticle {
-    // Generate a safe slug from the URL or title. Add random string to ensure unique React keys if URLs are the same.
-    const uniqueSuffix = Math.random().toString(36).substring(7);
-    const slug = raw.url ? Buffer.from(raw.url).toString('base64').replace(/[^a-zA-Z0-9]/g, '').substring(0, 20) + uniqueSuffix : uniqueSuffix;
+    // Generate a safe, deterministic slug from the URL or title
+    const fallbackId = raw.title ? Buffer.from(raw.title).toString('base64').replace(/[^a-zA-Z0-9]/g, '').substring(0, 30) : Math.random().toString(36).substring(7);
+    const slug = raw.url ? Buffer.from(raw.url).toString('base64').replace(/[^a-zA-Z0-9]/g, '').substring(0, 30) : fallbackId;
     
     return {
       id: slug,
@@ -182,8 +189,9 @@ export class AggregatedNewsService {
   }
 
   private mapGNewsArticleToArticle(raw: any): NormalizedArticle {
-    const uniqueSuffix = Math.random().toString(36).substring(7);
-    const slug = raw.url ? Buffer.from(raw.url).toString('base64').replace(/[^a-zA-Z0-9]/g, '').substring(0, 20) + uniqueSuffix : uniqueSuffix;
+    // Generate a safe, deterministic slug from the URL or title
+    const fallbackId = raw.title ? Buffer.from(raw.title).toString('base64').replace(/[^a-zA-Z0-9]/g, '').substring(0, 30) : Math.random().toString(36).substring(7);
+    const slug = raw.url ? Buffer.from(raw.url).toString('base64').replace(/[^a-zA-Z0-9]/g, '').substring(0, 30) : fallbackId;
 
     return {
       id: slug,
