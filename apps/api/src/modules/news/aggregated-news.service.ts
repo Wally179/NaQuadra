@@ -85,7 +85,17 @@ export class AggregatedNewsService {
       }
     }
 
-    this.cachedArticles = uniqueArticles;
+    // Merge with existing cache to keep old articles available for detail views
+    const mergedArticles = [...uniqueArticles];
+    for (const cached of this.cachedArticles) {
+      if (!mergedArticles.find(a => a.slug === cached.slug)) {
+        mergedArticles.push(cached);
+      }
+    }
+    
+    // Sort and limit cache to 200 items to prevent memory leaks
+    mergedArticles.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+    this.cachedArticles = mergedArticles.slice(0, 200);
     this.lastFetch = now;
 
     return uniqueArticles;
