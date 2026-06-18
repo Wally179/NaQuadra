@@ -45,7 +45,7 @@ export const NBA_TEAMS: Record<string, TeamStaticData> = {
     city: 'New York',
     conference: 'east',
     division: 'Atlantic',
-    colors: { primary: '#006BB6', secondary: '#F58426' },
+    colors: { primary: '#1D428A', secondary: '#F58426' },
     logo: 'https://a.espncdn.com/i/teamlogos/nba/500/ny.png',
   },
   phi: {
