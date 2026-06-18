@@ -4,13 +4,16 @@ import { useRef, useState, MouseEvent } from 'react';
 import type { NormalizedGame } from '@naquadra/types';
 import Link from 'next/link';
 import { GameCard } from '../GameCard/GameCard';
+import { ChampionCard, type ChampionInfo } from '../ChampionCard/ChampionCard';
 import styles from './ScoreboardBar.module.css';
 
 interface ScoreboardBarProps {
   games: NormalizedGame[];
+  isOffseason?: boolean;
+  champion?: ChampionInfo;
 }
 
-export function ScoreboardBar({ games }: ScoreboardBarProps) {
+export function ScoreboardBar({ games, isOffseason = false, champion }: ScoreboardBarProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
   const hasDragged = useRef(false);
@@ -18,7 +21,7 @@ export function ScoreboardBar({ games }: ScoreboardBarProps) {
   const scrollLeft = useRef(0);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  if (games.length === 0) {
+  if (games.length === 0 && !isOffseason) {
     return null;
   }
 
@@ -26,6 +29,9 @@ export function ScoreboardBar({ games }: ScoreboardBarProps) {
   const sorted = [...games].sort((a, b) => {
     return new Date(a.startTime).getTime() - new Date(b.startTime).getTime();
   });
+
+  // Total items: games + champion card (if offseason)
+  const totalItems = sorted.length + (isOffseason && champion ? 1 : 0);
 
   const onMouseDown = (e: MouseEvent) => {
     if (!scrollRef.current) return;
@@ -80,10 +86,15 @@ export function ScoreboardBar({ games }: ScoreboardBarProps) {
     }
   };
 
+  // Determine section title based on state
+  const sectionTitle = isOffseason
+    ? 'Último Jogo da Temporada'
+    : 'Próximos Jogos';
+
   return (
-    <section aria-label="Próximos jogos">
+    <section aria-label={sectionTitle}>
       <div className={styles.sectionHeader}>
-        <h2 className={styles.sectionTitle}>Próximos Jogos</h2>
+        <h2 className={styles.sectionTitle}>{sectionTitle}</h2>
         <Link href="/games" className={styles.sectionLink}>
           Ver todos →
         </Link>
@@ -104,17 +115,24 @@ export function ScoreboardBar({ games }: ScoreboardBarProps) {
             <GameCard game={game} />
           </div>
         ))}
+
+        {/* Champion commemorative card (offseason only) */}
+        {isOffseason && champion && (
+          <div onMouseEnter={() => setActiveIndex(sorted.length)}>
+            <ChampionCard champion={champion} />
+          </div>
+        )}
       </div>
 
-      {sorted.length > 1 && (
+      {totalItems > 1 && (
         <div className={styles.pagination}>
-          {sorted.map((_, index) => (
+          {Array.from({ length: totalItems }).map((_, index) => (
             <button
               key={index}
               className={`${styles.dot} ${index === activeIndex ? styles.activeDot : ''}`}
               onClick={() => scrollTo(index)}
               onMouseEnter={() => setActiveIndex(index)}
-              aria-label={`Ir para jogo ${index + 1}`}
+              aria-label={`Ir para item ${index + 1}`}
             />
           ))}
         </div>

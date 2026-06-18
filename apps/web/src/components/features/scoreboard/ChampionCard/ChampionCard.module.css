@@ -1,0 +1,261 @@
+/* ============================================================
+   Na Quadra — ChampionCard: NBA Champion Commemorative Card
+   ============================================================
+   Gold-themed celebratory card with trophy, confetti particles,
+   and glassmorphism over the champion team's primary color.
+   ============================================================ */
+
+.championCard {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--nq-radius-lg);
+  background: var(--nq-bg-primary);
+  min-height: 200px;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--nq-space-5) var(--nq-space-6);
+  scroll-snap-align: center;
+  flex-shrink: 0;
+  transition: transform var(--nq-duration-normal) var(--nq-ease-out),
+              box-shadow var(--nq-duration-normal) var(--nq-ease-out);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.championCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(253, 199, 39, 0.3),
+              var(--nq-shadow-xl);
+}
+
+/* Gold gradient background */
+.championCard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    var(--champion-color) 0%,
+    color-mix(in srgb, var(--champion-color) 70%, #FDB927) 40%,
+    color-mix(in srgb, var(--champion-color) 40%, #000) 70%,
+    var(--nq-bg-primary) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Shimmer overlay */
+.championCard::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(253, 199, 39, 0.08) 45%,
+    rgba(253, 199, 39, 0.15) 50%,
+    rgba(253, 199, 39, 0.08) 55%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Confetti particles */
+.confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.confettiPiece {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+  opacity: 0;
+  animation: confettiFall 4s ease-in-out infinite;
+}
+
+.confettiPiece:nth-child(1) {
+  background: #FDB927;
+  left: 10%;
+  animation-delay: 0s;
+  animation-duration: 3.5s;
+}
+.confettiPiece:nth-child(2) {
+  background: #fff;
+  left: 25%;
+  width: 4px;
+  height: 8px;
+  animation-delay: 0.7s;
+  animation-duration: 4s;
+}
+.confettiPiece:nth-child(3) {
+  background: var(--champion-color);
+  left: 45%;
+  animation-delay: 1.2s;
+  animation-duration: 3.8s;
+}
+.confettiPiece:nth-child(4) {
+  background: #FDB927;
+  left: 65%;
+  width: 5px;
+  height: 5px;
+  animation-delay: 0.3s;
+  animation-duration: 4.2s;
+}
+.confettiPiece:nth-child(5) {
+  background: #fff;
+  left: 80%;
+  animation-delay: 1.5s;
+  animation-duration: 3.6s;
+}
+.confettiPiece:nth-child(6) {
+  background: var(--champion-color);
+  left: 90%;
+  width: 4px;
+  height: 6px;
+  animation-delay: 0.9s;
+  animation-duration: 4.5s;
+}
+
+@keyframes confettiFall {
+  0% {
+    top: -10%;
+    opacity: 0;
+    transform: rotate(0deg) translateX(0);
+  }
+  10% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    top: 110%;
+    opacity: 0;
+    transform: rotate(720deg) translateX(20px);
+  }
+}
+
+/* Content */
+.content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--nq-space-2);
+}
+
+.topLabel {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-xs);
+  font-weight: var(--nq-font-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--nq-tracking-wider);
+  color: #FDB927;
+  text-shadow: 0 1px 8px rgba(253, 185, 39, 0.4);
+}
+
+.trophyRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--nq-space-4);
+  margin: var(--nq-space-2) 0;
+}
+
+.teamLogo {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 20px rgba(253, 199, 39, 0.5));
+  transition: transform var(--nq-duration-normal) var(--nq-ease-default);
+}
+
+.championCard:hover .teamLogo {
+  transform: scale(1.15);
+}
+
+.trophy {
+  font-size: 48px;
+  filter: drop-shadow(0 0 16px rgba(253, 199, 39, 0.6));
+  animation: trophyFloat 3s ease-in-out infinite;
+  line-height: 1;
+}
+
+@keyframes trophyFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.teamName {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-xl);
+  font-weight: var(--nq-font-extrabold);
+  color: #FFFFFF;
+  text-align: center;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+  line-height: 1.2;
+}
+
+.championTitle {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-sm);
+  font-weight: var(--nq-font-bold);
+  color: #FDB927;
+  text-transform: uppercase;
+  letter-spacing: var(--nq-tracking-wide);
+  text-shadow: 0 1px 8px rgba(253, 185, 39, 0.3);
+}
+
+.seriesResult {
+  font-family: var(--nq-font-mono);
+  font-size: var(--nq-text-xs);
+  color: rgba(255, 255, 255, 0.75);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+.mvpBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--nq-font-sans);
+  font-size: var(--nq-text-xs);
+  font-weight: var(--nq-font-bold);
+  color: #FDB927;
+  background: rgba(253, 185, 39, 0.12);
+  border: 1px solid rgba(253, 185, 39, 0.25);
+  border-radius: var(--nq-radius-sm);
+  padding: 3px 10px;
+  margin-top: var(--nq-space-1);
+  backdrop-filter: blur(4px);
+}
+
+/* Fallback for browsers without color-mix */
+@supports not (color: color-mix(in srgb, red, transparent)) {
+  .championCard::before {
+    background: linear-gradient(
+      135deg,
+      var(--champion-color) 0%,
+      rgba(253, 185, 39, 0.4) 50%,
+      transparent 100%
+    );
+    opacity: 0.8;
+  }
+}
