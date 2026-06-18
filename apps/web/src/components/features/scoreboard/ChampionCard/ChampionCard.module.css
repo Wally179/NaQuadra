@@ -8,12 +8,12 @@
   border-radius: var(--nq-radius-lg);
   background: var(--nq-bg-primary);
   min-height: 200px;
-  max-height: 200px;
   min-width: 320px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--nq-space-4) var(--nq-space-5);
+  padding: var(--nq-space-5) var(--nq-space-6);
   scroll-snap-align: center;
   flex-shrink: 0;
   transition: transform var(--nq-duration-normal) var(--nq-ease-out),
@@ -81,45 +81,46 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: var(--nq-space-2);
 }
 
 .topLabel {
   font-family: var(--nq-font-display);
-  font-size: 10px;
+  font-size: var(--nq-text-xs);
   font-weight: var(--nq-font-bold);
   text-transform: uppercase;
   letter-spacing: var(--nq-tracking-wider);
   color: #FDB927;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
 }
 
 .trophyRow {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--nq-space-3);
-  margin: var(--nq-space-1) 0;
+  gap: var(--nq-space-4);
+  margin: var(--nq-space-2) 0;
 }
 
 .teamLogo {
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   object-fit: contain;
-  filter: drop-shadow(0 0 12px rgba(253, 199, 39, 0.4));
+  filter: drop-shadow(0 0 16px rgba(253, 199, 39, 0.4));
 }
 
 .trophy {
-  font-size: 36px;
-  filter: drop-shadow(0 0 10px rgba(253, 199, 39, 0.5));
+  font-size: 40px;
+  filter: drop-shadow(0 0 12px rgba(253, 199, 39, 0.5));
   line-height: 1;
 }
 
 .teamName {
   font-family: var(--nq-font-display);
-  font-size: var(--nq-text-base);
+  font-size: var(--nq-text-lg);
   font-weight: var(--nq-font-extrabold);
   color: #FFFFFF;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
 }
 
 .championTitle {
@@ -129,12 +130,15 @@
   color: #FDB927;
   text-transform: uppercase;
   letter-spacing: var(--nq-tracking-wide);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
 }
 
 .seriesResult {
   font-family: var(--nq-font-mono);
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: var(--nq-text-xs);
+  font-weight: var(--nq-font-bold);
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
 }
 
 .mvpBadge {
@@ -142,12 +146,13 @@
   align-items: center;
   gap: 4px;
   font-family: var(--nq-font-sans);
-  font-size: 11px;
+  font-size: var(--nq-text-xs);
   font-weight: var(--nq-font-bold);
   color: #FDB927;
-  background: rgba(253, 185, 39, 0.1);
-  border: 1px solid rgba(253, 185, 39, 0.2);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(253, 185, 39, 0.3);
   border-radius: var(--nq-radius-sm);
-  padding: 2px 8px;
-  margin-top: 2px;
+  padding: 3px 10px;
+  backdrop-filter: blur(4px);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
