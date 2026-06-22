@@ -209,11 +209,17 @@ export async function fetchNews(options?: FetchOptions): Promise<Article[]> {
 
 export async function fetchNewsArticle(slug: string, options?: FetchOptions): Promise<Article | null> {
   try {
-    // Use no-store to ensure each article slug gets a fresh fetch
-    // (Next.js data cache can incorrectly serve stale results across dynamic routes)
+    // ISR with 60s revalidation — replaces the old cache: 'no-store'.
+    // This enables Next.js request deduplication: generateMetadata and the
+    // page component both call this function, but Next.js will only make
+    // ONE actual network request and share the cached result between them.
+    // Tags allow on-demand revalidation via revalidateTag().
     const url = `${API_BASE}/api/v1/news/${slug}`;
     const res = await fetch(url, {
-      cache: 'no-store',
+      next: {
+        revalidate: options?.revalidate ?? 60,
+        tags: options?.tags ?? [`news-${slug}`, 'news'],
+      },
       headers: { 'Accept': 'application/json' },
     });
     if (!res.ok) return null;

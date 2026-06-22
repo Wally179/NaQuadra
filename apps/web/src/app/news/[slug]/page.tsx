@@ -6,6 +6,7 @@ import { ArticleCardSkeleton } from '@/components/features/news/ArticleCard/Arti
 import { Skeleton } from '@/components/ui/Skeleton/Skeleton';
 import styles from './NewsArticlePage.module.css';
 import Link from 'next/link';
+import Image from 'next/image';
 import type { Metadata } from 'next';
 
 interface PageProps {
@@ -103,7 +104,15 @@ export default async function NewsArticlePage({ params }: PageProps) {
 
         {article.coverImage && (
           <div className={styles.imageWrapper}>
-            <img src={article.coverImage} alt={article.title} className={styles.image} />
+            <Image
+              src={article.coverImage}
+              alt={article.title}
+              fill
+              className={styles.image}
+              priority
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 800px"
+              unoptimized={!article.coverImage.startsWith('https://a.espncdn.com')}
+            />
           </div>
         )}
 

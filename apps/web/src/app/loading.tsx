@@ -9,11 +9,15 @@
 import { ScoreboardBarSkeleton } from '@/components/features/scoreboard/ScoreboardBar/ScoreboardBarSkeleton';
 import { ArticleCardSkeleton } from '@/components/features/news/ArticleCard/ArticleCardSkeleton';
 import { Skeleton } from '@/components/ui/Skeleton/Skeleton';
+import { ColdStartBanner } from '@/components/ui/ColdStartBanner/ColdStartBanner';
 import styles from './page.module.css';
 
 export default function GlobalLoading() {
   return (
     <>
+      {/* Cold start banner — appears after 3s if API is warming up */}
+      <ColdStartBanner />
+
       {/* Scoreboard section skeleton */}
       <section className={styles.heroSection}>
         <ScoreboardBarSkeleton />

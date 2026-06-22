@@ -1,0 +1,272 @@
+/* ============================================================
+   Na Quadra — ColdStartBanner Styles
+   Glassmorphism banner with animated progress bar.
+   Appears when loading takes > 3s (Render free tier cold start).
+   ============================================================ */
+
+.overlay {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9998;
+  width: calc(100% - 32px);
+  max-width: 520px;
+  animation: slideUp var(--nq-duration-slow) var(--nq-ease-bounce) forwards;
+  pointer-events: auto;
+}
+
+@media (min-width: 640px) {
+  .overlay {
+    bottom: 32px;
+  }
+}
+
+/* Above mobile nav on mobile */
+@media (max-width: 767px) {
+  .overlay {
+    bottom: calc(var(--nq-mobile-nav-height) + 16px);
+  }
+}
+
+.banner {
+  background: linear-gradient(
+    135deg,
+    rgba(26, 26, 31, 0.95) 0%,
+    rgba(34, 34, 40, 0.95) 100%
+  );
+  border: 1px solid rgba(245, 166, 35, 0.25);
+  border-radius: var(--nq-radius-xl);
+  padding: var(--nq-space-5) var(--nq-space-5);
+  box-shadow:
+    0 0 0 1px rgba(245, 166, 35, 0.08),
+    0 20px 60px rgba(0, 0, 0, 0.7),
+    0 4px 20px rgba(245, 166, 35, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--nq-space-4);
+  position: relative;
+}
+
+/* Subtle top glow line */
+.banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(245, 166, 35, 0.5),
+    transparent
+  );
+  border-radius: 1px;
+}
+
+/* ── Header Row ── */
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--nq-space-3);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--nq-space-3);
+  flex: 1;
+}
+
+.icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+  animation: bounce 1.5s ease-in-out infinite;
+}
+
+.titleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  font-family: var(--nq-font-display);
+  font-size: var(--nq-text-sm);
+  font-weight: var(--nq-font-bold);
+  color: var(--nq-brand-primary);
+  letter-spacing: var(--nq-tracking-wide);
+  text-transform: uppercase;
+}
+
+.subtitle {
+  font-family: var(--nq-font-body);
+  font-size: var(--nq-text-xs);
+  color: var(--nq-text-tertiary);
+}
+
+.closeBtn {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--nq-radius-sm);
+  background: var(--nq-overlay-light);
+  border: 1px solid var(--nq-border-subtle);
+  color: var(--nq-text-tertiary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--nq-duration-fast) var(--nq-ease-default);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.closeBtn:hover {
+  background: var(--nq-overlay-medium);
+  color: var(--nq-text-primary);
+  border-color: var(--nq-border-default);
+}
+
+/* ── Body ── */
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nq-space-3);
+}
+
+.message {
+  font-family: var(--nq-font-body);
+  font-size: var(--nq-text-sm);
+  color: var(--nq-text-secondary);
+  line-height: var(--nq-leading-relaxed);
+  margin: 0;
+}
+
+.highlight {
+  color: var(--nq-text-primary);
+  font-weight: var(--nq-font-medium);
+}
+
+.freeTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--nq-text-xs);
+  font-weight: var(--nq-font-semibold);
+  color: var(--nq-brand-primary);
+  background: rgba(245, 166, 35, 0.1);
+  border: 1px solid rgba(245, 166, 35, 0.2);
+  border-radius: var(--nq-radius-full);
+  padding: 2px 8px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+/* ── Progress Bar ── */
+.progressWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nq-space-2);
+}
+
+.progressTrack {
+  width: 100%;
+  height: 4px;
+  background: var(--nq-bg-tertiary);
+  border-radius: var(--nq-radius-full);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: var(--nq-radius-full);
+  background: linear-gradient(
+    90deg,
+    var(--nq-brand-accent),
+    var(--nq-brand-primary),
+    #FFD166
+  );
+  background-size: 200% 100%;
+  transition: width 1s linear;
+  animation: shimmerBar 2s ease-in-out infinite;
+}
+
+.progressLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--nq-space-2);
+}
+
+.statusText {
+  font-family: var(--nq-font-mono);
+  font-size: var(--nq-text-xs);
+  color: var(--nq-text-tertiary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--nq-brand-primary);
+  animation: pulse 1.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.elapsedText {
+  font-family: var(--nq-font-mono);
+  font-size: var(--nq-text-xs);
+  color: var(--nq-text-tertiary);
+}
+
+/* ── Animations ── */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(24px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.7); }
+}
+
+@keyframes shimmerBar {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Exit animation ── */
+.hiding {
+  animation: slideDown var(--nq-duration-slow) var(--nq-ease-in) forwards;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(16px) scale(0.96);
+  }
+}

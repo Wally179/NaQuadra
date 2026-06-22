@@ -1,18 +1,23 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { EspnService } from '../espn/espn.service';
 import type { NormalizedArticle } from '@naquadra/types';
 
 @Injectable()
-export class AggregatedNewsService {
+export class AggregatedNewsService implements OnModuleInit {
   private readonly logger = new Logger(AggregatedNewsService.name);
-  
+
   private readonly NEWS_API_KEY: string;
   private readonly GNEWS_API_KEY: string;
-  
+
   private cachedArticles: NormalizedArticle[] = [];
   private lastFetch: number = 0;
-  private readonly CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
+  private isRefreshing = false;
+
+  // Fresh threshold: serve from cache and revalidate in background after 5 min
+  private readonly CACHE_FRESH_MS = 5 * 60 * 1000;
+  // Stale threshold: still serve cache (stale-while-revalidate) up to 60 min
+  private readonly CACHE_STALE_MS = 60 * 60 * 1000;
 
   constructor(
     private readonly espnService: EspnService,
@@ -22,11 +27,51 @@ export class AggregatedNewsService {
     this.GNEWS_API_KEY = this.config.get<string>('GNEWS_API_KEY', '');
   }
 
+  // ── Pre-populate cache on module init ──
+  // This ensures the first user request after a cold start doesn't have to
+  // wait for the ESPN + NewsAPI + GNews fetches — the cache is already warm.
+  async onModuleInit() {
+    this.logger.log('🔄 Pre-populating news cache on startup...');
+    try {
+      await this.fetchAndUpdateCache();
+      this.logger.log(`✅ News cache ready: ${this.cachedArticles.length} articles`);
+    } catch (error) {
+      this.logger.warn(`⚠️  Failed to pre-populate news cache: ${(error as Error).message}`);
+    }
+  }
+
   async getNews(): Promise<NormalizedArticle[]> {
     const now = Date.now();
-    if (this.cachedArticles.length > 0 && (now - this.lastFetch) < this.CACHE_TTL_MS) {
+    const age = now - this.lastFetch;
+
+    // 1. Cache is fresh → return immediately
+    if (this.cachedArticles.length > 0 && age < this.CACHE_FRESH_MS) {
       return this.cachedArticles;
     }
+
+    // 2. Cache is stale but within stale window → return stale + revalidate in background
+    if (this.cachedArticles.length > 0 && age < this.CACHE_STALE_MS) {
+      this.logger.debug('Cache stale — serving stale and revalidating in background');
+      this.refreshInBackground();
+      return this.cachedArticles;
+    }
+
+    // 3. Cache expired or empty → fetch synchronously
+    return this.fetchAndUpdateCache();
+  }
+
+  // ── Stale-While-Revalidate helper ──
+  private refreshInBackground(): void {
+    if (this.isRefreshing) return; // Prevent concurrent refreshes
+    this.isRefreshing = true;
+    this.fetchAndUpdateCache()
+      .catch((err) => this.logger.error('Background cache refresh failed', (err as Error).message))
+      .finally(() => { this.isRefreshing = false; });
+  }
+
+  // ── Core fetch + cache update logic ──
+  private async fetchAndUpdateCache(): Promise<NormalizedArticle[]> {
+    const now = Date.now();
 
     const [espnResult, newsApiResult, gnewsResult] = await Promise.allSettled([
       this.espnService.getNews() as unknown as Promise<NormalizedArticle[]>,
@@ -50,14 +95,14 @@ export class AggregatedNewsService {
     };
 
     if (newsApiResult.status === 'fulfilled' && newsApiResult.value) {
-      console.log('NewsAPI articles found:', newsApiResult.value.length);
+      this.logger.debug(`NewsAPI articles found: ${newsApiResult.value.length}`);
       articles = [...articles, ...newsApiResult.value];
     } else if (newsApiResult.status === 'rejected') {
       this.logger.error(`NewsAPI fetch failed: ${newsApiResult.reason}`);
     }
 
     if (gnewsResult.status === 'fulfilled' && gnewsResult.value) {
-      console.log('GNews articles found:', gnewsResult.value.length);
+      this.logger.debug(`GNews articles found: ${gnewsResult.value.length}`);
       articles = [...articles, ...gnewsResult.value];
     } else if (gnewsResult.status === 'rejected') {
       this.logger.error(`GNews fetch failed: ${gnewsResult.reason}`);
@@ -74,13 +119,13 @@ export class AggregatedNewsService {
       if (!seen.has(normalizedTitle) && (!article.link || !seen.has(article.link))) {
         seen.add(normalizedTitle);
         if (article.link) seen.add(article.link);
-        // strict filter
+        // Strict filter: non-ESPN/editorial articles must be basketball-related
         if (article.source !== 'editorial' && article.author.id !== 'espn') {
-           if (isBasketballRelated(article.title) || isBasketballRelated(article.summary || '') || isBasketballRelated(article.content)) {
-               uniqueArticles.push(article);
-           }
+          if (isBasketballRelated(article.title) || isBasketballRelated(article.summary || '') || isBasketballRelated(article.content)) {
+            uniqueArticles.push(article);
+          }
         } else {
-           uniqueArticles.push(article); // Keep all ESPN/editorial
+          uniqueArticles.push(article); // Keep all ESPN/editorial articles
         }
       }
     }
@@ -92,7 +137,7 @@ export class AggregatedNewsService {
         mergedArticles.push(cached);
       }
     }
-    
+
     // Sort and limit cache to 200 items to prevent memory leaks
     mergedArticles.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
     this.cachedArticles = mergedArticles.slice(0, 200);
@@ -102,26 +147,37 @@ export class AggregatedNewsService {
   }
 
   async getNewsArticleBySlug(slug: string): Promise<NormalizedArticle | null> {
-    // First, check cache
+    // 1. Check cache first (fastest path)
     const cached = this.cachedArticles.find(a => a.slug === slug);
     if (cached) return cached;
 
-    // If cache missed, try repopulating the cache if it's empty (e.g. server restart)
-    if (this.cachedArticles.length === 0) {
-      await this.getNews();
-      const cachedAfterFetch = this.cachedArticles.find(a => a.slug === slug);
-      if (cachedAfterFetch) return cachedAfterFetch;
+    // 2. Cache miss → repopulate (covers cold start AND stale cache)
+    const now = Date.now();
+    const age = now - this.lastFetch;
+    if (age > this.CACHE_FRESH_MS || this.cachedArticles.length === 0) {
+      this.logger.debug(`Cache miss for slug "${slug}" — repopulating...`);
+      await this.fetchAndUpdateCache();
+      const foundAfterRefresh = this.cachedArticles.find(a => a.slug === slug);
+      if (foundAfterRefresh) return foundAfterRefresh;
     }
 
-    // If it's an ESPN article (usually numerical ID or specific slug), try ESPN
-    // If it's from GNews or NewsAPI, we might not be able to fetch it individually easily
-    // But since it wasn't in cache, we'll try ESPN just in case.
-    try {
-      const espnArticle = await this.espnService.getNewsArticleBySlug(slug);
-      return espnArticle as NormalizedArticle | null;
-    } catch {
-      return null;
+    // 3. Article not in aggregated cache — it may be an ESPN article not in our
+    //    curated list (e.g., limit=30 cutoff). Only try ESPN as last resort,
+    //    but only if the slug looks like a numeric ESPN article ID.
+    const isNumericEspnId = /^\d+$/.test(slug);
+    if (isNumericEspnId) {
+      this.logger.debug(`Slug "${slug}" looks like ESPN ID — trying ESPN direct fetch`);
+      try {
+        const espnArticle = await this.espnService.getNewsArticleBySlug(slug);
+        return espnArticle as NormalizedArticle | null;
+      } catch {
+        return null;
+      }
     }
+
+    // 4. Not found anywhere
+    this.logger.debug(`Article "${slug}" not found in cache or ESPN`);
+    return null;
   }
 
   private async fetchNewsApi(): Promise<NormalizedArticle[]> {
@@ -132,9 +188,7 @@ export class AggregatedNewsService {
         throw new Error(`NewsAPI returned ${response.status}`);
       }
       const data = (await response.json()) as any;
-      
-      console.log('RAW NEWSAPI RESPONSE:', JSON.stringify(data).substring(0, 500) + '...');
-      
+
       if (!data.articles || !Array.isArray(data.articles)) return [];
 
       return data.articles
@@ -155,9 +209,7 @@ export class AggregatedNewsService {
         throw new Error(`GNews returned ${response.status}`);
       }
       const data = (await response.json()) as any;
-      
-      console.log('RAW GNEWS RESPONSE:', JSON.stringify(data).substring(0, 500) + '...');
-      
+
       if (!data.articles || !Array.isArray(data.articles)) return [];
 
       return data.articles
@@ -173,13 +225,13 @@ export class AggregatedNewsService {
     // Generate a safe, deterministic slug from the URL or title
     const fallbackId = raw.title ? Buffer.from(raw.title).toString('base64').replace(/[^a-zA-Z0-9]/g, '').substring(0, 30) : Math.random().toString(36).substring(7);
     const slug = raw.url ? Buffer.from(raw.url).toString('base64').replace(/[^a-zA-Z0-9]/g, '').substring(0, 30) : fallbackId;
-    
+
     return {
       id: slug,
       slug: slug,
       title: raw.title,
       summary: raw.description,
-      content: raw.content || raw.description || raw.title, // User asked to use summary as content if missing
+      content: raw.content || raw.description || raw.title,
       coverImage: raw.urlToImage,
       publishedAt: raw.publishedAt,
       author: {
